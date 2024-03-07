@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('friend_request', function (Blueprint $table) {
             $table->id();
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id_1')->references('id')->on('users');
+            $table->foreign('user_id_2')->references('id')->on('users');
             $table->timestamps();
         });
     }
