@@ -14,43 +14,114 @@ class WordsTableSeeder extends Seeder
     public function run(): void
     {
         $easy = [
-        'Perro',
-        'Casa',
-        'Sol',
-        'Árbol',
-        'Manzana',
-        'Flor',
-        'Gato',
-        'Coche',
-        'Pelota',
-        'Mesa',
-        'Luna',
-        'Pato',
-        'Silla',
-        'Mariposa',
-        'Nube',
-        'Avión',
-        'Pescado',
-        'Tren',
-        'Globo',
-        'Camión',
-        'Rana',
-        'Corazón',
-        'Reloj',
-        'Círculo',
-        'Estrella',
-        'Zapato',
-        'Sombrero',
-        'Lápiz',
-        'Taza',
-        'Pizza'];
+            'Perro',
+            'Casa',
+            'Sol',
+            'Árbol',
+            'Manzana',
+            'Flor',
+            'Gato',
+            'Coche',
+            'Pelota',
+            'Mesa',
+            'Luna',
+            'Pato',
+            'Silla',
+            'Mariposa',
+            'Nube',
+            'Avión',
+            'Pescado',
+            'Tren',
+            'Globo',
+            'Camión',
+            'Rana',
+            'Corazón',
+            'Reloj',
+            'Círculo',
+            'Estrella',
+            'Zapato',
+            'Sombrero',
+            'Lápiz',
+            'Taza',
+            'Pizza'
+        ];
 
-        $medium = [];
+        $medium = [
+            'Computadora',
+            'Guitarra',
+            'Elefante',
+            'Jirafa',
+            'Avión',
+            'Helado',
+            'Dinosaurio',
+            'Fútbol',
+            'Camiseta',
+            'Mapa',
+            'Teléfono',
+            'Pintura',
+            'Helicóptero',
+            'Reloj',
+            'Globo terráqueo',
+            'Tortuga',
+            'Lápiz',
+            'Casa',
+            'Ojo',
+            'Llave',
+            'Pizarra',
+            'León',
+            'Escalera',
+            'Camión',
+            'Payaso',
+            'Manzana',
+            'Calendario',
+            'Globo aerostático',
+            'Robot',
+            'Paloma'
+        ];
 
-        $hard = [];
+        $hard = [
+            'Telescopio',
+            'Micrófono',
+            'Elefante africano',
+            'Engranaje',
+            'Helicóptero de combate',
+            'Catarata',
+            'Quiosco',
+            'Mariposa monarca',
+            'Hidroavión',
+            'Escarabajo rinoceronte',
+            'Quetzal',
+            'Crucigrama',
+            'Orangután',
+            'Péndulo',
+            'Paralelepípedo',
+            'Triceratops',
+            'Circunferencia',
+            'Arrecife de coral',
+            'Girasol',
+            'Catedral',
+            'Eclipse solar',
+            'Ventilador de techo',
+            'Escarabajo pelotero',
+            'Locomotora a vapor',
+            'Espectrograma',
+            'Pentágono',
+            'Magnolia',
+            'Aloe vera',
+            'Esquí acuático',
+            'Croissant',
+        ];
 
         foreach ($easy as $word) {
-            Word::create(['name' => $word, 'difficulty' => 'easy']);
+            Word::create(['word' => $word, 'difficulty' => 'easy']);
+        }
+
+        foreach ($medium as $word) {
+            Word::create(['word' => $word, 'difficulty' => 'medium']);
+        }
+        
+        foreach ($hard as $word) {
+            Word::create(['word' => $word, 'difficulty' => 'hard']);
         }
     }
 }
