@@ -1,7 +1,9 @@
 <template>
     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
         <div class="container">
-            <router-link to="/" class="navbar-brand">DAW 2</router-link>
+            <router-link to="/" class="navbar-brand">
+                <img id="logo" src="../../../storage/app/public/guess-it-logo.svg"></img> 
+            </router-link>
             <a class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </a>
@@ -53,3 +55,11 @@ import LocaleSwitcher from "../components/LocaleSwitcher.vue";
     const user = computed(() => store.getters["auth/user"])
     const { processing, logout } = useAuth();
 </script>
+
+<style scoped>
+    #logo
+    {
+        width: 100px;
+        height: auto;
+    }
+</style>
