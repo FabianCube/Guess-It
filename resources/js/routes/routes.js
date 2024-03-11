@@ -2,7 +2,7 @@ import Cookies from 'js-cookie'
 import store from "../store";
 
 const AuthenticatedLayout = () => import('../layouts/Authenticated.vue')
-const GuestLayout = ()  => import('../layouts/Guest.vue');
+// const GuestLayout = ()  => import('../layouts/Guest.vue');
 
 const PostsIndex  = ()  => import('../views/admin/posts/Index.vue');
 const PostsCreate  = ()  => import('../views/admin/posts/Create.vue');
@@ -37,9 +37,8 @@ export default [
     {
         path: '/',
         // redirect: { name: 'login' },
-        component: GuestLayout,
+        // component: GuestLayout,
         children: [
-           
             {
                 path: '/',
                 name: 'home',
