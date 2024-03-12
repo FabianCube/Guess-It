@@ -1,0 +1,24 @@
+.logo{
+    width: 20rem;
+    height: auto;
+}
+
+#background{
+    background-image: url('../../../../storage/app/public/background-create-game.svg');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.background-players{
+    height: 40rem;
+    width: 100%;
+    background-color: white;
+    border-radius: 20px;
+}
+
+.background-instructions{
+    height: 25rem;
+    width: 100%;
+    background-color: white;
+    border-radius: 20px;
+}
