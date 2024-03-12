@@ -9,7 +9,7 @@
             <div class="d-flex mt-5">
                 <div class="col-3 me-5">
                     <div class="background-players">
-                        <div class="d-flex flex-column align-items-center p-3">
+                        <div class="d-flex flex-column align-items-center justify-content-between p-3">
                             <h2>JUGADORES</h2>
                             <div class="d-flex align-items-center btn-invite">
                                 <p class="mb-0 me-3 ">INVITAR AMIGOS</p>
