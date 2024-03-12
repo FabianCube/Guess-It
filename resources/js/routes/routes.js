@@ -83,6 +83,12 @@ export default [
                 component: () => import('../views/auth/passwords/Reset.vue'),
                 beforeEnter: guest,
             },
+            {
+                path: 'create-game',
+                name: 'create-game',
+                component: () => import('../views/create game/CreateGame.vue'),
+                // beforeEnter: guest,
+            }
         ]
     },
     {

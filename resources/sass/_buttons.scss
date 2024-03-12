@@ -25,3 +25,18 @@
     left: 0;
     z-index: -1;
 }
+
+.btn-invite
+{
+    position: relative;
+    width: 8rem;
+    height: 3rem;
+    background-color: #6753DB;
+    color: white;
+    font-size: 2rem;
+    display: flex;
+    justify-content: center;
+    border-radius: 15px;
+    border: top solid #7F95E3 1px;
+    z-index: 2;
+}
