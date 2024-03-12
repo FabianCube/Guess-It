@@ -1,7 +1,7 @@
 <template>
     <div id="background" class="relative flex items-top justify-center min-h-screen sm:items-center py-4 sm:pt-0">
-        <div class="w-100 h-100 flex flex-row justify-between">
-            <div class="col-2 flex flex-column">
+        <div class="w-100 flex flex-row justify-between">
+            <div class="col-2 flex flex-column justify-content-end align-items-end">
                 <button class="btn btn-smll-default mb-3"><img src="../../../../storage/app/public/icons/info-circle.svg" alt=""></button>
                 <button class="btn btn-smll-default"><img src="../../../../storage/app/public/icons/volume-on.svg" alt=""></button>
             </div>
@@ -14,7 +14,7 @@
                 
             </div>
 
-            <div class="col-2">
+            <div class="col-2 flex flex-column justify-content-end">
                 <router-link to="/register" class="btn btn-smll-default">
                     <img src="../../../../storage/app/public/icons/friends.svg" alt="">
                 </router-link>
