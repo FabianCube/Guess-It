@@ -46,17 +46,26 @@
     background-color: #FCB078;
 }
 
-.btn-invite
-{
-    position: relative;
-    width: 8rem;
-    height: 3rem;
+.btn-invite {
     background-color: #6753DB;
+    border: none;
     color: white;
-    font-size: 2rem;
-    display: flex;
-    justify-content: center;
-    border-radius: 15px;
-    border: top solid #7F95E3 1px;
-    z-index: 2;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+
+    box-shadow: 0 5px #7F95E3;
+    transition: all 0.3s ease;
+
 }
+
+.btn-invite:active {
+    background-color: #6753DB; /* Color de fondo al hacer clic */
+    box-shadow: 0 2px #7F95E3; /* Sombra más pequeña para efecto de presión */
+    transform: translateY(3px); /* Mover el botón hacia abajo para simular presión */
+  }
