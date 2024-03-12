@@ -118,6 +118,7 @@ import 'vue-select/dist/vue-select.css';
 
 import "primeflex/primeflex.css";
 import '../css/theme.css';
+import '../css/globals.css';
 //import "primevue/resources/themes/lara-light-teal/theme.css";
 //import "primevue/resources/themes/viva-light/theme.css";
 import "primeicons/primeicons.css";
