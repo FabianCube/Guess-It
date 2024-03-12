@@ -48,8 +48,8 @@
 
 .btn-invite {
     background-color: #6753DB;
-    border: none;
     color: white;
+    border: none;
     padding: 10px 20px;
     text-align: center;
     text-decoration: none;
@@ -58,14 +58,33 @@
     margin: 4px 2px;
     cursor: pointer;
     border-radius: 5px;
-
-    box-shadow: 0 5px #7F95E3;
-    transition: all 0.3s ease;
+    box-shadow: 0 8px #513EBE;
+    transition: all 0.1s ease;
 
 }
 
+.btn-invite:hover {
+    background-color: #7968dc;
+    animation: bounce 0.2s;
+}
+
 .btn-invite:active {
-    background-color: #6753DB; /* Color de fondo al hacer clic */
-    box-shadow: 0 2px #7F95E3; /* Sombra más pequeña para efecto de presión */
-    transform: translateY(3px); /* Mover el botón hacia abajo para simular presión */
-  }
+    background-color: #7968dc;
+    /* Color de fondo al hacer clic */
+    box-shadow: 0 4px #513EBE;
+    /* Sombra más pequeña para efecto de presión */
+    transform: translateY(4px);
+    /* Mover el botón hacia abajo para simular presión */
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}

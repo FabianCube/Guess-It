@@ -1,5 +1,5 @@
 <template>
-    <div id="background" class="relative flex items-top justify-center min-h-screen sm:items-center py-4 sm:pt-0">
+    <div id="background" class="relative flex items-top justify-center min-h-screen sm:items-center py-4 sm:pt-0 lilita-one-regular">
         <div class="container mt-6">
             <div class="d-flex justify-content-between align-items-center">
                 <h1>Boton</h1>
@@ -11,7 +11,10 @@
                     <div class="background-players">
                         <div class="d-flex flex-column align-items-center p-3">
                             <h2>JUGADORES</h2>
-                            <button class="btn-invite">INVITAR AMIGOS</button>
+                            <div class="d-flex align-items-center btn-invite">
+                                <p class="mb-0 me-3 ">INVITAR AMIGOS</p>
+                                <img src="../../../../storage/app/public/icons/user-plus-01.svg">
+                            </div>
                         </div>
                     </div>
                 </div>
