@@ -1,4 +1,10 @@
 /* General */
 $scale:14px;                    /* main font size */ 
 $borderRadius:12px;             /* border radius of layout element e.g. card, sidebar */ 
-$transitionDuration:.2s;        /* transition duration of layout elements e.g. sidebar, overlay menus */ 
+$transitionDuration:.2s;        /* transition duration of layout elements e.g. sidebar, overlay menus */
+
+
+/* Colors */
+$backgroundPurple: #814BC7;   /* color for background */
+$buttonOrange: #FCB078;       /* color for front button side */ 
+$buttonDarkOrange: #F27820;   /* color for back button side */
