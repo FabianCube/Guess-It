@@ -1,7 +1,6 @@
-.btn-default
-{
+.btn-default {
     position: relative;
-    width: 450px;
+    width: 410px;
     height: 85px;
     background-color: #FCB078;
     color: white;
@@ -10,18 +9,39 @@
     display: flex;
     justify-content: center;
     border-radius: 15px;
-    border: top solid white 1px;
-    z-index: 2;
+    z-index: 1;
+    margin-top: 20px;
+    font-family: "Lilita One", sans-serif;
+    text-shadow: 0px 2px 6px rgba($color: #000000, $alpha: .25); // x / y / blur / color
+
+    &:before {
+        content: '';
+        z-index: -1;
+        position: absolute;
+        width: 410px;
+        height: 85px;
+        background-color: #F27820;
+        top: 10px;
+        left: 0;
+        border-radius: 15px;
+    }
 }
 
-.btn-default:before
-{
-    content: '';
-    position: absolute;
-    width: 450px;
-    height: 85px;
-    background-color: #F27820;
-    top: 10px;
-    left: 0;
-    z-index: -1;
+// .btn-default::before {
+//     content: '';
+//     position: absolute;
+//     width: 410px;
+//     height: 85px;
+//     background-color: #F27820;
+//     top: 10px;
+//     left: 0;
+//     z-index: 1;
+//     border-radius: 15px;
+// }
+
+.btn-smll-default {
+    width: 75px;
+    height: 75px;
+    border-radius: 15px;
+    background-color: #FCB078;
 }

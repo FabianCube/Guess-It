@@ -1,15 +1,24 @@
 <template>
     <div id="background" class="relative flex items-top justify-center min-h-screen sm:items-center py-4 sm:pt-0">
-        <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-            <div class="flex justify-center flex-column pt-8 sm:text-gray-600 dark:text-gray-400 text-sm">
-                <img id="logo" src="../../../../storage/app/public/guess-it-logo.svg"></img> 
-                <router-link :to="{ name : 'public-posts.index'}" class="nav-link btn-default" id="create-game-btn">CREAR PARTIDA</router-link>
-                <!-- <h1>{{ $t('welcome_starter_title') }}</h1> -->
+        <div class="w-100 h-100 flex flex-row justify-between">
+            <div class="col-2">
+                <button><img src="../../../../storage/app/public/icons/info-circle.svg" alt=""></button>
+                <button><img src="../../../../storage/app/public/icons/" alt=""></button>
             </div>
 
-            <div class="test">a</div>
+            <div class="col-8 flex justify-center align-items-center flex-column pt-8">
+                <img id="logo" src="../../../../storage/app/public/guess-it-logo.svg"></img> 
 
-            <ul class="navbar-nav mt-2 mt-lg-0 ms-auto">
+                <router-link :to="{ name : 'public-posts.index'}" class="btn-default">CREAR PARTIDA</router-link>
+                <router-link :to="{ name : 'public-posts.index'}" class="btn-default">UNIRSE A PARTIDA</router-link>
+                
+            </div>
+
+            <div class="col-2">
+                <router-link to="/register" class="btn btn-smll-default">REGISTRARSE</router-link>
+            </div>
+
+            <!-- <ul class="navbar-nav mt-2 mt-lg-0 ms-auto">
                 <li class="nav-item">
                     <router-link to="/" class="nav-link" aria-current="page">{{ $t('home') }}</router-link>
                 </li>
@@ -37,7 +46,7 @@
                     <li><a class="dropdown-item" href="javascript:void(0)" @click="logout">Logout</a></li>
                 </ul>
             </li>
-        </ul>
+        </ul> -->
         </div>
     </div>
 </template>
@@ -46,10 +55,6 @@
 </script>
 
 <style scoped>
-
-body {
-    font-family: 'Lilita One', sans-serif;
-}
 
 #logo
 {
