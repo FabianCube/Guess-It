@@ -9,15 +9,18 @@
             <div class="col-8 flex justify-center align-items-center flex-column pt-8">
                 <img id="logo" src="../../../../storage/app/public/guess-it-logo.svg"></img> 
 
-                <router-link :to="{ name : 'public-posts.index'}" class="btn-default">CREAR PARTIDA</router-link>
+                <router-link to="/create-game" class="btn-default">CREAR PARTIDA</router-link>
                 <router-link :to="{ name : 'public-posts.index'}" class="btn-default">UNIRSE A PARTIDA</router-link>
                 
             </div>
 
-            <div class="col-2 flex flex-column justify-content-end">
+            <div class="col-2 flex flex-column justify-content-between">
                 <router-link to="/register" class="btn btn-smll-default">
-                    <img src="../../../../storage/app/public/icons/friends.svg" alt="">
+                    <img src="../../../../storage/app/public/icons/account.svg" alt="">
                 </router-link>
+                <button class="btn btn-smll-default">
+                    <img src="../../../../storage/app/public/icons/friends.svg" alt="">
+                </button>
             </div>
 
             <!-- <ul class="navbar-nav mt-2 mt-lg-0 ms-auto">
