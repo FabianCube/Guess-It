@@ -1,9 +1,9 @@
 <template>
     <div id="background" class="relative flex items-top justify-center min-h-screen sm:items-center py-4 sm:pt-0">
-        <div class="w-100 flex flex-row justify-between">
+        <div class="w-100 flex flex-row justify-between py-5">
             <div class="col-2 flex flex-column justify-content-end align-items-end">
-                <button class="btn btn-smll-default mb-3"><img src="../../../../storage/app/public/icons/info-circle.svg" alt=""></button>
-                <button class="btn btn-smll-default"><img src="../../../../storage/app/public/icons/volume-on.svg" alt=""></button>
+                <button class="btn-smll-default mb-5" style="border: none;"><img src="../../../../storage/app/public/icons/info-circle.svg" alt=""></button>
+                <button class="btn-smll-default" style="border: none;"><img src="../../../../storage/app/public/icons/volume-on.svg" alt=""></button>
             </div>
 
             <div class="col-8 flex justify-center align-items-center flex-column pt-8">
@@ -15,10 +15,10 @@
             </div>
 
             <div class="col-2 flex flex-column justify-content-between">
-                <router-link to="/register" class="btn btn-smll-default">
+                <router-link to="/register" class="btn-smll-default flex justify-content-center">
                     <img src="../../../../storage/app/public/icons/account.svg" alt="">
                 </router-link>
-                <button class="btn btn-smll-default">
+                <button class="btn-smll-default" style="border: none">
                     <img src="../../../../storage/app/public/icons/friends.svg" alt="">
                 </button>
             </div>
