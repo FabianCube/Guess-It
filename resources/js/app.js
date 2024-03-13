@@ -27,7 +27,7 @@ import PrimeVue from "primevue/config";
 //import Card from 'primevue/card';
 //import Chart from 'primevue/chart';
 //import CascadeSelect from 'primevue/cascadeselect';
-//import Carousel from 'primevue/carousel';
+// import Carousel from 'primevue/carousel';
 //import Checkbox from 'primevue/checkbox';
 //import Chip from 'primevue/chip';
 //import Chips from 'primevue/chips';
@@ -121,6 +121,8 @@ import '../css/theme.css';
 //import "primevue/resources/themes/lara-light-teal/theme.css";
 //import "primevue/resources/themes/viva-light/theme.css";
 import "primeicons/primeicons.css";
+import Carousel from "./views/create game/components/Carousel.vue";
+
 
 const app = createApp({
     created() {
@@ -138,6 +140,8 @@ app.use(i18n)
 app.use(abilitiesPlugin, ability)
 app.component('Pagination', Bootstrap5Pagination)
 app.component("v-select", vSelect);
+
+app.component("Carousel", Carousel);
 
 /**PRIMEVUE */
 app.use(PrimeVue, { ripple: true });
