@@ -142,7 +142,7 @@ export default {
 <style scoped>
 
 .canvas{
-    position:absolute;
+    
     width: 100%;
     height: 100%;
 }
