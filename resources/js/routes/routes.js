@@ -88,6 +88,12 @@ export default [
                 name: 'create-game',
                 component: () => import('../views/create game/CreateGame.vue'),
                 // beforeEnter: guest,
+            },
+            {
+                path: 'play-game',
+                name: 'play-game',
+                component: () => import('../views/gameRoom/Game.vue'),
+                // beforeEnter: guest,
             }
         ]
     },
