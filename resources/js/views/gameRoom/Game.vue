@@ -21,7 +21,7 @@
                         <div class="canvas">
                             <!-- COMPONENTE CANVAS -->
                             <div>
-                                <canvas-component :new-canvas="newCanvas" v-on:canvasupdate="sendCanvas"></canvas-component>
+                                <canvas-component :new-canvas="newCanvas" @canvasupdate="sendCanvas"></canvas-component>
                             </div>
                             <!-- FIN COMPONENTE CANVAS -->
                         </div>
@@ -45,10 +45,10 @@
                             <!-- COMPONENTE CHAT  -->
                             <div class="">
                                 <div class="card-body chat">
-                                    <chat-messages :messages="messages"></chat-messages>
+                                    <!-- <chat-messages :messages="messages"></chat-messages> -->
                                 </div>
                                 <div class="card-footer">
-                                    <!-- <chat-form v-on:messagesent="addMessage" :user="{{ Auth::user() }}"></chat-form> -->
+                                    <!-- <chat-form @messagesent="addMessage" :user="user"></chat-form> -->
                                 </div>
                             </div>
                             <!-- FIN COMPONENTE CHAT -->
