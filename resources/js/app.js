@@ -123,9 +123,9 @@ import '../css/theme.css';
 import "primeicons/primeicons.css";
 import Carousel from "./views/create game/components/Carousel.vue";
 
-import ChatMessages from './gameRoom/components/ChatMessages.vue';
-import ChatForm from './gameRoom/components/ChatForm.vue';
-import Canvas from './gameRoom/components/Canvas.vue';
+import ChatMessages from './views/gameRoom/components/ChatMessages.vue';
+import ChatForm from './views/gameRoom/components/ChatForm.vue';
+import Canvas from './views/gameRoom/components/Canvas.vue';
 
 
 const app = createApp({
@@ -188,6 +188,9 @@ app.component('Pagination', Bootstrap5Pagination)
 app.component("v-select", vSelect);
 
 app.component("Carousel", Carousel);
+app.component('chat-messages', ChatMessages);
+app.component('chat-form', ChatForm);
+app.component('canvas-component', Canvas);
 
 /**PRIMEVUE */
 app.use(PrimeVue, { ripple: true });
