@@ -17,10 +17,10 @@ class ChatsController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
-    {
-        return view('chat');
-    }
+    // public function index()
+    // {
+    //     return view('chat');
+    // }
 
     public function fetchMessages()
     {
