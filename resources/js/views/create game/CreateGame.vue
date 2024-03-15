@@ -22,7 +22,7 @@
                 </div>
                 <div class="col-9 d-flex flex-column ps-5">
                     <div class="background-instructions">
-                        <div class="p-3 d-flex justify-content-center">
+                        <div class="p-3 h-100">
                             <Carousel />
                         </div>
                     </div>
