@@ -3,11 +3,10 @@
         class="relative flex items-top justify-center min-h-screen sm:items-center py-4 sm:pt-0 lilita-one-regular">
         <div class="container mt-6">
             <div class="d-flex justify-content-between align-items-center">
-                <button class="btn-smll-default"><img src="../../../../storage/app/public/icons/home-05.svg"
+                <button class="btn-smll-default"><img src="/storage/icons/home-05.svg"
                         alt=""></button>
-                <img id="logo" src="../../../../storage/app/public/guess-it-logo.svg" class="logo"></img>
-                <button class="btn-smll-default"><img src="../../../../storage/app/public/icons/volume-on.svg"
-                        alt=""></button>
+                <img id="logo" src="/storage/guess-it-logo.svg" class="logo"></img>
+                <button class="btn-smll-default"><img src="/storage/icons/volume-on.svg" alt=""></button>
             </div>
             <div class="flex mt-5">
                 <div class="col-3 ">
