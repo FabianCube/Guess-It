@@ -20,7 +20,7 @@
                     <div>
                         <div class="canvas">
                             <!-- COMPONENTE CANVAS -->
-                            <div>
+                            <div class="canvas-container">
                                 <canvas-component :new-canvas="newCanvas" @canvasupdate="sendCanvas"></canvas-component>
                             </div>
                             <!-- FIN COMPONENTE CANVAS -->
@@ -79,11 +79,17 @@
 
 <style>
 
-.testCanvas
+.canvas-container
+{
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+.canvas
 {
     width: 100%;
-    height: 600px;
-    background-color: yellow;
+    height: 500px;
     border-radius: 12px;
 }
 .chat
