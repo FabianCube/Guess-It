@@ -123,10 +123,56 @@ import '../css/theme.css';
 import "primeicons/primeicons.css";
 import Carousel from "./views/create game/components/Carousel.vue";
 
+import ChatMessages from './gameRoom/components/ChatMessages.vue';
+import ChatForm from './gameRoom/components/ChatForm.vue';
+import Canvas from './gameRoom/components/Canvas.vue';
+
 
 const app = createApp({
+    data() {
+        return {
+            messages: [],
+            newCanvas: {}
+        };
+    },
     created() {
-        useAuth().getUser()
+        useAuth().getUser();
+
+        this.fetchMessages();
+        window.Echo.private('chat')
+            .listen('MessageSent', (e) => {
+                this.messages.push({
+                    message: e.message.message,
+                    user: e.user
+                });
+            });
+
+        // routes/channels
+        // Escuchamos el canal canvas para reconstruir el canvas cuando el que está dibujando hace mouseout    
+        window.Echo.private('canvas')
+            .listen('CanvasUpdate', (e) =>{
+                this.newCanvas = e.canvas;
+                console.log(this.newCanvas);
+            });
+
+    },
+    methods: {
+        fetchMessages() {
+            axios.get('/messages').then(response => {
+                this.messages = response.data;
+            });
+        },
+        addMessage(message) {
+            this.messages.push(message);
+            axios.post('/messages', message).then(response => {
+                console.log(response.data);
+            });
+        },
+        sendCanvas(canvas){
+            axios.post('/canvas', canvas).then(response => {
+                console.log(response.data);
+            });
+        }
     }
 });
 
