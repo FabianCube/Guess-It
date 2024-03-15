@@ -1,27 +1,9 @@
 # Características
 
-Ejemplo proyecto Laravel 10 + vue3 PAra DAW
-
-- ✅ Laravel 10
-- ✅ Vue 3
-- ✅ VueRouter + Vuex
-- ✅ Vue i18n Multi Idioma
-- ✅ Iniciar sesión
-- ✅ Restablecimiento de contraseña
-- ✅ Login
-- ✅ Panel de administración
-- ✅ Gestión de perfiles
-- ✅ Gestión de usuarios
-- ✅ Gestión de roles
-- ✅ Gestión de permisos
-- ✅ Cambio de contraseña
-- ✅ Verificación de correo electrónico
-- ✅ Gestión de Posts
-- ✅ Blog de Frontend
-- ✅ Boostrap 5
 
 
-## Como usar
+
+## SETUP
 ### Clonar Repositorio 
 
 ```bash
