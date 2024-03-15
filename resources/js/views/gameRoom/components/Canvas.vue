@@ -1,6 +1,6 @@
 <template>
-    <body>
-        <div class="input-group">
+    <!-- <body> -->
+        <div class="">
             <canvas id="can" class="canvas"></canvas>
             <button id="clearArea">Clear Area</button>
             Line width : <select id="selWidth">
@@ -16,9 +16,8 @@
                 <option value="yellow">yellow</option>
                 <option value="gray">gray</option>
             </select>
-
         </div>
-    </body>
+    <!-- </body> -->
 </template>
 
 <script>
@@ -142,9 +141,9 @@ export default {
 <style scoped>
 
 .canvas{
-    
     width: 100%;
     height: 100%;
+    background-color: #fff;
 }
 
 </style>
