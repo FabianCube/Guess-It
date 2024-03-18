@@ -122,6 +122,7 @@ import '../css/theme.css';
 //import "primevue/resources/themes/viva-light/theme.css";
 import "primeicons/primeicons.css";
 import Carousel from "./views/create game/components/Carousel.vue";
+import PlayerList from "./views/create game/components/PlayerList.vue";
 
 import ChatMessages from './views/gameRoom/components/ChatMessages.vue';
 import ChatForm from './views/gameRoom/components/ChatForm.vue';
@@ -188,6 +189,7 @@ app.component('Pagination', Bootstrap5Pagination)
 app.component("v-select", vSelect);
 
 app.component("Carousel", Carousel);
+app.component("PlayerList", PlayerList);
 app.component('chat-messages', ChatMessages);
 app.component('chat-form', ChatForm);
 app.component('canvas-component', Canvas);

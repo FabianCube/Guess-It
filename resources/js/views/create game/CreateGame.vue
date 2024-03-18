@@ -12,7 +12,8 @@
                 <div class="col-3 ">
                     <div class="background-players">
                         <div class="d-flex flex-column align-items-center justify-content-between p-3">
-                            <h2>JUGADORES</h2>
+                            <h2 class="mb-3">JUGADORES</h2>
+                            <PlayerList class="mb-3"/>
                             <div class="d-flex align-items-center btn-invite">
                                 <p class="mb-0 me-3 ">INVITAR AMIGOS</p>
                                 <img src="../../../../storage/app/public/icons/user-plus-01.svg">
