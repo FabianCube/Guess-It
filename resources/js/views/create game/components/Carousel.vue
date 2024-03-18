@@ -1,6 +1,6 @@
 <template>
     <div class="carousel">
-        <vueper-slides :dragging-distance="50" class="no-shadow" fixed-height="28rem" slide-image-inside>
+        <vueper-slides :dragging-distance="50" class="no-shadow" fixed-height="33rem" slide-image-inside>
             <vueper-slide v-for="(slide, i) in slides" :key="i" :image="slide.image" />
         </vueper-slides>
     </div>

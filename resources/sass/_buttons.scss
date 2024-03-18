@@ -50,17 +50,16 @@
     background-color: #6753DB;
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 20px 20px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 15px;
     box-shadow: 0 8px #513EBE;
     transition: all 0.1s ease;
-
 }
 
 .btn-invite:hover {
@@ -74,6 +73,36 @@
     box-shadow: 0 4px #513EBE;
     /* Sombra más pequeña para efecto de presión */
     transform: translateY(4px);
+    /* Mover el botón hacia abajo para simular presión */
+}
+
+.btn-play {
+    background-color: #66BA13;
+    color: white;
+    border: none;
+    padding: 20px 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 15px;
+    box-shadow: 0 14px #4D8A11;
+    transition: all 0.1s ease;
+}
+
+.btn-play:hover {
+    background-color: #70ca16;
+    animation: bounce 0.2s;
+}
+
+.btn-play:active {
+    background-color: #70ca16;
+    /* Color de fondo al hacer clic */
+    box-shadow: 0 6px #4D8A11;
+    /* Sombra más pequeña para efecto de presión */
+    transform: translateY(8px);
     /* Mover el botón hacia abajo para simular presión */
 }
 
