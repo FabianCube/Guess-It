@@ -1,6 +1,11 @@
 # Características
 
 
+### Link storage
+
+```bash
+php artisan storage:link
+```
 
 
 ## SETUP
