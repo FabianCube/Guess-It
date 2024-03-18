@@ -14,15 +14,15 @@ import 'vueperslides/dist/vueperslides.css';
 const slides = ref([
     {
         title: 'Bob',
-        image: '/storage/bob-esponja.jpg'
+        image: '/storage/instrucciones-demo.svg'
     },
     {
         title: 'Pikachu',
-        image: '/storage/pikachu.jpg'
+        image: '/storage/instrucciones-demo.svg'
     },
     {
         title: 'Robot',
-        image: '/storage/robot.jpg'
+        image: '/storage/instrucciones-demo.svg'
     }
 ])
 
