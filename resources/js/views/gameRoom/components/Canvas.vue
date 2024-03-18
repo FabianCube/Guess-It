@@ -1,7 +1,11 @@
 <template>
-    <!-- <body> -->
-        <div class="">
-            <canvas id="can" class="canvas"></canvas>
+    <!-- CANVAS COMPONENT -->
+
+            <!-- <canvas id="can" class="canvas"></canvas> -->
+            <canvas id="can" width="750" height="550"
+                style="position:absolute;top:0%;left:0%; background-color: #fff; border-radius: 12px;"></canvas>
+
+       
             <button id="clearArea">Clear Area</button>
             Line width : <select id="selWidth">
                 <option value="11">11</option>
@@ -16,8 +20,7 @@
                 <option value="yellow">yellow</option>
                 <option value="gray">gray</option>
             </select>
-        </div>
-    <!-- </body> -->
+    <!-- END CANVAS COMPONENT -->
 </template>
 
 <script>
@@ -140,10 +143,5 @@ export default {
 
 <style scoped>
 
-.canvas{
-    width: 100%;
-    height: 100%;
-    background-color: #fff;
-}
 
 </style>
