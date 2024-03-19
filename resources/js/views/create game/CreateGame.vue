@@ -34,8 +34,8 @@
                     </div>
                     <div class="d-flex justify-content-end">
                         <div class="d-flex align-items-center btn-play">
-                            <h1 class="mb-0 me-3 play-font">INICIAR</h1>
-                            <img id="play" src="../../../../storage/app/public/icons/play.svg" alt="">
+                            <h1 class="mb-2 me-3 play-font">INICIAR</h1>
+                            <img src="../../../../storage/app/public/icons/play.svg" alt="">
                         </div>
                     </div>
                 </div>
