@@ -1,6 +1,6 @@
 <template>
-    <div class="input-group">
-      <input id="btn-input" type="text" name="message" class="form-control input-sm" placeholder="Type your message here..."
+    <div class="text-input">
+      <input id="btn-input" type="text" name="message" class="form-control input-sm" placeholder="Escribe aquí..."
         v-model="newMessage"
         @keyup.enter="sendMessage"
       />
@@ -36,7 +36,16 @@
   </script>
   
   <style scoped>
-  
+  .text-input
+  {
+    width: 100%;
+    background-color: white;
+  }
+
+  #btn-input
+  {
+    width: 100%;
+  }
   
   
   </style>
