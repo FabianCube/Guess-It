@@ -14,49 +14,43 @@
             </div>
 
             <!-- CANVAS & CHAT -->
-            <div class="col-12 flex flex-row bg-primary p-0 mt-5">
-                <div class="col-7 p-0">
-
+            <div class="container flex flex-row p-0 mt-5 justify-content-between">
+                <div class="col-8 p-0" style="height: 622.5px; width: 830px;">
                     <!-- CANVAS -->
-                    <div style="width: 100%; height: 100%; background-color: yellow; border: 2px solid black; border-radius: 12px; position: relative;">
+                    <div style="width: 100%; height: 100%;border-radius: 12px; position: relative;">
                         <!-- COMPONENTE CANVAS -->
                         <canvas-component :new-canvas="newCanvas" @canvasupdate="sendCanvas"></canvas-component>
                     </div>
 
                     <!-- JUGADORES -->
-                    <div class="jugadores mt-5" style="width: 100%; height: 100px; background-color: #fff; border-radius: 12px;">
+                    <!-- <div class="jugadores" style=""> -->
                         <!-- COMPONENTE JUGADORES -->
                         
-                    </div>
+                    <!-- </div> -->
                 </div>
 
-                <div class="col-5 p-0">
+                <div class="col-4 chat-container">
                     <!-- CHAT -->
                     <div>
-                        <div class="chat">
-
+                        <div class="chat p-4">
                             <!-- COMPONENTE CHAT  -->
-                            <div class="">
-                                <div class="card-body chat">
-                                    <!-- <chat-messages :messages="messages"></chat-messages> -->
-                                </div>
-                                <div class="card-footer">
-                                    <!-- <chat-form @messagesent="addMessage" :user="user"></chat-form> -->
-                                </div>
+                            <div>
+                                <chat-messages :messages="messages"></chat-messages>
                             </div>
-                            <!-- FIN COMPONENTE CHAT -->
-
+                            <div>
+                                <chat-form @messagesent="addMessage"></chat-form>
+                            </div>
                         </div>
                     </div>
 
                     <!-- PLAYER INFO -->
-                    <div>
-                        <div class="info-jugador">
+                    <!-- <div> -->
+                        <!-- <div class="info-jugador"> -->
                             <!-- COMPONENTE INFO JUGADOR -->
 
                             <!-- FIN COMPONENTE INOF JUGADOR -->
-                        </div>
-                    </div>
+                        <!-- </div> -->
+                    <!-- </div> -->
                 </div>
             </div>
             <!--  -->
@@ -89,9 +83,13 @@
 
 .chat {
     width: 100%;
-    height: 600px;
-    background-color: red;
+    height: 622.5px;
+    background-color: white;
     border-radius: 12px;
-    padding-left: 20px;
+}
+
+.chat-container
+{
+    padding: 0 0 0 0px;
 }
 </style>
