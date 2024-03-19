@@ -3,7 +3,7 @@
         class="relative flex items-top justify-center min-h-screen sm:items-center py-4 sm:pt-0 lilita-one-regular">
         <div class="container mt-6">
             <div class="d-flex justify-content-between align-items-center">
-                <button class="btn-smll-default"><img src="/storage/icons/home-05.svg" alt=""></button>
+                <router-link to="/" class="btn-smll-default"><img src="/storage/icons/home-05.svg" alt=""></router-link>
                 <img id="logo" src="/storage/guess-it-logo.svg" class="logo"></img>
                 <button class="btn-smll-default"><img src="/storage/icons/volume-on.svg" alt=""></button>
             </div>
@@ -33,10 +33,10 @@
                         <img src="../../../../storage/app/public/icons/copy-03.svg" alt="Copiar código">
                     </div>
                     <div class="d-flex justify-content-end">
-                        <div class="d-flex align-items-center btn-play">
+                        <router-link to="/play-game" class="d-flex align-items-center btn-play">
                             <h1 class="mb-2 me-3 play-font">INICIAR</h1>
                             <img src="../../../../storage/app/public/icons/play.svg" alt="">
-                        </div>
+                        </router-link>
                     </div>
                 </div>
             </div>
