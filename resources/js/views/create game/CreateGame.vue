@@ -27,10 +27,10 @@
                             <Carousel />
                         </div>
                     </div>
-                    <div class="d-flex justify-content-between">
-                        <div class="d-flex background-code">
-                            <h4 class="mb-0 me-5">CODE: XLM984</h4>
-                            <img src="../../../../storage/app/public/icons/copy-03.svg" alt="Copiar código">
+                    <div class="d-flex justify-content-between pb-3">
+                        <div class="align-self-start d-flex alig-items-center background-code">
+                            <h4 class="mb-0 me-4">CODE: XLM984</h4>
+                            <img src="../../../../storage/app/public/icons/copy-03.svg" alt="Copiar código" class="copiar">
                         </div>
                         <div class="d-flex justify-content-end">
                             <router-link to="/play-game" class="d-flex align-items-center btn-play">
