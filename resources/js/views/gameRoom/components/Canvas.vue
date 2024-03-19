@@ -1,29 +1,31 @@
 <template>
     <!-- CANVAS COMPONENT -->
+    <canvas id="can"></canvas>
 
-            <!-- <canvas id="can" class="canvas"></canvas> -->
-            <canvas id="can" width="750" height="550"
-                style="position:absolute;top:0%;left:0%; background-color: #fff; border-radius: 12px;"></canvas>
+    <div class="controls">
+        <button id="clearArea">Clear Area</button>
+        Line width : <select id="selWidth">
+            <option value="11">11</option>
+            <option value="13" selected="selected">13</option>
+            <option value="15">15</option>
+        </select>
+        Color : <select id="selColor">
+            <option value="black">black</option>
+            <option value="blue" selected="selected">blue</option>
+            <option value="red">red</option>
+            <option value="green">green</option>
+            <option value="yellow">yellow</option>
+            <option value="gray">gray</option>
+        </select>
+    </div>
 
-       
-            <button id="clearArea">Clear Area</button>
-            Line width : <select id="selWidth">
-                <option value="11">11</option>
-                <option value="13" selected="selected">13</option>
-                <option value="15">15</option>
-            </select>
-            Color : <select id="selColor">
-                <option value="black">black</option>
-                <option value="blue" selected="selected">blue</option>
-                <option value="red">red</option>
-                <option value="green">green</option>
-                <option value="yellow">yellow</option>
-                <option value="gray">gray</option>
-            </select>
     <!-- END CANVAS COMPONENT -->
 </template>
 
 <script>
+
+// window.onload = adjustCanvas;
+
 export default {
     props: ["newCanvas"],
     updated() {
@@ -61,25 +63,27 @@ export default {
     },
     mounted() {
         this.init();
+        window.addEventListener('resize', this.adjustCanvas);
+        this.adjustCanvas();
     },
     methods: {
-        sendCanvas(params) {
+        sendCanvas(params) 
+        {
             this.$emit("canvasupdate", {
                 user: this.user,
 
                 canvas: params,
             });
-
             console.log("canvas sent");
         },
-        getParams() {
+        getParams() 
+        {
             console.log("Dentro de getParams");
-
             const params = JSON.stringify(this.movements);
-
             this.sendCanvas(params)
         },
-        init() {
+        init() 
+        {
             this.canvas = document.getElementById('can');
             this.ctx = this.canvas.getContext("2d");
 
@@ -122,7 +126,8 @@ export default {
                 this.sendCanvas("clear");
             })
         },
-        drawLine(ctx, x1, y1, x2, y2) {
+        drawLine(ctx, x1, y1, x2, y2) 
+        {
             ctx.beginPath();
             ctx.strokeStyle = document.getElementById('selColor').value;
             ctx.lineWidth = document.getElementById('selWidth').value;
@@ -132,9 +137,16 @@ export default {
             ctx.closePath();
             ctx.stroke();
         },
-        clearArea() {
+        clearArea() 
+        {
             this.ctx.setTransform(1, 0, 0, 1, 0, 0);
             this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+        },
+        adjustCanvas()
+        {
+            let style = getComputedStyle(this.canvas);
+            this.canvas.width = parseInt(style.width);
+            this.canvas.height = parseInt(style.height);
         }
     }
 }
@@ -142,6 +154,21 @@ export default {
 </script>
 
 <style scoped>
+#can {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    background-color: #fff;
+    border-radius: 12px;
+}
 
-
+.controls
+{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+}
 </style>
