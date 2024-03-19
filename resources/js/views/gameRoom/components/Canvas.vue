@@ -167,8 +167,18 @@ export default {
 .controls
 {
     position: absolute;
-    bottom: 0;
-    left: 0;
+    bottom: 0%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 100;
+    background-color: white;
+    border-radius: 15px;
+    border: solid 2px;
+    width: 350px;
+    height: 65px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>
