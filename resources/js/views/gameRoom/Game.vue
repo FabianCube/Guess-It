@@ -18,6 +18,8 @@
                 <div class="col-8 p-0" style="height: 622.5px; width: 830px;">
                     <!-- CANVAS -->
                     <div style="width: 100%; height: 100%;border-radius: 12px; position: relative;">
+                        <!-- COMPONENTE STATUS BAR -->
+                        <status-bar/>
                         <!-- COMPONENTE CANVAS -->
                         <canvas-component :new-canvas="newCanvas" @canvasupdate="sendCanvas"></canvas-component>
                     </div>
