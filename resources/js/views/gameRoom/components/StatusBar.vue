@@ -2,9 +2,9 @@
 
 <template>
     <div class="container flex flex-column bar-container">
-        <div></div>
-        <div></div>
-        <div></div>
+        <div>a</div>
+        <div>a</div>
+        <div>a</div>
     </div>
 </template>
 
