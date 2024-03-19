@@ -124,11 +124,13 @@ import '../css/theme.css';
 import "primeicons/primeicons.css";
 import Carousel from "./views/create game/components/Carousel.vue";
 import PlayerList from "./views/create game/components/PlayerList.vue";
+import GameSettings from './views/create game/components/GameSettings.vue';
 
 import ChatMessages from './views/gameRoom/components/ChatMessages.vue';
 import ChatForm from './views/gameRoom/components/ChatForm.vue';
 import Canvas from './views/gameRoom/components/Canvas.vue';
 import StatusBar from './views/gameRoom/components/StatusBar.vue';
+
 
 
 const app = createApp({
@@ -191,6 +193,7 @@ app.component('Pagination', Bootstrap5Pagination);
 app.component("v-select", vSelect);
 
 app.component("Carousel", Carousel);
+app.component("GameSettings", GameSettings);
 app.component("PlayerList", PlayerList);
 app.component('chat-messages', ChatMessages);
 app.component('chat-form', ChatForm);
