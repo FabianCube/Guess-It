@@ -1,12 +1,10 @@
 <template>
     <div class="background min-h-screen sm:items-center py-4">
-
-
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
-                <button class="btn-smll-default">
+                <router-link to="/" class="btn-smll-default">
                     <img src="/storage/icons/home-05.svg" alt="">
-                </button>
+                </router-link>
 
                 <img id="logo" src="/storage/guess-it-logo.svg" class="logo"></img>
 
