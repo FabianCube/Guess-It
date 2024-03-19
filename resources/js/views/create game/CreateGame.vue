@@ -1,7 +1,6 @@
 <template>
-    <div id="background"
-        class="relative flex items-top justify-center min-h-screen sm:items-center py-4 sm:pt-0 lilita-one-regular">
-        <div class="container mt-6">
+    <div id="background" class="relative flex items-top justify-center min-h-screen sm:items-center sm:pt-0 lilita-one-regular">
+        <div class="container py-4">
             <div class="d-flex justify-content-between align-items-center">
                 <router-link to="/" class="btn-smll-default"><img src="/storage/icons/home-05.svg" alt=""></router-link>
                 <img id="logo" src="/storage/guess-it-logo.svg" class="logo"></img>
@@ -22,21 +21,23 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-8 d-flex flex-column ps-5">
+                <div class="col-8 d-flex flex-column justify-content-between ps-5">
                     <div class="background-instructions">
                         <div class="p-3 h-100">
                             <Carousel />
                         </div>
                     </div>
-                    <div class="d-flex justify-content-between mt-4 w-25 background-code">
-                        <h4 class="mb-0">CODE: XLM984</h4>
-                        <img src="../../../../storage/app/public/icons/copy-03.svg" alt="Copiar código">
-                    </div>
-                    <div class="d-flex justify-content-end">
-                        <router-link to="/play-game" class="d-flex align-items-center btn-play">
-                            <h1 class="mb-2 me-3 play-font">INICIAR</h1>
-                            <img src="../../../../storage/app/public/icons/play.svg" alt="">
-                        </router-link>
+                    <div class="d-flex justify-content-between">
+                        <div class="d-flex background-code">
+                            <h4 class="mb-0 me-5">CODE: XLM984</h4>
+                            <img src="../../../../storage/app/public/icons/copy-03.svg" alt="Copiar código">
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <router-link to="/play-game" class="d-flex align-items-center btn-play">
+                                <h1 class="mb-2 me-3 play-font">INICIAR</h1>
+                                <img src="../../../../storage/app/public/icons/play.svg" alt="">
+                            </router-link>
+                        </div>
                     </div>
                 </div>
             </div>

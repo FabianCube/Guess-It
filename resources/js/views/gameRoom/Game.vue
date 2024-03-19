@@ -30,7 +30,7 @@
                     </div>
                 </div>
 
-                <div class="col-5 p-0">
+                <div class="col-5">
                     <!-- CHAT -->
                     <div>
                         <div class="chat">
