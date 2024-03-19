@@ -19,39 +19,31 @@
                     <!-- CANVAS -->
                     <div style="width: 100%; height: 100%;border-radius: 12px; position: relative;">
                         <!-- COMPONENTE STATUS BAR -->
-                        <status-bar/>
+                        <status-bar />
                         <!-- COMPONENTE CANVAS -->
                         <canvas-component :new-canvas="newCanvas" @canvasupdate="sendCanvas"></canvas-component>
                     </div>
-
-                    <!-- JUGADORES -->
-                    <!-- <div class="jugadores" style=""> -->
-                        <!-- COMPONENTE JUGADORES -->
-                        
-                    <!-- </div> -->
                 </div>
 
                 <div class="col-4 chat-container">
                     <!-- CHAT -->
-                    <div>
-                        <div class="chat p-4">
-                            <!-- COMPONENTE CHAT  -->
-                            <div>
-                                <chat-messages :messages="messages"></chat-messages>
-                            </div>
-                            <div>
-                                <chat-form @messagesent="addMessage"></chat-form>
-                            </div>
+                    <div class="chat p-0">
+                        <!-- COMPONENTE CHAT  -->
+                        <div class="col-8 p-0" style="height: 90%;">
+                            <chat-messages :messages="messages"></chat-messages>
+                        </div>
+                        <div class="col-4 p-0" style="width:100%">
+                            <chat-form @messagesent="addMessage"></chat-form>
                         </div>
                     </div>
 
                     <!-- PLAYER INFO -->
                     <!-- <div> -->
-                        <!-- <div class="info-jugador"> -->
-                            <!-- COMPONENTE INFO JUGADOR -->
+                    <!-- <div class="info-jugador"> -->
+                    <!-- COMPONENTE INFO JUGADOR -->
 
-                            <!-- FIN COMPONENTE INOF JUGADOR -->
-                        <!-- </div> -->
+                    <!-- FIN COMPONENTE INOF JUGADOR -->
+                    <!-- </div> -->
                     <!-- </div> -->
                 </div>
             </div>
@@ -90,8 +82,7 @@
     border-radius: 12px;
 }
 
-.chat-container
-{
+.chat-container {
     padding: 0 0 0 0px;
 }
 </style>
