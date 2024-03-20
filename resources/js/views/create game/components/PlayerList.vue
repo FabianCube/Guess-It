@@ -1,20 +1,20 @@
 <template>
     <div class="w-100">
-        <div class="d-flex align-items-center mb-2 etiqueta">
+        <div class="d-flex align-items-center mb-2 etiqueta player-1">
             <div class="me-3 avatar">
             </div>
             <div class="nombre-jugador">
                 <p class="mb-0">SUPER_DRAWER2000</p>
             </div>
         </div>
-        <div class="d-flex align-items-center mb-2 etiqueta">
+        <div class="d-flex align-items-center mb-2 etiqueta player-2">
             <div class="me-3 avatar">
             </div>
             <div class="nombre-jugador">
                 <p class="mb-0">SUPER_DRAWER2000</p>
             </div>
         </div>
-        <div class="d-flex align-items-center mb-2 etiqueta">
+        <div class="d-flex align-items-center mb-2 etiqueta player-3">
             <div class="me-3 avatar">
             </div>
             <div class="nombre-jugador">
@@ -51,11 +51,34 @@
 
 <style scoped>
 .etiqueta {
-    border: 3px solid #950398;
     border-radius: 10px;
     height: 4.3rem;
     padding: 0.5rem;
     box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.25);
+}
+
+.player-1{
+    border: 3px solid #950398;
+}
+
+.player-2{
+    border: 3px solid #d42424;
+}
+
+.player-3{
+    border: 3px solid #1ed621;
+}
+
+.player-4{
+    border: 3px solid #1f39df;
+}
+
+.player-5{
+    border: 3px solid #fb930c;
+}
+
+.player-6{
+    border: 3px solid #fcf010;
 }
 
 .vacia{
