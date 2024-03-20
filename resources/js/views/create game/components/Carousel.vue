@@ -1,5 +1,6 @@
 <template>
     <div class="carousel">
+        <img src="/storage/icons/settings.svg" class="settings">
         <vueper-slides :dragging-distance="50" class="no-shadow" fixed-height="33rem" slide-image-inside>
             <vueper-slide v-for="(slide, i) in slides" :key="i" :image="slide.image" />
         </vueper-slides>
@@ -29,6 +30,14 @@ const slides = ref([
 </script>
 
 <style>
+.settings{
+    position: absolute;
+    margin-left: 1rem;
+    margin-top: 1rem;
+    cursor: pointer;
+    z-index: 99;
+}
+
 .vueperslides__arrow {
     color: black;
 }

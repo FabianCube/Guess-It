@@ -9,7 +9,7 @@
 }
 
 .settings-font{
-    font-size: 2.2857rem;
+    font-size: 2.5rem;
 }
 
 .select-font{
@@ -33,8 +33,11 @@
 }
 
 #background {
+    position: fixed;
+    top: 0;
+    left: 0;
     background-image: url('../../../../storage/app/public/background-home.svg');
-    background-size: cover;
+    background-size: 110%;
     background-repeat: no-repeat;
 }
 
@@ -57,3 +60,4 @@
     border-radius: 20px;
     padding: 1.5rem;
 }
+
