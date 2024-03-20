@@ -19,7 +19,7 @@
                 <!-- PLAYER INFO -->
                 <div class="col-1 p-0 info-jugador">
                     <!-- COMPONENTE INFO JUGADOR -->
-
+                    <info-players />
                 </div>
 
                 <div class="col-8 p-0" style="height: 622.5px; width: 830px;">
