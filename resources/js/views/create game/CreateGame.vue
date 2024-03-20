@@ -56,10 +56,9 @@ document.addEventListener('mousemove', function (e) {
     let mouseY = e.clientY;
     let fondo = document.getElementById('background');
 
-    // Ajusta '50%' para cambiar el punto de inicio del movimiento
     // Los valores divididos controlan la sensibilidad del movimiento del fondo
-    let posX = (mouseX - anchura) / anchura * -10; // Cambia '10' para ajustar la sensibilidad en X
-    let posY = (mouseY - altura) / altura * -10; // Cambia '10' para ajustar la sensibilidad en Y
+    let posX = (mouseX - anchura) / anchura * -5; 
+    let posY = (mouseY - altura) / altura * -5; 
 
     // Actualiza el estilo del fondo
     fondo.style.backgroundPosition = `calc(50% + ${posX}px) calc(50% + ${posY}px)`;
