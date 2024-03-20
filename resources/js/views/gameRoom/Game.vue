@@ -15,6 +15,15 @@
 
             <!-- CANVAS & CHAT -->
             <div class="container flex flex-row p-0 mt-5 justify-content-between">
+                
+                <!-- PLAYER INFO -->
+                <div class="col-1 p-0 info-jugador">
+                    <!-- COMPONENTE INFO JUGADOR -->
+                    <div class="jugadores">
+                        a
+                    </div>
+                </div>
+
                 <div class="col-8 p-0" style="height: 622.5px; width: 830px;">
                     <!-- CANVAS -->
                     <div style="width: 100%; height: 100%;border-radius: 12px; position: relative;">
@@ -25,7 +34,7 @@
                     </div>
                 </div>
 
-                <div class="col-4 flex flex-row chat-container">
+                <div class="col-3 flex flex-row chat-container">
                     <!-- CHAT -->
                     <div class="p-3 chat flex flex-column justify-content-between">
                         <!-- COMPONENTE CHAT  -->
@@ -36,18 +45,8 @@
                             <chat-form @messagesent="addMessage"></chat-form>
                         </div>
                     </div>
-
-                    <!-- PLAYER INFO -->
-                    <div class="p-0 info-jugador">
-                    <!-- COMPONENTE INFO JUGADOR -->
-                        <div class="jugadores">
-
-                        </div>
-                    </div>
                 </div>
             </div>
-            <!--  -->
-
         </div>
     </div>
 </template>
@@ -71,31 +70,28 @@
 .canvas {
     width: 100%;
     height: 500px;
-    border-radius: 12px;
+    border-radius: 22px;
 }
 
 .chat {
     width: 100%;
     height: 622.5px;
-    background-color: white;
-    border-radius: 12px 0 0 12px;
+    background-color: #FFFDFD;
+    border-radius: 22px;
 }
 
 .chat-container {
     padding: 0 0 0 0px;
 }
 
-.info-jugador
-{
-    width: 300px;
-    height: 100%;
+.info-jugador {
+    height: 622.5px;
 }
 
-.jugadores
-{
+.jugadores {
     width: 100%;
     height: 100%;
-    background-color: rgb(218, 218, 218);
-    border-radius: 0 12px 12px 0;
+    background-color: #FFFDFD;
+    border-radius: 22px;
 }
 </style>

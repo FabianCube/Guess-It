@@ -161,7 +161,7 @@ export default {
     top: 0%;
     left: 0%;
     background-color: #fff;
-    border-radius: 12px;
+    border-radius: 22px;
 }
 
 .controls
