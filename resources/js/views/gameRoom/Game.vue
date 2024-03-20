@@ -15,13 +15,11 @@
 
             <!-- CANVAS & CHAT -->
             <div class="container flex flex-row p-0 mt-5 justify-content-between">
-                
+
                 <!-- PLAYER INFO -->
                 <div class="col-1 p-0 info-jugador">
                     <!-- COMPONENTE INFO JUGADOR -->
-                    <div class="jugadores">
-                        a
-                    </div>
+
                 </div>
 
                 <div class="col-8 p-0" style="height: 622.5px; width: 830px;">
@@ -86,12 +84,5 @@
 
 .info-jugador {
     height: 622.5px;
-}
-
-.jugadores {
-    width: 100%;
-    height: 100%;
-    background-color: #FFFDFD;
-    border-radius: 22px;
 }
 </style>
