@@ -45,6 +45,7 @@
   #btn-input
   {
     width: 100%;
+    border-radius: 22px;
   }
   
   
