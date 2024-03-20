@@ -25,11 +25,11 @@
                     </div>
                 </div>
 
-                <div class="col-4 chat-container">
+                <div class="col-4 flex flex-row chat-container">
                     <!-- CHAT -->
-                    <div class="chat p-0">
+                    <div class="p-3 chat flex flex-column justify-content-between">
                         <!-- COMPONENTE CHAT  -->
-                        <div class="col-8 p-0" style="height: 90%;">
+                        <div class="col-8 p-0" style="height: 90%; width:100%;">
                             <chat-messages :messages="messages"></chat-messages>
                         </div>
                         <div class="col-4 p-0" style="width:100%">
@@ -38,13 +38,12 @@
                     </div>
 
                     <!-- PLAYER INFO -->
-                    <!-- <div> -->
-                    <!-- <div class="info-jugador"> -->
+                    <div class="p-0 info-jugador">
                     <!-- COMPONENTE INFO JUGADOR -->
+                        <div class="jugadores">
 
-                    <!-- FIN COMPONENTE INOF JUGADOR -->
-                    <!-- </div> -->
-                    <!-- </div> -->
+                        </div>
+                    </div>
                 </div>
             </div>
             <!--  -->
@@ -79,10 +78,24 @@
     width: 100%;
     height: 622.5px;
     background-color: white;
-    border-radius: 12px;
+    border-radius: 12px 0 0 12px;
 }
 
 .chat-container {
     padding: 0 0 0 0px;
+}
+
+.info-jugador
+{
+    width: 300px;
+    height: 100%;
+}
+
+.jugadores
+{
+    width: 100%;
+    height: 100%;
+    background-color: rgb(218, 218, 218);
+    border-radius: 0 12px 12px 0;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <div class="text-input">
+    <div class="text-input flex flex-row">
       <input id="btn-input" type="text" name="message" class="form-control input-sm" placeholder="Escribe aquí..."
         v-model="newMessage"
         @keyup.enter="sendMessage"
