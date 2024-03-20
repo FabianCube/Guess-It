@@ -130,6 +130,7 @@ import ChatMessages from './views/gameRoom/components/ChatMessages.vue';
 import ChatForm from './views/gameRoom/components/ChatForm.vue';
 import Canvas from './views/gameRoom/components/Canvas.vue';
 import StatusBar from './views/gameRoom/components/StatusBar.vue';
+import InfoPlayers from './views/gameRoom/components/InfoPlayers.vue';
 
 
 
@@ -199,6 +200,7 @@ app.component('chat-messages', ChatMessages);
 app.component('chat-form', ChatForm);
 app.component('canvas-component', Canvas);
 app.component('status-bar', StatusBar);
+app.component('info-players', InfoPlayers);
 
 /**PRIMEVUE */
 app.use(PrimeVue, { ripple: true });
