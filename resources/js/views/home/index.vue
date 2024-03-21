@@ -1,5 +1,6 @@
 <template>
     <div class="login">
+        <button @click="toggleLogin()">close</button>
         <login-popup />
     </div>
     <div id="background" class="relative flex items-top justify-center min-h-screen sm:items-center py-4 sm:pt-0">
@@ -47,6 +48,7 @@ document.addEventListener('mousemove', function (e) {
     fondo.style.backgroundPosition = `calc(50% + ${posX}px) calc(50% + ${posY}px)`;
 });
 
+// Abrir cerrar poop up de login
 function toggleLogin()
 {
     let login = document.querySelector('.login');
