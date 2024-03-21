@@ -131,6 +131,7 @@ import ChatForm from './views/gameRoom/components/ChatForm.vue';
 import Canvas from './views/gameRoom/components/Canvas.vue';
 import StatusBar from './views/gameRoom/components/StatusBar.vue';
 import InfoPlayers from './views/gameRoom/components/InfoPlayers.vue';
+import LoginPopUp from './views/home/components/Login.vue';
 
 
 
@@ -201,6 +202,7 @@ app.component('chat-form', ChatForm);
 app.component('canvas-component', Canvas);
 app.component('status-bar', StatusBar);
 app.component('info-players', InfoPlayers);
+app.component('login-popup', LoginPopUp);
 
 /**PRIMEVUE */
 app.use(PrimeVue, { ripple: true });
