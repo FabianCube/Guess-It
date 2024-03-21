@@ -1,5 +1,6 @@
 <template>
-    <div class="background min-h-screen sm:items-center py-4">
+    <div id="background-game"></div>
+    <div class="min-h-screen sm:items-center py-4">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
                 <router-link to="/" class="btn-smll-default">
@@ -50,15 +51,34 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue';
+
+onMounted(() => {
+    const bg = document.getElementById('background-game');
+
+    if (!bg) {
+        console.error('Elemento #background no encontrado.');
+        return;
+    }
+
+    document.addEventListener("mousemove", (e) => {
+        const width = window.innerWidth / 2;
+        const height = window.innerHeight / 2;
+
+        const mouseX = e.clientX - width;
+        const mouseY = e.clientY - height;
+
+        // Ajusta estos multiplicadores para cambiar la sensibilidad del efecto
+        const bgX = mouseX * 0.02; // Por ejemplo, 0.05 para un efecto sutil
+        const bgY = mouseY * 0.02;
+
+        // Aplica la transformación
+        bg.style.transform = `translate(${bgX}px, ${bgY}px) translateZ(0)`;
+    });
+});
 </script>
 
 <style>
-.background {
-    background-image: url('/storage/background-play-game.svg');
-    background-size: cover;
-    background-repeat: no-repeat;
-}
-
 .canvas-container {
     height: 100%;
     width: 100%;

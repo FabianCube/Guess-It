@@ -3,7 +3,8 @@
         <button @click="toggleLogin()">close</button>
         <login-popup />
     </div>
-    <div id="background" class="relative flex items-top justify-center min-h-screen sm:items-center py-4 sm:pt-0">
+    <div id="background"></div>
+    <div class="relative flex items-top justify-center min-h-screen sm:items-center py-4 sm:pt-0">
         <div class="w-100 flex flex-row justify-between py-5">
             <div class="col-2 flex flex-column justify-content-end align-items-end">
                 <button class="btn-smll-default mb-5" style="border: none;"><img src="/storage/icons/info-circle.svg" alt=""></button>
@@ -31,21 +32,30 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue';
 
-//Control de movimiento del fondo
-document.addEventListener('mousemove', function (e) {
-    let anchura = window.innerWidth / 2;
-    let altura = window.innerHeight / 2;
-    let mouseX = e.clientX;
-    let mouseY = e.clientY;
-    let fondo = document.getElementById('background');
+onMounted(() => {
+    const bg = document.getElementById('background');
 
-    // Los valores divididos controlan la sensibilidad del movimiento del fondo
-    let posX = (mouseX - anchura) / anchura * -5;
-    let posY = (mouseY - altura) / altura * -5; 
+    if (!bg) {
+        console.error('Elemento #background no encontrado.');
+        return;
+    }
 
-    // Actualiza el estilo del fondo
-    fondo.style.backgroundPosition = `calc(50% + ${posX}px) calc(50% + ${posY}px)`;
+    document.addEventListener("mousemove", (e) => {
+        const width = window.innerWidth / 2;
+        const height = window.innerHeight / 2;
+
+        const mouseX = e.clientX - width;
+        const mouseY = e.clientY - height;
+
+        // Ajusta estos multiplicadores para cambiar la sensibilidad del efecto
+        const bgX = mouseX * 0.02; // Por ejemplo, 0.05 para un efecto sutil
+        const bgY = mouseY * 0.02;
+
+        // Aplica la transformación
+        bg.style.transform = `translate(${bgX}px, ${bgY}px) translateZ(0)`;
+    });
 });
 
 // Abrir cerrar poop up de login

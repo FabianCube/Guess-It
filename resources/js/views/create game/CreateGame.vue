@@ -48,8 +48,7 @@
     </div>
 </template>
 
-<script>
-
+<script setup>
 import { onMounted } from 'vue';
 
 onMounted(() => {
@@ -71,7 +70,6 @@ onMounted(() => {
         const bgX = mouseX * 0.02; // Por ejemplo, 0.05 para un efecto sutil
         const bgY = mouseY * 0.02;
 
-        console.log(`translate(${bgX}px, ${bgY}px) translateZ(0)`);
         // Aplica la transformación
         bg.style.transform = `translate(${bgX}px, ${bgY}px) translateZ(0)`;
     });
