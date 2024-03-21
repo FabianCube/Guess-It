@@ -8,21 +8,21 @@
     font-size: 2.2857rem;
 }
 
-.settings-font{
+.settings-font {
     font-size: 2.5rem;
 }
 
-.select-font{
+.select-font {
     font-size: 1.5rem;
 }
 
-.play-font{
+.play-font {
     color: #ffffff;
     font-size: 2.85rem;
     text-shadow: 0px 3px 5px rgba($color: #000000, $alpha: .5);
 }
 
-.copiar{
+.copiar {
     height: 1.5rem;
     width: auto;
     cursor: pointer;
@@ -34,11 +34,34 @@
 
 #background {
     position: fixed;
-    top: 0;
-    left: 0;
-    background-image: url('../../../../storage/app/public/background-home.svg');
-    background-size: 110%;
+    top: -50px;
+    left: -50px;
+    width: 110vw;
+    height: 110vh;
+    background-image: url('../../../../storage/app/public/background-home.png');
+    background-position: center;
+    background-size: 100%;
     background-repeat: no-repeat;
+    transition: transform 0.1s ease;
+    transform: translateZ(0);
+    z-index: -1;
+    will-change: transform;
+}
+
+#background-game {
+    position: fixed;
+    top: -50px;
+    left: -50px;
+    width: 110vw;
+    height: 110vh;
+    background-image: url('../../../../storage/app/public/background-play-game.png');
+    background-position: center;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    transition: transform 0.1s ease;
+    transform: translateZ(0);
+    z-index: -1;
+    will-change: transform;
 }
 
 .background-players {
@@ -55,9 +78,8 @@
     border-radius: 20px;
 }
 
-.background-code{
+.background-code {
     background-color: #FFFDFD;
     border-radius: 20px;
     padding: 1.5rem;
 }
-
