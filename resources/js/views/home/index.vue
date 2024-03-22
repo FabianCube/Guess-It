@@ -1,7 +1,6 @@
 <template>
     <div class="login">
-        <button @click="toggleLogin()">close</button>
-        <login-popup />
+        <login-popup @close-popup="toggleLogin"/>
     </div>
     <div id="background"></div>
     <div class="relative flex items-top justify-center min-h-screen sm:items-center py-4 sm:pt-0">
@@ -32,7 +31,7 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { ref , onMounted } from 'vue';
 
 onMounted(() => {
     const bg = document.getElementById('background');
@@ -58,12 +57,15 @@ onMounted(() => {
     });
 });
 
-// Abrir cerrar poop up de login
+const isLoginPopupVisible = ref(true);
+
+// Abrir cerrar popup de login
 function toggleLogin()
 {
     let login = document.querySelector('.login');
     let isOpen = login.classList.contains('active');
     isOpen ? login.classList.remove('active') : login.classList.add('active');
+    isLoginPopupVisible.value = !isLoginPopupVisible.value;
 }
 
 

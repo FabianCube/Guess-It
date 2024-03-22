@@ -62,13 +62,15 @@
 </template>
 
 <script setup>
-
+import { defineProps, defineEmits } from 'vue';
 import useAuth from '@/composables/auth';
 
-
+const emits = defineEmits(['close-popup']);
 const { loginForm, validationErrors, processing, submitLogin } = useAuth();
 
-
+function toggleLogin() {
+    emits('close-popup');
+}
 </script>
 <style scoped>
 #closeLogin
