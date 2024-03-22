@@ -1,6 +1,6 @@
 <template>
     <div id="background-game"></div>
-    <div class="min-h-screen sm:items-center py-4">
+    <div class="min-h-screen sm:items-center py-4 main-content">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
                 <router-link to="/" class="btn-smll-default">
@@ -104,5 +104,22 @@ onMounted(() => {
 
 .info-jugador {
     height: 622.5px;
+}
+
+.main-content {
+  animation: scaleUp 0.7s ease forwards;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+@keyframes scaleUp {
+  from {
+    transform: scale(0.1);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 </style>
