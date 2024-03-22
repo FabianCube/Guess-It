@@ -31,6 +31,7 @@
 
 <style scoped>
 .settings{
+    position: relative;
     margin-top: 6.5rem;
     margin-bottom: 4.5rem;
 }

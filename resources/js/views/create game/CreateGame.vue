@@ -25,8 +25,8 @@
                 <div class="col-8 d-flex flex-column justify-content-between ps-5">
                     <div class="background-instructions">
                         <div class="p-3 h-100">
-                            <Carousel />
-                            <!-- <GameSettings /> -->
+                            <!-- <Carousel /> -->
+                            <GameSettings />
                         </div>
                     </div>
                     <div class="d-flex justify-content-between pb-3">
