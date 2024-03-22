@@ -1,6 +1,9 @@
 <template>
     <div class="login">
-        <login-popup @close-popup="toggleLogin"/>
+        <login-popup @close-popup="toggleLogin"/> 
+    </div>
+    <div class="anonymous">
+        <anonymous-user @close-anonymous="toggleAnonymous"/>
     </div>
     <div id="background"></div>
     <div class="relative flex items-top justify-center min-h-screen sm:items-center py-4 sm:pt-0">
@@ -13,7 +16,7 @@
             <div class="col-8 flex justify-center align-items-center flex-column pt-8">
                 <img id="logo" src="/storage/guess-it-logo.svg"></img> 
 
-                <router-link to="/create-game" class="btn-default">CREAR PARTIDA</router-link>
+                <button @click="toggleAnonymous()" to="/create-game" class="btn-default">CREAR PARTIDA</button>
                 <router-link :to="{ name : 'public-posts.index'}" class="btn-default">UNIRSE A PARTIDA</router-link>
                 
             </div>
@@ -58,6 +61,7 @@ onMounted(() => {
 });
 
 const isLoginPopupVisible = ref(true);
+const isAnonymousPopupVisible = ref(true);
 
 // Abrir cerrar popup de login
 function toggleLogin()
@@ -68,6 +72,14 @@ function toggleLogin()
     isLoginPopupVisible.value = !isLoginPopupVisible.value;
 }
 
+// Abrir cerrar popup de usuario anónimo
+function toggleAnonymous()
+{
+    let anonymous = document.querySelector('.anonymous');
+    let isOpen = anonymous.classList.contains('active');
+    isOpen ? anonymous.classList.remove('active') : anonymous.classList.add('active');
+    isAnonymousPopupVisible.value = !isAnonymousPopupVisible.value;
+}
 
 </script>
 
@@ -80,6 +92,17 @@ function toggleLogin()
 }
 
 .login
+{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 100;
+    display: none;
+    background-color: rgba(0,0,0,.25);
+    backdrop-filter: blur(4px);
+}
+
+.anonymous
 {
     width: 100%;
     height: 100%;
