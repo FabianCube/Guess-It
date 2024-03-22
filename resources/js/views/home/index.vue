@@ -14,7 +14,7 @@
             </div>
 
             <div class="col-8 flex justify-center align-items-center flex-column pt-8">
-                <img id="logo" src="/storage/guess-it-logo.svg"></img> 
+                <img id="logo" src="/storage/guess-it-logo.svg" class="shake-img"></img> 
 
                 <button @click="toggleAnonymous()" to="/create-game" class="btn-default">CREAR PARTIDA</button>
                 <router-link :to="{ name : 'public-posts.index'}" class="btn-default">UNIRSE A PARTIDA</router-link>
@@ -116,5 +116,22 @@ function toggleAnonymous()
 .active
 {
     display: block!important;
+}
+
+.shake-img {
+  display: inline-block; /* Necesario para que transform funcione */
+  animation: shake 5s infinite;
+}
+
+@keyframes shake {
+  0%, 20% { transform: scale(1); } /* No tiembla durante el 90% del tiempo */
+  20%, 40% { transform: scale(0.95); } /* No tiembla durante el 90% del tiempo */
+  40%, 60% { transform: scale(1); } /* No tiembla durante el 90% del tiempo */
+  60%, 90% { transform: translate(0px, 0px); } /* No tiembla durante el 90% del tiempo */
+  92% { transform: translate(0px, 5px); }
+  94% { transform: translate(0px, -5px); }
+  96% { transform: translate(0px, 5px); }
+  98% { transform: translate(0px, -5px); }
+  100% { transform: translate(0, 0); } /* Termina en la posición original */
 }
 </style>
