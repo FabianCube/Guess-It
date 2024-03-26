@@ -124,14 +124,14 @@ function toggleAnonymous()
 }
 
 @keyframes shake {
-  0%, 20% { transform: scale(1); } /* No tiembla durante el 90% del tiempo */
-  20%, 40% { transform: scale(0.95); } /* No tiembla durante el 90% del tiempo */
-  40%, 60% { transform: scale(1); } /* No tiembla durante el 90% del tiempo */
-  60%, 90% { transform: translate(0px, 0px); } /* No tiembla durante el 90% del tiempo */
+  0%, 30% { transform: translate(0px, 0px); } 
+  30%, 40% { transform: scale(0.95); } 
+  40%, 50% { transform: scale(1); } 
+  60%, 90% { transform: translate(0px, 0px); } 
   92% { transform: translate(0px, 5px); }
   94% { transform: translate(0px, -5px); }
   96% { transform: translate(0px, 5px); }
   98% { transform: translate(0px, -5px); }
-  100% { transform: translate(0, 0); } /* Termina en la posición original */
+  100% { transform: translate(0px, 0px); } 
 }
 </style>

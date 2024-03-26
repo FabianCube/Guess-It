@@ -13,13 +13,14 @@ class AvatarTableSeeder extends Seeder
      */
     public function run(): void
     {
-        $pepe = [
-            'belbel',
-            'sdfadf',
-            'sdfdsf'
+        $images = [
+            'avatar1.jpg',
+            'avatar2.jpg',
+            'avatar3.jpg',
+            'avatar4.jpg'
         ];
 
-        foreach ($pepe as $avatar) {
+        foreach ($images as $avatar) {
             Avatar::create(['image' => $avatar]);
         }
     }

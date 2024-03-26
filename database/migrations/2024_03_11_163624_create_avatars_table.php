@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('avatars', function (Blueprint $table) {
             $table->id();
-            $table->binary('image'); // binary = que BLOB
+            // $table->binary('image'); // binary = que BLOB
+            $table->string('image');
             $table->timestamps();
         });
     }
