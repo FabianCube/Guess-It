@@ -27,8 +27,8 @@ import { ref, computed, onMounted } from 'vue';
 // Lista reactiva de jugadores
 const jugadores = ref([
     // Ejemplo de jugadores preexistentes
-    { nombre: 'SUPER_DRAWER2000' },
-    { nombre: 'ANOTHER_PLAYER' }
+    { nickname: 'SUPER_DRAWER2000' },
+    { nickname: 'ANOTHER_PLAYER' }
     // Agrega aquí más jugadores según se unan
 ]);
 
