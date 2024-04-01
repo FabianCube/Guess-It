@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AvatarController;
+use App\Http\Controllers\Api\RoomController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -55,3 +56,5 @@ Route::get('get-category-posts/{id}', [PostController::class, 'getCategoryByPost
 Route::get('get-post/{id}', [PostController::class, 'getPost']);
 Route::get('get-avatar/{id}', [AvatarController::class, 'getAvatar']);
 Route::post('users', [UserController::class, 'createAnonymousSession']);
+Route::get('create-room', [RoomController::class, 'createRoom']);
+Route::post('enter-room', [RoomController::class, 'enterRoom']);

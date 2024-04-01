@@ -1,41 +1,17 @@
 <template>
     <div class="w-100">
-        <div class="d-flex align-items-center mb-2 etiqueta player-1">
+        <!-- Renderizar jugadores -->
+        <div v-for="(jugador, index) in jugadores" :key="index" class="d-flex align-items-center mb-2 etiqueta" :class="`player-${index + 1}`">
             <div class="me-3 avatar">
+                <!-- Aquí puedes incluir una imagen basada en jugador.avatarUrl si tienes -->
             </div>
             <div class="nombre-jugador">
-                <p class="mb-0">SUPER_DRAWER2000</p>
+                <p class="mb-0">{{ jugador.nickname }}</p>
             </div>
         </div>
-        <div class="d-flex align-items-center mb-2 etiqueta player-2">
-            <div class="me-3 avatar">
-            </div>
-            <div class="nombre-jugador">
-                <p class="mb-0">SUPER_DRAWER2000</p>
-            </div>
-        </div>
-        <div class="d-flex align-items-center mb-2 etiqueta player-3">
-            <div class="me-3 avatar">
-            </div>
-            <div class="nombre-jugador">
-                <p class="mb-0">SUPER_DRAWER2000</p>
-            </div>
-        </div>
-        <div class="d-flex align-items-center mb-2 etiqueta vacia">
-            <div class="me-3 avatar-vacio">
-            </div>
-            <div class="nombre-jugador-vacio">
-                <p class="mb-0">VACÍO</p>
-            </div>
-        </div>
-        <div class="d-flex align-items-center mb-2 etiqueta vacia">
-            <div class="me-3 avatar-vacio">
-            </div>
-            <div class="nombre-jugador-vacio">
-                <p class="mb-0">VACÍO</p>
-            </div>
-        </div>
-        <div class="d-flex align-items-center mb-2 etiqueta vacia">
+        
+        <!-- Renderizar espacios vacíos -->
+        <div v-for="n in espaciosVacios" :key="`vacio-${n}`" class="d-flex align-items-center mb-2 etiqueta vacia">
             <div class="me-3 avatar-vacio">
             </div>
             <div class="nombre-jugador-vacio">
@@ -46,7 +22,34 @@
 </template>
 
 <script setup>
+import { ref, computed, onMounted } from 'vue';
 
+// Lista reactiva de jugadores
+const jugadores = ref([
+    // Ejemplo de jugadores preexistentes
+    { nombre: 'SUPER_DRAWER2000' },
+    { nombre: 'ANOTHER_PLAYER' }
+    // Agrega aquí más jugadores según se unan
+]);
+
+// Número máximo de jugadores permitidos
+const maxJugadores = 6;
+
+// Espacios vacíos calculados
+const espaciosVacios = computed(() => maxJugadores - jugadores.value.length);
+
+const cargarJugadores = async () => {
+  try {
+    // Reemplaza con la llamada adecuada a tu API para obtener los jugadores actuales
+    const response = await axios.get('/api/partida/jugadores');
+    jugadores.value = response.data; // Asume que la respuesta incluye la lista de jugadores
+  } catch (error) {
+    console.error('Error al cargar los jugadores:', error);
+  }
+};
+
+// Inicialmente cargar el jugador creador de la partida
+onMounted(cargarJugadores);
 </script>
 
 <style scoped>
