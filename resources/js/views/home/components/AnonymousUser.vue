@@ -15,27 +15,27 @@
                     <img src="/storage/icons/next-avatar.svg" alt="Next-avatar">
                 </button>
             </div>
-            <form @submit.prevent="submitLogin">
+            <form @submit.prevent="submitAnonymousLogin">
                 <div class="">
-                    <!-- Email -->
+                    <!-- Nickname -->
                     <div class="mb-3">
-                        <label for="email" class="form-label h4">{{ $t('Nickname') }}</label>
-                        <input v-model="loginForm.email" id="email" type="email" class="form-control" required autofocus
+                        <label for="nickname" class="form-label h4">Nickname</label>
+                        <input id="nickname" type="text" class="form-control" v-model="nickname" required autofocus
                             autocomplete="username">
                         <!-- Validation Errors -->
-                        <div class="text-danger mt-1">
+                        <!-- <div class="text-danger mt-1">
                             <div v-for="message in validationErrors?.email">
                                 {{ message }}
                             </div>
-                        </div>
+                        </div> -->
                     </div>
 
                     <!-- Buttons -->
                     <div class="flex items-center justify-end mt-4">
-                        <router-link to="/create-game" class="btn-default btn-login"
+                        <button @click="submitAnonymousLogin" class="btn-default btn-login"
                             :class="{ 'opacity-25': processing }" :disabled="processing">
                             PREPARADO!
-                        </router-link>
+                        </button>
                     </div>
                 </div>
             </form>
@@ -49,19 +49,22 @@
 import { defineProps, defineEmits, ref, onMounted } from 'vue';
 import axios from 'axios';
 import useAuth from '@/composables/auth';
+import { useRoute, useRouter } from 'vue-router';
+import { v4 as uuidv4 } from 'uuid';
 
 const emits = defineEmits(['close-anonymous']);
-const { loginForm, validationErrors, processing, submitLogin } = useAuth();
+const { loginForm, validationErrors, submitLogin } = useAuth();
 
 function toggleAnonymous() {
     emits('close-anonymous');
 }
 
 const baseAvatar = '/storage/avatars/';
-
+const router = useRouter();
+const nickname = ref();
 const avatarImage = ref();
-
 let avatarId = ref(1);
+const processing = ref(false);
 
 // Función para cargar el el nombre del archivo del avatar según si ID
 const loadAvatar = () => {
@@ -88,7 +91,36 @@ const changeAvatar = () => {
     loadAvatar(); // Cargamos el nuevo avatar
 };
 
+
+// Método para generar la sesión de un usuario anónimo
+const submitAnonymousLogin = () => {
+    processing.value = true;
+    const playerUuid = uuidv4(); // Generamos un UUID para el usuario anónimo
+
+    console.log({
+        nickname: nickname.value,
+        avatarId: avatarId.value,
+        uuid: playerUuid
+    });
+
+    // Enviamos los datos al servidor
+    axios.post('/api/users', {
+        nickname: nickname.value,
+        avatarId: avatarId.value,
+        uuid: playerUuid
+    }).then(response => {
+        // Redirigimos al usuario a la pantalla se crear juego
+        router.push('/create-game');
+    }).catch(error => {
+        console.error("Error al crear la sesión anónima: ", error);
+    }).finally(() => {
+        processing.value = false;
+    });
+};
+
 </script>
+
+
 <style scoped>
 #closeLogin {
     background-color: transparent;

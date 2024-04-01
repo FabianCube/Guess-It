@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -28,18 +29,16 @@ class UserController extends Controller
         if (!in_array($orderDirection, ['asc', 'desc'])) {
             $orderDirection = 'desc';
         }
-        $users = User::
-        when(request('search_id'), function ($query) {
-            $query->where('id', request('search_id'));
-        })
+        $users = User::when(request('search_id'), function ($query) {
+                $query->where('id', request('search_id'));
+            })
             ->when(request('search_title'), function ($query) {
-                $query->where('name', 'like', '%'.request('search_title').'%');
+                $query->where('name', 'like', '%' . request('search_title') . '%');
             })
             ->when(request('search_global'), function ($query) {
-                $query->where(function($q) {
+                $query->where(function ($q) {
                     $q->where('id', request('search_global'))
-                        ->orWhere('name', 'like', '%'.request('search_global').'%');
-
+                        ->orWhere('name', 'like', '%' . request('search_global') . '%');
                 });
             })
             ->orderBy($orderColumn, $orderDirection)
@@ -95,7 +94,7 @@ class UserController extends Controller
 
         $user->name = $request->name;
         $user->email = $request->email;
-        if(!empty($request->password)) {
+        if (!empty($request->password)) {
             $user->password = Hash::make($request->password) ?? $user->password;
         }
 
@@ -119,5 +118,25 @@ class UserController extends Controller
         $user->delete();
 
         return response()->noContent();
+    }
+
+
+    public function createAnonymousSession(Request $request)
+    {
+        // Validar request
+        $validated = $request->validate([
+            'nickname' => 'required|max:255',
+            'avatarId' => 'required|integer',
+            'uuid' => 'required|uuid',
+        ]);
+
+        // Aquí puedes crear la sesión, asignar los valores a la sesión, etc.
+        session([
+            'playerUuid' => $validated['uuid'],
+            'nickname' => $validated['nickname'],
+            'avatarId' => $validated['avatarId'],
+        ]);
+
+        return response()->json(['message' => 'Sesión anónima creada correctamente']);
     }
 }

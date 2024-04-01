@@ -54,3 +54,4 @@ Route::get('get-posts', [PostController::class, 'getPosts']);
 Route::get('get-category-posts/{id}', [PostController::class, 'getCategoryByPosts']);
 Route::get('get-post/{id}', [PostController::class, 'getPost']);
 Route::get('get-avatar/{id}', [AvatarController::class, 'getAvatar']);
+Route::post('users', [UserController::class, 'createAnonymousSession']);
