@@ -3,7 +3,7 @@
         <!-- Renderizar jugadores -->
         <div v-for="(jugador, index) in jugadores" :key="index" class="d-flex align-items-center mb-2 etiqueta" :class="`player-${index + 1}`">
             <div class="me-3 avatar">
-                <!-- Aquí puedes incluir una imagen basada en jugador.avatarUrl si tienes -->
+                <img :src="obtenerUrlAvatar(jugador.avatarId)" alt="avatar">
             </div>
             <div class="nombre-jugador">
                 <p class="mb-0">{{ jugador.nickname }}</p>
@@ -23,14 +23,10 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 
 // Lista reactiva de jugadores
-const jugadores = ref([
-    // Ejemplo de jugadores preexistentes
-    { nickname: 'SUPER_DRAWER2000' },
-    { nickname: 'ANOTHER_PLAYER' }
-    // Agrega aquí más jugadores según se unan
-]);
+const jugadores = ref([]);
 
 // Número máximo de jugadores permitidos
 const maxJugadores = 6;
@@ -38,18 +34,30 @@ const maxJugadores = 6;
 // Espacios vacíos calculados
 const espaciosVacios = computed(() => maxJugadores - jugadores.value.length);
 
+const codigoSala = ref();
+
+const route = useRoute();
+
+const obtenerUrlAvatar = (avatarId) => {
+    
+    return `/storage/avatars/${avatarId}`;
+};
+
 const cargarJugadores = async () => {
   try {
-    // Reemplaza con la llamada adecuada a tu API para obtener los jugadores actuales
-    const response = await axios.get('/api/partida/jugadores');
-    jugadores.value = response.data; // Asume que la respuesta incluye la lista de jugadores
+    const response = await axios.get(`/api/room/players/${codigoSala.value}`);
+    jugadores.value = response.data;
   } catch (error) {
     console.error('Error al cargar los jugadores:', error);
   }
 };
 
+
 // Inicialmente cargar el jugador creador de la partida
-onMounted(cargarJugadores);
+onMounted(() => {
+    codigoSala.value = route.params.code;
+    cargarJugadores();
+});
 </script>
 
 <style scoped>
@@ -93,11 +101,12 @@ onMounted(cargarJugadores);
     border-radius: 50%;
     height: 3rem;
     width: 3rem;
-    background-image: url('/storage/app/public/funny-avatar.jpg');
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
     flex-shrink: 0;
+}
+
+.avatar img{
+    height: 100%;
+    width: auto;
 }
 
 .avatar-vacio{

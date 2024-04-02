@@ -32,7 +32,7 @@
 
                     <!-- Buttons -->
                     <div class="flex items-center justify-end mt-4">
-                        <button @click="submitAnonymousLogin" class="btn-default btn-login"
+                        <button @click="createRoom" class="btn-default btn-login"
                             :class="{ 'opacity-25': processing }" :disabled="processing">
                             PREPARADO!
                         </button>
@@ -92,13 +92,15 @@ const changeAvatar = () => {
 };
 
 const roomCode = ref();
+const playerUuid = ref();
 
-const createRoom = () => {
+const createRoom = async () => {
     axios.post('/api/create-room')
     .then(response => {
         roomCode.value = response.data.code; // Guarda el código de la sala
         console.log("Sala creada con código:", roomCode.value);
         submitAnonymousLogin();
+        enterRoom(playerUuid.value);
     })
     .catch(error => {
         console.error("Error al crear la sala: ", error);
@@ -109,25 +111,33 @@ const createRoom = () => {
 // Método para generar la sesión de un usuario anónimo
 const submitAnonymousLogin = () => {
     processing.value = true;
-    const playerUuid = uuidv4(); // Generamos un UUID para el usuario anónimo
-
-    console.log({
-        nickname: nickname.value,
-        avatarId: avatarId.value,
-        uuid: playerUuid
-    });
+    playerUuid.value = uuidv4(); // Generamos un UUID para el usuario anónimo
 
     // Enviamos los datos al servidor
     axios.post('/api/users', {
         nickname: nickname.value,
-        avatarId: avatarId.value,
-        uuid: playerUuid
+        avatarId: avatarImage.value,
+        uuid: playerUuid.value
     }).then(response => {
-        // Redirigimos al usuario a la pantalla de crear juego
-        // router.push('/create-game');
 
     }).catch(error => {
         console.error("Error al crear la sesión anónima: ", error);
+    }).finally(() => {
+        processing.value = false;
+    });
+};
+
+const enterRoom = (playerUuid) => {
+    axios.post('/api/enter-room', {
+        code: roomCode.value,
+        nickname: nickname.value,
+        avatarId: avatarId.value,
+        uuid: playerUuid
+    }).then(response => {
+        console.log(response.data.mensaje);
+        router.push({ name: 'create-game', params: { code: roomCode.value } });
+    }).catch(error => {
+        console.error("Error al unirse a la sala: ", error);
     }).finally(() => {
         processing.value = false;
     });

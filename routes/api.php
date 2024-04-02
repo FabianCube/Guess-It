@@ -56,5 +56,6 @@ Route::get('get-category-posts/{id}', [PostController::class, 'getCategoryByPost
 Route::get('get-post/{id}', [PostController::class, 'getPost']);
 Route::get('get-avatar/{id}', [AvatarController::class, 'getAvatar']);
 Route::post('users', [UserController::class, 'createAnonymousSession']);
-Route::get('create-room', [RoomController::class, 'createRoom']);
+Route::post('create-room', [RoomController::class, 'createRoom']);
 Route::post('enter-room', [RoomController::class, 'enterRoom']);
+Route::get('/room/players/{code}', [RoomController::class, 'getPlayers']);

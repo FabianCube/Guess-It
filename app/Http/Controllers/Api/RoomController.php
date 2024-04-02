@@ -29,14 +29,24 @@ class RoomController extends Controller
         $avatarId = $request->avatarId;
         $uuid = $request->uuid;
 
-        $room = Cache::get('room_'.$code);
+        $room = Cache::get('room_' . $code);
         if (!$room) {
             return response()->json(['mensaje' => 'Sala no encontrada'], 404);
         }
 
         $room['players'][] = ['nickname' => $nickname, 'avatarId' => $avatarId, 'uuid' => $uuid];
-        Cache::put('room_'.$code, $room, now()->addMinutes(120));
+        Cache::put('room_' . $code, $room, now()->addMinutes(120));
 
         return response()->json(['mensaje' => 'Jugador añadido a la sala']);
+    }
+
+    public function getPlayers($code)
+    {
+        $room = Cache::get('room_' . $code);
+        if (!$room) {
+            return response()->json(['mensaje' => 'Sala no encontrada'], 404);
+        }
+
+        return response()->json($room['players']);
     }
 }
