@@ -52,11 +52,11 @@ export default function useAuth() {
                 await loginUser()
                 swal({
                     icon: 'success',
-                    title: 'Login correcto',
+                    title: 'INICIO DE SESIÓN CORRECTO',
                     showConfirmButton: false,
                     timer: 1500
                 })
-                await router.push({ name: 'admin.index' })
+                await router.push({ name: 'home', params: { popup: 'a' } });
             })
             .catch(error => {
                 if (error.response?.data) {

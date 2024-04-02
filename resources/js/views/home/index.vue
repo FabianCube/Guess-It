@@ -35,6 +35,7 @@
 
 <script setup>
 import { ref , onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 
 onMounted(() => {
     const bg = document.getElementById('background');
@@ -62,6 +63,14 @@ onMounted(() => {
 
 const isLoginPopupVisible = ref(true);
 const isAnonymousPopupVisible = ref(true);
+const route = useRoute();
+
+
+if(route.params.popup)
+{
+    isLoginPopupVisible.value = route.params.popup; 
+    console.log(route.params.popup);
+}
 
 // Abrir cerrar popup de login
 function toggleLogin()

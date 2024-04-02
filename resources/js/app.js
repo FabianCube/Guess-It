@@ -133,6 +133,7 @@ import StatusBar from './views/gameRoom/components/StatusBar.vue';
 import InfoPlayers from './views/gameRoom/components/InfoPlayers.vue';
 import LoginPopUp from './views/home/components/Login.vue';
 import AnonymousUser from './views/home/components/AnonymousUser.vue';
+import Account from './views/home/components/Account.vue';
 
 
 
@@ -205,6 +206,7 @@ app.component('status-bar', StatusBar);
 app.component('info-players', InfoPlayers);
 app.component('login-popup', LoginPopUp);
 app.component('anonymous-user', AnonymousUser);
+app.component('account-management', Account);
 
 /**PRIMEVUE */
 app.use(PrimeVue, { ripple: true });
