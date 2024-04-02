@@ -25,14 +25,16 @@ class RoomController extends Controller
     public function enterRoom(Request $request)
     {
         $code = $request->code;
-        $playerName = $request->nombre;
+        $nickname = $request->nickname;
+        $avatarId = $request->avatarId;
+        $uuid = $request->uuid;
 
         $room = Cache::get('room_'.$code);
         if (!$room) {
             return response()->json(['mensaje' => 'Sala no encontrada'], 404);
         }
 
-        $room['players'][] = ['nickname' => $playerName];
+        $room['players'][] = ['nickname' => $nickname, 'avatarId' => $avatarId, 'uuid' => $uuid];
         Cache::put('room_'.$code, $room, now()->addMinutes(120));
 
         return response()->json(['mensaje' => 'Jugador añadido a la sala']);

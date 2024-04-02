@@ -91,6 +91,20 @@ const changeAvatar = () => {
     loadAvatar(); // Cargamos el nuevo avatar
 };
 
+const roomCode = ref();
+
+const createRoom = () => {
+    axios.post('/api/create-room')
+    .then(response => {
+        roomCode.value = response.data.code; // Guarda el código de la sala
+        console.log("Sala creada con código:", roomCode.value);
+        submitAnonymousLogin();
+    })
+    .catch(error => {
+        console.error("Error al crear la sala: ", error);
+    });
+};
+
 
 // Método para generar la sesión de un usuario anónimo
 const submitAnonymousLogin = () => {
@@ -109,8 +123,9 @@ const submitAnonymousLogin = () => {
         avatarId: avatarId.value,
         uuid: playerUuid
     }).then(response => {
-        // Redirigimos al usuario a la pantalla se crear juego
-        router.push('/create-game');
+        // Redirigimos al usuario a la pantalla de crear juego
+        // router.push('/create-game');
+
     }).catch(error => {
         console.error("Error al crear la sesión anónima: ", error);
     }).finally(() => {
