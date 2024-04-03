@@ -15,7 +15,7 @@
                     <img src="/storage/icons/next-avatar.svg" alt="Next-avatar">
                 </button>
             </div>
-            <form @submit.prevent="submitAnonymousLogin">
+            <form @submit.prevent>
                 <div class="">
                     <!-- Nickname -->
                     <div class="mb-3">
@@ -32,8 +32,7 @@
 
                     <!-- Buttons -->
                     <div class="flex items-center justify-end mt-4">
-                        <button @click="createRoom" class="btn-default btn-login"
-                            :class="{ 'opacity-25': processing }" :disabled="processing">
+                        <button @click="createRoom" class="btn-default btn-login">
                             PREPARADO!
                         </button>
                     </div>
@@ -46,10 +45,10 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, ref, onMounted } from 'vue';
+import { defineEmits, ref, onMounted } from 'vue';
 import axios from 'axios';
 import useAuth from '@/composables/auth';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { v4 as uuidv4 } from 'uuid';
 
 const emits = defineEmits(['close-anonymous']);
@@ -66,11 +65,10 @@ const avatarImage = ref();
 let avatarId = ref(1);
 const processing = ref(false);
 
-// Función para cargar el el nombre del archivo del avatar según si ID
+// Función para cargar el nombre del archivo del avatar según su Id
 const loadAvatar = () => {
     axios.get('/api/get-avatar/' + avatarId.value)
         .then(({ data }) => {
-            console.log(data);
             avatarImage.value = baseAvatar + data.image;
         })
         .catch(error => {
@@ -94,17 +92,18 @@ const changeAvatar = () => {
 const roomCode = ref();
 const playerUuid = ref();
 
+// Se crea la sala, se añade al jugador anónimo y se redirige a la sala
 const createRoom = async () => {
-    axios.post('/api/create-room')
-    .then(response => {
-        roomCode.value = response.data.code; // Guarda el código de la sala
+    try {
+        const response = await axios.post('/api/create-room');
+        roomCode.value = response.data.code;
         console.log("Sala creada con código:", roomCode.value);
-        submitAnonymousLogin();
-        enterRoom(playerUuid.value);
-    })
-    .catch(error => {
+        await submitAnonymousLogin();
+        await enterRoom(playerUuid.value); 
+        router.push({ name: 'create-game', params: { code: roomCode.value } });
+    } catch (error) {
         console.error("Error al crear la sala: ", error);
-    });
+    }
 };
 
 
@@ -116,10 +115,10 @@ const submitAnonymousLogin = () => {
     // Enviamos los datos al servidor
     axios.post('/api/users', {
         nickname: nickname.value,
-        avatarId: avatarImage.value,
+        avatar: avatarImage.value,
         uuid: playerUuid.value
     }).then(response => {
-
+        console.log(response.data.message);
     }).catch(error => {
         console.error("Error al crear la sesión anónima: ", error);
     }).finally(() => {
@@ -127,15 +126,16 @@ const submitAnonymousLogin = () => {
     });
 };
 
+
+// Se inserta al jugador anónimo en el array de jugadores de la sala
 const enterRoom = (playerUuid) => {
     axios.post('/api/enter-room', {
         code: roomCode.value,
         nickname: nickname.value,
-        avatarId: avatarId.value,
+        avatar: avatarImage.value,
         uuid: playerUuid
     }).then(response => {
         console.log(response.data.mensaje);
-        router.push({ name: 'create-game', params: { code: roomCode.value } });
     }).catch(error => {
         console.error("Error al unirse a la sala: ", error);
     }).finally(() => {
