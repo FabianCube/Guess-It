@@ -3,10 +3,11 @@
         <!-- Renderizar jugadores -->
         <div v-for="(jugador, index) in jugadores" :key="index" class="d-flex align-items-center mb-2 etiqueta" :class="`player-${index + 1}`">
             <div class="me-3 avatar">
-                <img :src="obtenerUrlAvatar(jugador.avatarId)" alt="avatar">
+                <img :src="jugador.avatar" alt="avatar">
             </div>
             <div class="nombre-jugador">
                 <p class="mb-0">{{ jugador.nickname }}</p>
+
             </div>
         </div>
         
@@ -38,15 +39,12 @@ const codigoSala = ref();
 
 const route = useRoute();
 
-const obtenerUrlAvatar = (avatarId) => {
-    
-    return `/storage/avatars/${avatarId}`;
-};
 
 const cargarJugadores = async () => {
   try {
     const response = await axios.get(`/api/room/players/${codigoSala.value}`);
     jugadores.value = response.data;
+    console.log(jugadores.value);
   } catch (error) {
     console.error('Error al cargar los jugadores:', error);
   }
@@ -99,6 +97,7 @@ onMounted(() => {
 
 .avatar {
     border-radius: 50%;
+    overflow: hidden;
     height: 3rem;
     width: 3rem;
     flex-shrink: 0;

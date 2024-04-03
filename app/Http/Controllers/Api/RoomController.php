@@ -26,7 +26,7 @@ class RoomController extends Controller
     {
         $code = $request->code;
         $nickname = $request->nickname;
-        $avatarId = $request->avatarId;
+        $avatar = $request->avatar;
         $uuid = $request->uuid;
 
         $room = Cache::get('room_' . $code);
@@ -34,7 +34,7 @@ class RoomController extends Controller
             return response()->json(['mensaje' => 'Sala no encontrada'], 404);
         }
 
-        $room['players'][] = ['nickname' => $nickname, 'avatarId' => $avatarId, 'uuid' => $uuid];
+        $room['players'][] = ['nickname' => $nickname, 'avatar' => $avatar, 'uuid' => $uuid];
         Cache::put('room_' . $code, $room, now()->addMinutes(120));
 
         return response()->json(['mensaje' => 'Jugador añadido a la sala']);

@@ -126,7 +126,7 @@ class UserController extends Controller
         // Validar request
         $validated = $request->validate([
             'nickname' => 'required|max:255',
-            'avatarId' => 'required|integer',
+            'avatar' => 'required|max:100',
             'uuid' => 'required|uuid',
         ]);
 
@@ -134,7 +134,7 @@ class UserController extends Controller
         session([
             'playerUuid' => $validated['uuid'],
             'nickname' => $validated['nickname'],
-            'avatarId' => $validated['avatarId'],
+            'avatar' => $validated['avatar'],
         ]);
 
         return response()->json(['message' => 'Sesión anónima creada correctamente']);
