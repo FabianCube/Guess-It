@@ -22,10 +22,16 @@
             </div>
 
             <div class="col-2 flex flex-column justify-content-between">
-                <button @click="toggleLogin()" to="/register" class="btn-smll-default flex justify-content-center">
+                <button v-if="logged" @click="toggleAccount()" class="btn-smll-default flex justify-content-center">
+                    <div class="avatar-image">
+                        <img src="/storage/avatars/avatar1.jpg" alt="">
+                    </div>
+                </button>
+                <button v-else @click="toggleLogin()" class="btn-smll-default flex justify-content-center">
                     <img src="/storage/icons/account.svg" alt="">
                 </button>
-                <button class="btn-smll-default" style="border: none">
+
+                <button @click="logout" class="btn-smll-default" style="border: none">
                     <img src="/storage/icons/friends.svg" alt="">
                 </button>
             </div>
@@ -36,15 +42,22 @@
 <script setup>
 import { ref , onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import useAuth from '@/composables/auth'
+
+const { isLoggedIn, logout } = useAuth();
+
+const logged = ref();
 
 onMounted(() => {
-    const bg = document.getElementById('background');
 
+    logged.value = isLoggedIn();
+
+    // Backgorund animation
+    const bg = document.getElementById('background');
     if (!bg) {
         console.error('Elemento #background no encontrado.');
         return;
     }
-
     document.addEventListener("mousemove", (e) => {
         const width = window.innerWidth / 2;
         const height = window.innerHeight / 2;
@@ -61,24 +74,16 @@ onMounted(() => {
     });
 });
 
-const isLoginPopupVisible = ref(true);
-const isAnonymousPopupVisible = ref(true);
-const route = useRoute();
-
-
-if(route.params.popup)
-{
-    isLoginPopupVisible.value = route.params.popup; 
-    console.log(route.params.popup);
-}
-
 // Abrir cerrar popup de login
 function toggleLogin()
 {
+    //TODO comprobar si la sesion se ha iniciado
     let login = document.querySelector('.login');
     let isOpen = login.classList.contains('active');
     isOpen ? login.classList.remove('active') : login.classList.add('active');
-    isLoginPopupVisible.value = !isLoginPopupVisible.value;
+
+    logged.value = isLoggedIn();
+    console.log("La sesion se ha " + (logged.value ? "iniciado" : "cerrado") + " correctamente");
 }
 
 // Abrir cerrar popup de usuario anónimo
@@ -87,8 +92,14 @@ function toggleAnonymous()
     let anonymous = document.querySelector('.anonymous');
     let isOpen = anonymous.classList.contains('active');
     isOpen ? anonymous.classList.remove('active') : anonymous.classList.add('active');
-    isAnonymousPopupVisible.value = !isAnonymousPopupVisible.value;
+    //isAnonymousPopupVisible.value = !isAnonymousPopupVisible.value;
 }
+
+function toggleAccount()
+{
+    console.log("ABRIR ACCOUNT POPUP")
+}
+
 
 </script>
 
@@ -128,19 +139,33 @@ function toggleAnonymous()
 }
 
 .shake-img {
-  display: inline-block; /* Necesario para que transform funcione */
-  animation: shake 5s infinite;
+    display: inline-block; /* Necesario para que transform funcione */
+    animation: shake 5s infinite;
 }
 
 @keyframes shake {
-  0%, 30% { transform: translate(0px, 0px); } 
-  30%, 40% { transform: scale(0.95); } 
-  40%, 50% { transform: scale(1); } 
-  60%, 90% { transform: translate(0px, 0px); } 
-  92% { transform: translate(0px, 5px); }
-  94% { transform: translate(0px, -5px); }
-  96% { transform: translate(0px, 5px); }
-  98% { transform: translate(0px, -5px); }
-  100% { transform: translate(0px, 0px); } 
+    0%, 30% { transform: translate(0px, 0px); } 
+    30%, 40% { transform: scale(0.95); } 
+    40%, 50% { transform: scale(1); } 
+    60%, 90% { transform: translate(0px, 0px); } 
+    92% { transform: translate(0px, 5px); }
+    94% { transform: translate(0px, -5px); }
+    96% { transform: translate(0px, 5px); }
+    98% { transform: translate(0px, -5px); }
+    100% { transform: translate(0px, 0px); } 
+}
+
+.avatar-image
+{
+    width: 80%;
+    height: 70%;
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.avatar-image>img
+{
+    width: 100%;
+    height: auto;
 }
 </style>
