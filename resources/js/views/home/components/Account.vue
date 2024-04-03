@@ -6,8 +6,16 @@
             </button>
         </div>
         <div class="card-body flex flex-column p-5" style="width: 100%">
-            <div style="width: 100%; height: 50%; background-color: white;">
-                a
+            <div class="flex justify-content-end container-info" style="width: 100%; height: 50%;">
+                <div class="user-container">
+                    <div>
+                        <h3>NICKNAME</h3>
+                        <h3>NIVEL</h3>
+                    </div>
+                    <div>
+                        <!-- <img src="/storage/avatars/avatar1.jpg" alt=""> -->
+                    </div>
+                </div>
             </div>
             <div class="info-container">
                 <div class="tabs">
@@ -125,5 +133,19 @@ function toggleAccount() {
 {
     background-color: #fff;
     color: black;
+}
+
+.container-info
+{
+    padding-bottom: 8px;
+}
+
+.user-container
+{
+    width: 400px;
+    height: auto;
+    background-color: #fff;
+    border: black 3px solid;
+    border-radius: 23px;
 }
 </style>
