@@ -90,7 +90,7 @@ function toggleAccount() {
 {
     background-color: white;
     width: 100%;
-    height: 85%;
+    height: 87%;
     border-radius: 0 23px 23px;
 }
 
