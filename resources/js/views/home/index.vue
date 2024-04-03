@@ -2,6 +2,9 @@
     <div class="login">
         <login-popup @close-popup="toggleLogin"/> 
     </div>
+    <div class="account">
+        <account-management @close-account="toggleAccount"/> 
+    </div>
     <div class="anonymous">
         <anonymous-user @close-anonymous="toggleAnonymous"/>
     </div>
@@ -77,7 +80,6 @@ onMounted(() => {
 // Abrir cerrar popup de login
 function toggleLogin()
 {
-    //TODO comprobar si la sesion se ha iniciado
     let login = document.querySelector('.login');
     let isOpen = login.classList.contains('active');
     isOpen ? login.classList.remove('active') : login.classList.add('active');
@@ -92,12 +94,13 @@ function toggleAnonymous()
     let anonymous = document.querySelector('.anonymous');
     let isOpen = anonymous.classList.contains('active');
     isOpen ? anonymous.classList.remove('active') : anonymous.classList.add('active');
-    //isAnonymousPopupVisible.value = !isAnonymousPopupVisible.value;
 }
 
 function toggleAccount()
 {
-    console.log("ABRIR ACCOUNT POPUP")
+    let account = document.querySelector('.account');
+    let isOpen = account.classList.contains('active');
+    isOpen ? account.classList.remove('active') : account.classList.add('active');
 }
 
 
@@ -123,6 +126,17 @@ function toggleAccount()
 }
 
 .anonymous
+{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 100;
+    display: none;
+    background-color: rgba(0,0,0,.25);
+    backdrop-filter: blur(4px);
+}
+
+.account
 {
     width: 100%;
     height: 100%;
