@@ -1,3 +1,4 @@
+<!-- Componente para Login -->
 <template>
     <div class="card border-0 shadow-sm popup-login">
         <div class="w-100">
