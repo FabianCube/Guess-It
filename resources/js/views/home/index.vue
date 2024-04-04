@@ -1,6 +1,9 @@
 <template>
     <div class="login">
-        <login-popup @close-popup="toggleLogin"/> 
+        <login-popup @close-popup="toggleLogin" @open-register="toggleRegister"/> 
+    </div>
+    <div class="register">
+        <register-popup/>
     </div>
     <div class="account">
         <account-management @close-account="toggleAccount"/> 
@@ -107,6 +110,14 @@ function toggleAccount()
     isOpen ? account.classList.remove('active') : account.classList.add('active');
 }
 
+function toggleRegister()
+{
+    toggleLogin();
+    let register = document.querySelector('.register');
+    let isOpen = register.classList.contains('active');
+    isOpen ? register.classList.remove('active') : register.classList.add('active');
+}
+
 
 </script>
 
@@ -119,6 +130,17 @@ function toggleAccount()
 }
 
 .login
+{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 100;
+    display: none;
+    background-color: rgba(0,0,0,.25);
+    backdrop-filter: blur(4px);
+}
+
+.register
 {
     width: 100%;
     height: 100%;

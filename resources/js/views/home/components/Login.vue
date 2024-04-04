@@ -35,6 +35,9 @@
                                 {{ message }}
                             </div>
                         </div>
+                        <router-link :to="{ name: 'auth.forgot-password' }">
+                            {{ $t('forgot_password') }}
+                        </router-link>
                     </div>
                     <!-- Remember me -->
                     <div class="form-check">
@@ -46,16 +49,19 @@
                     </div>
 
                     <!-- Buttons -->
-                    <div class="flex items-center justify-end mt-4">
+                    <div class="flex align-items-center justify-end flex-column mt-4">
                         <button class="btn-default btn-login" :class="{ 'opacity-25': processing }" :disabled="processing">
                             ENTRAR!
                         </button>
+                        <p class="m-0">O</p>
+                        
                     </div>
                 </div>
-                <router-link :to="{ name: 'auth.forgot-password' }">
-                    {{ $t('forgot_password') }}
-                </router-link>
+                
             </form>
+            <button @click="toggleRegister()" class="btn-default btn-register mb-5">
+                CREAR CUENTA!
+            </button>
         </div>
     </div>
 
@@ -66,12 +72,18 @@
 import { defineProps, defineEmits } from 'vue';
 import useAuth from '@/composables/auth';
 
-const emits = defineEmits(['close-popup']);
+const emits = defineEmits(['close-popup', 'open-register']);
 const { loginForm, validationErrors, processing, submitLogin } = useAuth();
 
 function toggleLogin() {
     emits('close-popup');
 }
+
+function toggleRegister()
+{
+    emits('open-register');
+}
+
 </script>
 <style scoped>
 #closeLogin
@@ -82,7 +94,7 @@ function toggleLogin() {
 .popup-login
 {
     width: 800px;
-    height: 500px;
+    height: 600px;
     margin-left: auto;
     margin-right: auto;
     margin-top: 100px;
@@ -102,6 +114,21 @@ function toggleLogin() {
     line-height: 65px;
     font-size: 2rem;
 }
+
+.btn-register
+{
+    width: 100%;
+    height: 45px;
+    border: none;
+    margin: 0 0 15px 0;
+    line-height: 45px;
+    font-size: 1.6rem;
+    border-radius: 12px;
+
+    background-color: #6753DB;
+    box-shadow: 0 10px #513EBE;
+}
+
 
 .form-control
 {
