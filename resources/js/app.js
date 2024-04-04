@@ -112,7 +112,6 @@ import ToastService from 'primevue/toastservice';
 
 //import BlockViewer from '@/components/BlockViewer.vue';
 
-
 import 'sweetalert2/dist/sweetalert2.min.css';
 import 'vue-select/dist/vue-select.css';
 
@@ -122,16 +121,22 @@ import '../css/theme.css';
 //import "primevue/resources/themes/lara-light-teal/theme.css";
 //import "primevue/resources/themes/viva-light/theme.css";
 import "primeicons/primeicons.css";
+
+// Components for Create game
 import Carousel from "./views/create game/components/Carousel.vue";
 import PlayerList from "./views/create game/components/PlayerList.vue";
 import GameSettings from './views/create game/components/GameSettings.vue';
 
+// Components for Game room
 import ChatMessages from './views/gameRoom/components/ChatMessages.vue';
 import ChatForm from './views/gameRoom/components/ChatForm.vue';
 import Canvas from './views/gameRoom/components/Canvas.vue';
 import StatusBar from './views/gameRoom/components/StatusBar.vue';
 import InfoPlayers from './views/gameRoom/components/InfoPlayers.vue';
+
+// Components for Home
 import LoginPopUp from './views/home/components/Login.vue';
+import Register from './views/home/components/Register.vue';
 import AnonymousUser from './views/home/components/AnonymousUser.vue';
 import Account from './views/home/components/Account.vue';
 
@@ -205,6 +210,7 @@ app.component('canvas-component', Canvas);
 app.component('status-bar', StatusBar);
 app.component('info-players', InfoPlayers);
 app.component('login-popup', LoginPopUp);
+app.component('register-popup', Register);
 app.component('anonymous-user', AnonymousUser);
 app.component('account-management', Account);
 

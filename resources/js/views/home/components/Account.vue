@@ -1,3 +1,4 @@
+<!-- Componente para Cuenta usuario -->
 <template>
     <div class="card border-0 shadow-sm popup-account">
         <div class="w-100">
