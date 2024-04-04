@@ -95,11 +95,14 @@ const playerUuid = ref();
 // Se crea la sala, se añade al jugador anónimo y se redirige a la sala
 const createRoom = async () => {
     try {
-        const response = await axios.post('/api/create-room');
+        // Generamos el uuid del jugador anónimo
+        playerUuid.value = uuidv4();
+
+        const response = await axios.post(`/api/create-room/${playerUuid.value}`);
         roomCode.value = response.data.code;
         console.log("Sala creada con código:", roomCode.value);
         await submitAnonymousLogin();
-        await enterRoom(playerUuid.value); 
+        await enterRoom(); 
         router.push({ name: 'create-game', params: { code: roomCode.value } });
     } catch (error) {
         console.error("Error al crear la sala: ", error);
@@ -109,39 +112,31 @@ const createRoom = async () => {
 
 // Método para generar la sesión de un usuario anónimo
 const submitAnonymousLogin = () => {
-    processing.value = true;
-    playerUuid.value = uuidv4(); // Generamos un UUID para el usuario anónimo
-
-    // Enviamos los datos al servidor
-    axios.post('/api/users', {
+    // Prepara los datos a guardar
+    const userData = {
         nickname: nickname.value,
         avatar: avatarImage.value,
         uuid: playerUuid.value,
-        owner: true
-    }).then(response => {
-        console.log(response.data.message);
-    }).catch(error => {
-        console.error("Error al crear la sesión anónima: ", error);
-    }).finally(() => {
-        processing.value = false;
-    });
+    };
+
+    // Guarda los datos en Session Storage
+    sessionStorage.setItem('userData', JSON.stringify(userData));
+
+    console.log('Sesión anónima creada correctamente en Session Storage.');
 };
 
 
 // Se inserta al jugador anónimo en el array de jugadores de la sala
-const enterRoom = (playerUuid) => {
+const enterRoom = () => {
     axios.post('/api/enter-room', {
         code: roomCode.value,
         nickname: nickname.value,
         avatar: avatarImage.value,
-        uuid: playerUuid,
-        owner: true
+        uuid: playerUuid.value,
     }).then(response => {
         console.log(response.data.mensaje);
     }).catch(error => {
         console.error("Error al unirse a la sala: ", error);
-    }).finally(() => {
-        processing.value = false;
     });
 };
 

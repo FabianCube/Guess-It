@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onBeforeMount } from 'vue';
 import { useRoute } from 'vue-router';
 
 // Lista reactiva de jugadores
@@ -39,6 +39,10 @@ const codigoSala = ref();
 
 const route = useRoute();
 
+onBeforeMount(() => {
+    codigoSala.value = route.params.code; 
+    cargarJugadores();
+});
 
 const cargarJugadores = async () => {
   try {
@@ -49,13 +53,6 @@ const cargarJugadores = async () => {
     console.error('Error al cargar los jugadores:', error);
   }
 };
-
-
-// Inicialmente cargar el jugador creador de la partida
-onMounted(() => {
-    codigoSala.value = route.params.code;
-    cargarJugadores();
-});
 </script>
 
 <style scoped>

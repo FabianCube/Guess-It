@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -118,27 +119,5 @@ class UserController extends Controller
         $user->delete();
 
         return response()->noContent();
-    }
-
-
-    public function createAnonymousSession(Request $request)
-    {
-        // Validar request
-        $validated = $request->validate([
-            'nickname' => 'required|max:255',
-            'avatar' => 'required|max:100',
-            'uuid' => 'required|uuid',
-            'owner' => 'required|boolean'
-        ]);
-
-        // Aquí puedes crear la sesión, asignar los valores a la sesión, etc.
-        session([
-            'playerUuid' => $validated['uuid'],
-            'nickname' => $validated['nickname'],
-            'avatar' => $validated['avatar'],
-            'owner' => $validated['owner']
-        ]);
-
-        return response()->json(['message' => 'Sesión anónima creada correctamente']);
     }
 }

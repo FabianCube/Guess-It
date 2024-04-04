@@ -1,6 +1,7 @@
 <template>
     <div id="background"></div>
-    <div class="relative flex items-top justify-center min-h-screen sm:items-center sm:pt-0 lilita-one-regular">
+    <div v-if="isLoading">Cargando...</div>
+    <div v-else class="relative flex items-top justify-center min-h-screen sm:items-center sm:pt-0 lilita-one-regular">
         <div class="container py-4">
             <div class="d-flex justify-content-between align-items-center">
                 <router-link to="/" class="btn-smll-default"><img src="/storage/icons/home-05.svg" alt=""></router-link>
@@ -25,7 +26,7 @@
                 <div class="col-8 d-flex flex-column justify-content-between ps-5">
                     <div class="background-instructions">
                         <div class="p-3 h-100">
-                            <GameSettings v-if="owner"/>
+                            <GameSettings v-if="options" />
                             <Carousel v-else />
                         </div>
                     </div>
@@ -49,20 +50,44 @@
 </template>
 
 <script setup>
-import { ref, onMounted, inject } from 'vue';
+import { ref, onMounted, onBeforeMount, inject } from 'vue';
 import { useRoute } from 'vue-router';
-
 
 const codigoSala = ref();
 const route = useRoute();
 
 const swal = inject('$swal');
 
-const owner = ref(false);
+// Variable con el id del creador de partida
+const owner = ref();
 
-onMounted(() => {
+const options = ref(false);
+
+// Constante para no mostrar componentes hasta no haber cargado los datos de la sala
+const isLoading = ref(true);
+
+// Guardamos en variables los datos de sesión del usuario anónimo
+const storedUserDataString = sessionStorage.getItem('userData');
+const storedUserData = JSON.parse(storedUserDataString || '{}');
+
+onBeforeMount(() => {
     codigoSala.value = route.params.code;
 
+    // Usando una función autoinvocada para manejar la operación asíncrona
+    (async () => {
+        await getOwner();
+        // Todo el código aquí se ejecuta después de getOwner
+
+        if (owner.value == storedUserData.uuid) {
+            options.value = true;
+        }
+
+        // Indica que la carga ha finalizado y se muestran los componentes
+        isLoading.value = false;
+    })();
+});
+
+onMounted(() => {
     const bg = document.getElementById('background');
 
     if (!bg) {
@@ -86,15 +111,16 @@ onMounted(() => {
     });
 });
 
-onMounted(async () => {
+// Obtenemos el id del creador de partida
+const getOwner = async () => {
     try {
-        console.log(codigoSala.value);
         const response = await axios.get(`/api/room/owner/${codigoSala.value}`);
-        owner.value = response.data.owner;
+        owner.value = response.data;
+        console.log(owner.value);
     } catch (error) {
         console.error('Error obteniendo detalles de la sala:', error);
     }
-});
+};
 
 // Copia el código de la sala
 const copiarCodigo = () => {
@@ -108,12 +134,12 @@ const copiarCodigo = () => {
         .then(() => {
             console.log('Código copiado al portapapeles');
             swal({
-                    icon: 'success',
-                    title: 'Código de partida copiado',
-                    showConfirmButton: false,
-                    timer: 1500,
-                    allowOutsideClick: true
-                })
+                icon: 'success',
+                title: 'Código de partida copiado',
+                showConfirmButton: false,
+                timer: 1500,
+                allowOutsideClick: true
+            })
         })
         .catch(err => {
             console.error('Error al copiar el código al portapapeles:', err);
