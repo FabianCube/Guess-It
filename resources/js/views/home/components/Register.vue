@@ -74,6 +74,8 @@ import useAuth from '@/composables/auth'
 
 const { registerForm, validationErrors, processing, submitRegister } = useAuth();
 
+// TODO añadir campos necesarios para el registro.
+
 </script>
 
 <style scoped>

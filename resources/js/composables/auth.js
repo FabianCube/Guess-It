@@ -33,6 +33,7 @@ export default function useAuth() {
         password_confirmation: ''
     })
 
+    // TODO Modificar los parametros que recive del controlador (agregar los que faltan)
     const registerForm = reactive({
         name: '',
         email: '',
@@ -82,11 +83,15 @@ export default function useAuth() {
                 // await loginUser()
                 swal({
                     icon: 'success',
-                    title: 'Registration successfully',
+                    title: 'REGISTRADO CORRECTAMENTE',
                     showConfirmButton: false,
                     timer: 1500
                 })
-                await router.push({ name: 'auth.login' })
+                await router.push({ name: 'home' })
+
+                // evento para abrir el popup de login desde /home
+                const event = new Event('loggin-done');
+                document.dispatchEvent(event);
             })
             .catch(error => {
                 if (error.response?.data) {
