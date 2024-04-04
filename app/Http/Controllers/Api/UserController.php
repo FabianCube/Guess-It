@@ -128,6 +128,7 @@ class UserController extends Controller
             'nickname' => 'required|max:255',
             'avatar' => 'required|max:100',
             'uuid' => 'required|uuid',
+            'owner' => 'required|boolean'
         ]);
 
         // Aquí puedes crear la sesión, asignar los valores a la sesión, etc.
@@ -135,6 +136,7 @@ class UserController extends Controller
             'playerUuid' => $validated['uuid'],
             'nickname' => $validated['nickname'],
             'avatar' => $validated['avatar'],
+            'owner' => $validated['owner']
         ]);
 
         return response()->json(['message' => 'Sesión anónima creada correctamente']);

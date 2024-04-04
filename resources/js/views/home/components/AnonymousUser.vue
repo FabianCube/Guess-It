@@ -116,7 +116,8 @@ const submitAnonymousLogin = () => {
     axios.post('/api/users', {
         nickname: nickname.value,
         avatar: avatarImage.value,
-        uuid: playerUuid.value
+        uuid: playerUuid.value,
+        owner: true
     }).then(response => {
         console.log(response.data.message);
     }).catch(error => {
@@ -133,7 +134,8 @@ const enterRoom = (playerUuid) => {
         code: roomCode.value,
         nickname: nickname.value,
         avatar: avatarImage.value,
-        uuid: playerUuid
+        uuid: playerUuid,
+        owner: true
     }).then(response => {
         console.log(response.data.mensaje);
     }).catch(error => {

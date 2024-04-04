@@ -25,15 +25,15 @@
                 <div class="col-8 d-flex flex-column justify-content-between ps-5">
                     <div class="background-instructions">
                         <div class="p-3 h-100">
-                            <!-- <Carousel /> -->
-                            <GameSettings />
+                            <GameSettings v-if="owner"/>
+                            <Carousel v-else />
                         </div>
                     </div>
                     <div class="d-flex justify-content-between pb-3">
                         <div class="align-self-start d-flex alig-items-center background-code">
-                            <h4 class="mb-0 me-4">CODE: XLM984</h4>
+                            <h4 id="room-code" class="mb-0 me-4">CODE: {{ codigoSala }}</h4>
                             <img src="../../../../storage/app/public/icons/copy-03.svg" alt="Copiar código"
-                                class="copiar">
+                                class="copiar" @click="copiarCodigo">
                         </div>
                         <div class="d-flex justify-content-end">
                             <router-link to="/play-game" class="d-flex align-items-center btn-play">
@@ -49,9 +49,20 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { ref, onMounted, inject } from 'vue';
+import { useRoute } from 'vue-router';
+
+
+const codigoSala = ref();
+const route = useRoute();
+
+const swal = inject('$swal');
+
+const owner = ref(false);
 
 onMounted(() => {
+    codigoSala.value = route.params.code;
+
     const bg = document.getElementById('background');
 
     if (!bg) {
@@ -74,4 +85,38 @@ onMounted(() => {
         bg.style.transform = `translate(${bgX}px, ${bgY}px) translateZ(0)`;
     });
 });
+
+onMounted(async () => {
+    try {
+        console.log(codigoSala.value);
+        const response = await axios.get(`/api/room/owner/${codigoSala.value}`);
+        owner.value = response.data.owner;
+    } catch (error) {
+        console.error('Error obteniendo detalles de la sala:', error);
+    }
+});
+
+// Copia el código de la sala
+const copiarCodigo = () => {
+    // El navegador no soporta la API del portapapeles
+    if (!navigator.clipboard) {
+        console.error('La API del portapapeles no está soportada en este navegador');
+        return;
+    }
+
+    navigator.clipboard.writeText(codigoSala.value)
+        .then(() => {
+            console.log('Código copiado al portapapeles');
+            swal({
+                    icon: 'success',
+                    title: 'Código de partida copiado',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    allowOutsideClick: true
+                })
+        })
+        .catch(err => {
+            console.error('Error al copiar el código al portapapeles:', err);
+        });
+};
 </script>
