@@ -136,9 +136,9 @@ import InfoPlayers from './views/gameRoom/components/InfoPlayers.vue';
 
 // Components for Home
 import LoginPopUp from './views/home/components/Login.vue';
+import Register from './views/home/components/Register.vue';
 import AnonymousUser from './views/home/components/AnonymousUser.vue';
 import Account from './views/home/components/Account.vue';
-import Register from './viewa/home/components/Register.vue';
 
 
 
