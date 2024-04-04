@@ -190,7 +190,21 @@ export default function useAuth() {
             })
     }
 
+    const isLoggedIn = () => 
+    {
+        if(store.getters['auth/authenticated'])
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+    };
+
     return {
+        isLoggedIn,
         loginForm,
         registerForm,
         forgotForm,
