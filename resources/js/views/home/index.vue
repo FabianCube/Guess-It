@@ -77,6 +77,10 @@ onMounted(() => {
     });
 });
 
+document.addEventListener('loggin-done', () => {
+    toggleLogin();
+})
+
 // Abrir cerrar popup de login
 function toggleLogin()
 {

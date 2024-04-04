@@ -56,7 +56,11 @@ export default function useAuth() {
                     showConfirmButton: false,
                     timer: 1500
                 })
-                await router.push({ name: 'home', params: { popup: 'a' } });
+                await router.push({ name: 'home' });
+
+                // evento para cerrar el popup desde /home
+                const event = new Event('loggin-done');
+                document.dispatchEvent(event);
             })
             .catch(error => {
                 if (error.response?.data) {
