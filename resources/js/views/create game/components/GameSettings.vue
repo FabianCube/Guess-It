@@ -2,7 +2,7 @@
     <div>
         <img src="/storage/icons/info-circle-black.svg" class="info">
         <div class="d-flex flex-column align-items-center">
-            <h2 class="settings-font settings">AJUSTES DE PARTIDA</h2>
+            <h2 class="ms-0 settings-font settings">AJUSTES DE PARTIDA</h2>
             <div class="d-flex justify-content-between align-items-center w-50">
                 <h3 class="mb-0">NÚMERO DE RONDAS</h3>
                 <select class="select-font select-settings">

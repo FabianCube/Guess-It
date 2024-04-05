@@ -11,6 +11,9 @@
     <div class="anonymous">
         <anonymous-user @close-anonymous="toggleAnonymous"/>
     </div>
+    <div class="enter-game">
+        <enter-game @close-enterGame="toggleEnterGame"/>
+    </div>
     <div id="background"></div>
     <div class="relative flex items-top justify-center min-h-screen sm:items-center py-4 sm:pt-0">
         <div class="w-100 flex flex-row justify-between py-5">
@@ -23,7 +26,7 @@
                 <img id="logo" src="/storage/guess-it-logo.svg" class="shake-img"></img> 
 
                 <button @click="toggleAnonymous()" to="/create-game" class="btn-default">CREAR PARTIDA</button>
-                <router-link :to="{ name : 'public-posts.index'}" class="btn-default">UNIRSE A PARTIDA</router-link>
+                <button @click="toggleEnterGame()" class="btn-default">UNIRSE A PARTIDA</button>
                 
             </div>
 
@@ -72,7 +75,7 @@ onMounted(() => {
         const mouseY = e.clientY - height;
 
         // Ajusta estos multiplicadores para cambiar la sensibilidad del efecto
-        const bgX = mouseX * 0.02; // Por ejemplo, 0.05 para un efecto sutil
+        const bgX = mouseX * 0.02;
         const bgY = mouseY * 0.02;
 
         // Aplica la transformación
@@ -116,6 +119,14 @@ function toggleRegister()
     let register = document.querySelector('.register');
     let isOpen = register.classList.contains('active');
     isOpen ? register.classList.remove('active') : register.classList.add('active');
+}
+
+// Abrir cerrar popup de unirse a partida
+function toggleEnterGame()
+{
+    let enterGame = document.querySelector('.enter-game');
+    let isOpen = enterGame.classList.contains('active');
+    isOpen ? enterGame.classList.remove('active') : enterGame.classList.add('active');
 }
 
 
@@ -163,6 +174,17 @@ function toggleRegister()
 }
 
 .account
+{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 100;
+    display: none;
+    background-color: rgba(0,0,0,.25);
+    backdrop-filter: blur(4px);
+}
+
+.enter-game
 {
     width: 100%;
     height: 100%;

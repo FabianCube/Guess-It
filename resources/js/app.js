@@ -139,6 +139,7 @@ import LoginPopUp from './views/home/components/Login.vue';
 import Register from './views/home/components/Register.vue';
 import AnonymousUser from './views/home/components/AnonymousUser.vue';
 import Account from './views/home/components/Account.vue';
+import EnterGame from './views/home/components/EnterGame.vue';
 
 
 
@@ -213,6 +214,7 @@ app.component('login-popup', LoginPopUp);
 app.component('register-popup', Register);
 app.component('anonymous-user', AnonymousUser);
 app.component('account-management', Account);
+app.component('enter-game', EnterGame);
 
 /**PRIMEVUE */
 app.use(PrimeVue, { ripple: true });

@@ -22,12 +22,6 @@
                         <label for="nickname" class="form-label h4">Nickname</label>
                         <input id="nickname" type="text" class="form-control" v-model="nickname" required autofocus
                             autocomplete="username">
-                        <!-- Validation Errors -->
-                        <!-- <div class="text-danger mt-1">
-                            <div v-for="message in validationErrors?.email">
-                                {{ message }}
-                            </div>
-                        </div> -->
                     </div>
 
                     <!-- Buttons -->
@@ -63,7 +57,6 @@ const router = useRouter();
 const nickname = ref();
 const avatarImage = ref();
 let avatarId = ref(1);
-const processing = ref(false);
 
 // Función para cargar el nombre del archivo del avatar según su Id
 const loadAvatar = () => {
