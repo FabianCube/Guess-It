@@ -1,6 +1,11 @@
 <template>
     <div id="background"></div>
-    <div v-if="isLoading">Cargando...</div>
+    <div v-if="isLoading" class="d-flex flex-column justify-content-center align-items-center loading-container">
+        <img src="/storage/loading.svg" alt="" class="loading-logo">
+        <div class="mt-5 loading-bar-container">
+            <div class="loading-bar"></div>
+        </div>
+    </div>
     <div v-else class="relative flex items-top justify-center min-h-screen sm:items-center sm:pt-0 lilita-one-regular">
         <div class="container py-4">
             <div class="d-flex justify-content-between align-items-center">
@@ -70,21 +75,25 @@ const isLoading = ref(true);
 const storedUserDataString = sessionStorage.getItem('userData');
 const storedUserData = JSON.parse(storedUserDataString || '{}');
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
     codigoSala.value = route.params.code;
 
-    // Usando una función autoinvocada para manejar la operación asíncrona
-    (async () => {
-        await getOwner();
-        // Todo el código aquí se ejecuta después de getOwner
+    // Definimos una espera de 3 segundos
+    const loadingPromise = new Promise((resolve) => setTimeout(resolve, 3000));
 
-        if (owner.value == storedUserData.uuid) {
-            options.value = true;
-        }
+    // Guardamos en una variable el método getOwner
+    const ownerPromise = getOwner();
 
-        // Indica que la carga ha finalizado y se muestran los componentes
-        isLoading.value = false;
-    })();
+    // Esperamos 3 segundos después de ejecutar getOwner para que se muestre la animación de carga
+    await Promise.all([loadingPromise, ownerPromise]);
+
+    // Si el usuario es el creador de partida, se le muestran las opciones de partida
+    if (owner.value === storedUserData.uuid) {
+        options.value = true;
+    }
+
+    // Finaliza la carga y muestra los componentes
+    isLoading.value = false; 
 });
 
 onMounted(() => {
@@ -95,6 +104,7 @@ onMounted(() => {
         return;
     }
 
+    // Mueve el fondo de pantalla según el movimiento del ratón
     document.addEventListener("mousemove", (e) => {
         const width = window.innerWidth / 2;
         const height = window.innerHeight / 2;
@@ -102,8 +112,8 @@ onMounted(() => {
         const mouseX = e.clientX - width;
         const mouseY = e.clientY - height;
 
-        // Ajusta estos multiplicadores para cambiar la sensibilidad del efecto
-        const bgX = mouseX * 0.02; // Por ejemplo, 0.05 para un efecto sutil
+        // Con esto se ajusta la sensibilidad del movimiento del fondo de pantalla
+        const bgX = mouseX * 0.02;
         const bgY = mouseY * 0.02;
 
         // Aplica la transformación
@@ -130,6 +140,7 @@ const copiarCodigo = () => {
         return;
     }
 
+
     navigator.clipboard.writeText(codigoSala.value)
         .then(() => {
             console.log('Código copiado al portapapeles');
@@ -146,3 +157,43 @@ const copiarCodigo = () => {
         });
 };
 </script>
+
+<style scoped>
+.loading-container {
+    height: 100vh;
+    width: 100vw;
+}
+
+.loading-bar-container {
+  width: 30vw;
+  background-color: #e0e0e0;
+  border-radius: 10px;
+  padding: 5px;
+  box-shadow: 0px 5px 7px 1px rgba(0, 0, 0, 0.25);
+}
+
+.loading-bar {
+  height: 20px;
+  background-color: #66BA13;
+  width: 0%;
+  border-radius: 5px;
+  animation: fillProgress 3s ease-in-out forwards;
+}
+
+.loading-logo {
+    animation: logoAnimation 3s infinite;
+}
+
+@keyframes fillProgress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
+@keyframes logoAnimation {
+    0% { transform: translate(0); }
+  25% { transform: translate(0px, 10px); }
+  50% { transform: translate(0px, -10px); }
+  75% { transform: translate(0px, 10px); }
+  100% { transform: translate(0px, 0px); }
+}
+</style>

@@ -14,7 +14,6 @@
     margin-top: 30px;
     font-family: "Lilita One", sans-serif;
     text-shadow: 0px 2px 6px rgba($color: #000000, $alpha: .25); // x / y / blur / color
-
     box-shadow: 0 10px #F27820;
     transition: all 0.3s ease;
 }
@@ -73,11 +72,8 @@
 
 .btn-invite:active {
     background-color: #7968dc;
-    /* Color de fondo al hacer clic */
     box-shadow: 0 4px #513EBE;
-    /* Sombra más pequeña para efecto de presión */
     transform: translateY(4px);
-    /* Mover el botón hacia abajo para simular presión */
 }
 
 .btn-play {
@@ -103,11 +99,8 @@
 
 .btn-play:active {
     background-color: #70ca16;
-    /* Color de fondo al hacer clic */
     box-shadow: 0 6px #4D8A11;
-    /* Sombra más pequeña para efecto de presión */
     transform: translateY(8px);
-    /* Mover el botón hacia abajo para simular presión */
 }
 
 @keyframes bounce {
