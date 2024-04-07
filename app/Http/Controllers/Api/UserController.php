@@ -60,7 +60,9 @@ class UserController extends Controller
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->level = 1;
         $user->password = Hash::make($request->password);
+        $user->avatar_id = $request->avatar_id;
 
         if ($user->save()) {
             if ($role) {
