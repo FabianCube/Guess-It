@@ -12,6 +12,7 @@
                     <div class="avatar-wrapper">
                         <div class="image-container">
                             <img :src="avatarImage" alt="Avatar" class="avatar-image">
+                            <input v-model="registerForm.avatar_id" type="text" id="currentAvatarId" hidden>
                         </div>
                         <a class="change-avatar" @click="changeAvatar">
                             <img src="/storage/icons/next-avatar.svg" alt="Next-avatar">
@@ -92,11 +93,14 @@ const router = useRouter();
 const avatarImage = ref();
 let avatarId = ref(1);
 
+// Asigno el avatar_id para usarlo en registerForm (input)
+
 // TODO añadir campos necesarios para el registro.
 const loadAvatar = () => {
     axios.get('/api/get-avatar/' + avatarId.value)
-        .then(({ data }) => {
-            avatarImage.value = baseAvatar + data.image;
+    .then(({ data }) => {
+        document.getElementById('currentAvatarId').value = avatarId;
+        avatarImage.value = baseAvatar + data.image;
         })
         .catch(error => {
             console.error("Error al obtener el avatar: ", error);

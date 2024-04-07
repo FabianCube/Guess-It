@@ -56,7 +56,7 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        $role = Role::find($request->role_id);
+        //$role = Role::find($request->role_id);
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
@@ -65,9 +65,9 @@ class UserController extends Controller
         $user->avatar_id = $request->avatar_id;
 
         if ($user->save()) {
-            if ($role) {
-                $user->assignRole($role);
-            }
+            // if ($role) {
+            //     $user->assignRole($role);
+            // }
             return new UserResource($user);
         }
     }
