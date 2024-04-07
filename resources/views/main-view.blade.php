@@ -14,7 +14,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Laravel Vue 3 Stater</title>
+    <title>Guess-it - ¡Dibuja y adivina!</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
