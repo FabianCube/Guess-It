@@ -57,6 +57,10 @@
 <script setup>
 import { ref, onMounted, onBeforeMount, inject } from 'vue';
 import { useRoute } from 'vue-router';
+import sweetAlertNotifications from '@/utils/swal_notifications';
+
+const { throwSuccessMessage } = sweetAlertNotifications();
+
 
 const codigoSala = ref();
 const route = useRoute();
@@ -144,13 +148,7 @@ const copiarCodigo = () => {
     navigator.clipboard.writeText(codigoSala.value)
         .then(() => {
             console.log('Código copiado al portapapeles');
-            swal({
-                icon: 'success',
-                title: 'Código de partida copiado',
-                showConfirmButton: false,
-                timer: 1500,
-                allowOutsideClick: true
-            })
+            throwSuccessMessage('Código de partida copiado');
         })
         .catch(err => {
             console.error('Error al copiar el código al portapapeles:', err);
