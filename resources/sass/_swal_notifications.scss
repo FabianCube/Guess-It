@@ -1,9 +1,16 @@
-.swal2-custom-success { 
+.swal2-custom
+{
     -webkit-border-radius: 20px !important; 
     -moz-border-radius: 20px !important; 
     border-radius: 20px !important; 
-    border: solid 8px #66BA13;
     height: 300px;
     width: 300px;
     font-family: "Lilita One", sans-serif;
+}
+
+
+.swal2-custom-success 
+{ 
+    border: solid 8px #66BA13;
+    color: black;
 }
