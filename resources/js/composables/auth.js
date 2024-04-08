@@ -3,6 +3,7 @@ import { useRouter } from "vue-router";
 import { AbilityBuilder, createMongoAbility } from '@casl/ability';
 import { ABILITY_TOKEN } from '@casl/vue';
 import store from '../store'
+import sweetAlertNotifications from '../utils/swal_notifications';
 
 let user = reactive({
     name: '',
@@ -15,6 +16,7 @@ export default function useAuth() {
     const router = useRouter()
     const swal = inject('$swal')
     const ability = inject(ABILITY_TOKEN)
+    const { throwSuccessMessage, throwInfoMessage, throwErrorMessage, throwAcceptMessage } = sweetAlertNotifications();
 
     const loginForm = reactive({
         email: '',
@@ -53,12 +55,8 @@ export default function useAuth() {
             .then(async response => {
                 await store.dispatch('auth/getUser')
                 await loginUser()
-                swal({
-                    icon: 'success',
-                    title: 'INICIO DE SESIÓN CORRECTO',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
+
+                throwSuccessMessage('INICIO DE SESIÓN CORRECTO')
                 await router.push({ name: 'home' });
 
                 // evento para cerrar el popup desde /home
@@ -83,12 +81,8 @@ export default function useAuth() {
             .then(async response => {
                 // await store.dispatch('auth/getUser')
                 // await loginUser()
-                swal({
-                    icon: 'success',
-                    title: 'REGISTRADO CORRECTAMENTE',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
+
+                throwSuccessMessage('REGISTRADO CORRECTAMENTE');
                 await router.push({ name: 'home' })
 
                 // evento para abrir el popup de login desde /home
@@ -111,12 +105,7 @@ export default function useAuth() {
 
         await axios.post('/api/forget-password', forgotForm)
             .then(async response => {
-                swal({
-                    icon: 'success',
-                    title: 'We have emailed your password reset link! Please check your mail inbox.',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
+                throwSuccessMessage('Te hemos enviado el link de reset! Porfavor, comprueba tu email.')
                 // await router.push({ name: 'admin.index' })
             })
             .catch(error => {
@@ -135,12 +124,7 @@ export default function useAuth() {
 
         await axios.post('/api/reset-password', resetForm)
             .then(async response => {
-                swal({
-                    icon: 'success',
-                    title: 'Password successfully changed.',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
+                throwSuccessMessage('Contraseña cambiada correctamente!')
                 await router.push({ name: 'auth.login' })
             })
             .catch(error => {
