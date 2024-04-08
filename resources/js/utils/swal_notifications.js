@@ -31,7 +31,7 @@ export default function sweetAlertNotifications()
             showConfirmButton: false,
             timer: 1500,
             customClass: { 
-                popup: "swal2-custom"
+                popup: "swal2-custom swal2-custom-info"
             }
         });
     }
@@ -45,7 +45,7 @@ export default function sweetAlertNotifications()
             showConfirmButton: false,
             timer: 1500,
             customClass: { 
-                popup: "swal2-custom"
+                popup: "swal2-custom swal2-custom-error"
             }
         });
     }

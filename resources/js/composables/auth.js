@@ -91,6 +91,7 @@ export default function useAuth() {
             })
             .catch(error => {
                 if (error.response?.data) {
+                    throwErrorMessage('Error al registrar cuenta')
                     validationErrors.value = error.response.data.errors
                 }
             })
