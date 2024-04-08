@@ -8,35 +8,60 @@ export default function sweetAlertNotifications()
 {
     const swal = inject('$swal')
 
-    const throwSuccessMessage = ($message) => {
-        console.log('Sending info message...');
+    const throwSuccessMessage = ($message = '¡ÉXITO!') => {
+        console.log('Sending success message...');
 
         swal({
             icon: 'success',
             title: $message,
             showConfirmButton: false,
             timer: 1500,
-            customClass: { popup: "swal2-custom-success" }
+            customClass: { 
+                popup: "swal2-custom swal2-custom-success" 
+            }
         });
     }
 
-    const throwInfoMessage = ($message) => {
+    const throwInfoMessage = ($message = 'Info') => {
         console.log('Sending info message...');
 
         swal({
             icon: 'info',
             title: $message,
             showConfirmButton: false,
-            timer: 1500
+            timer: 1500,
+            customClass: { 
+                popup: "swal2-custom"
+            }
         });
     }
 
-    const throwErrorMessage = () => {
-        
+    const throwErrorMessage = ($message = '¡ERROR!') => {
+        console.log('Sending error message...');
+
+        swal({
+            icon: 'error',
+            title: $message,
+            showConfirmButton: false,
+            timer: 1500,
+            customClass: { 
+                popup: "swal2-custom"
+            }
+        });
     }
 
-    const throwAcceptMessage = () => {
-        
+    const throwAcceptMessage = ($message = '¿Aceptar?') => {
+        console.log('Sending accept message...');
+
+        swal({
+            icon: 'error',
+            title: $message,
+            showConfirmButton: true,
+            timer: 1500,
+            customClass: { 
+                popup: "swal2-custom"
+            }
+        });
     }
 
     return {
