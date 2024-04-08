@@ -39,14 +39,13 @@
 </template>
 
 <script setup>
-import { defineEmits, ref, onMounted } from 'vue';
+import { defineEmits, ref, onMounted, onBeforeMount } from 'vue';
 import axios from 'axios';
 import useAuth from '@/composables/auth';
 import { useRouter } from 'vue-router';
 import { v4 as uuidv4 } from 'uuid';
 
 const emits = defineEmits(['close-anonymous']);
-const { loginForm, validationErrors, submitLogin } = useAuth();
 
 function toggleAnonymous() {
     emits('close-anonymous');
@@ -70,16 +69,17 @@ const loadAvatar = () => {
 };
 
 // Cargamos el avatar inicial cuando el componente se monta
-onMounted(loadAvatar);
+onBeforeMount(loadAvatar);
 
 // Método para cambiar el avatar
 const changeAvatar = () => {
     if (avatarId.value === 4) {
         avatarId.value = 1;
     } else {
-        avatarId.value += 1; // Incrementamos el ID
+        avatarId.value += 1;
     }
-    loadAvatar(); // Cargamos el nuevo avatar
+
+    loadAvatar();
 };
 
 const roomCode = ref();
@@ -95,7 +95,7 @@ const createRoom = async () => {
         roomCode.value = response.data.code;
         console.log("Sala creada con código:", roomCode.value);
         await submitAnonymousLogin();
-        await enterRoom(); 
+        await enterRoom();
         router.push({ name: 'create-game', params: { code: roomCode.value } });
     } catch (error) {
         console.error("Error al crear la sala: ", error);

@@ -59,3 +59,4 @@ Route::post('create-room/{owner}', [RoomController::class, 'createRoom']);
 Route::post('enter-room', [RoomController::class, 'enterRoom']);
 Route::get('/room/players/{code}', [RoomController::class, 'getPlayers']);
 Route::get('/room/owner/{code}', [RoomController::class, 'getOwner']);
+Route::get('find-room/{code}', [RoomController::class, 'findRoom']);

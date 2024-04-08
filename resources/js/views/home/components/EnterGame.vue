@@ -9,16 +9,16 @@
             <h1 style="text-align: center;">CÓDIGO DE PARTIDA</h1>
             <form @submit.prevent>
                 <div class="">
-                    <!-- Nickname -->
+                    <!-- Código partida -->
                     <div class="mb-3">
-                        <label for="nickname" class="form-label h4">Código</label>
-                        <input id="nickname" type="text" class="form-control" v-model="nickname" required autofocus
+                        <label for="codigo" class="form-label h4">Código</label>
+                        <input id="codigo" type="text" class="form-control" v-model="roomCode" required autofocus
                             autocomplete="username">
                     </div>
 
                     <!-- Buttons -->
                     <div class="flex items-center justify-end mt-4">
-                        <button @click="createRoom" class="btn-default btn-login">
+                        <button @click="findRoom()" class="btn-default btn-login">
                             PREPARADO!
                         </button>
                     </div>
@@ -31,8 +31,10 @@
 </template>
 
 <script setup>
-import { defineEmits, ref, onMounted } from 'vue';
+import { defineEmits, ref } from 'vue';
 import axios from 'axios';
+import useAuth from '@/composables/auth';
+import { useRouter } from 'vue-router';
 
 const emits = defineEmits(['close-enterGame']);
 
@@ -40,8 +42,49 @@ function toggleEnterGame() {
     emits('close-enterGame');
 }
 
+const { isLoggedIn } = useAuth();
+
 const roomCode = ref();
 const playerUuid = ref();
+const router = useRouter();
+
+const roomExists = ref();
+
+// Verifica si existe una sala con el código insertado
+const findRoom = async () => {
+    try {
+        const response = await axios.get(`/api/find-room/${roomCode.value}`);
+        roomExists.value = response.data;
+        
+        console.log("Sala existe");
+        await userRegistered();
+        await enterRoom();
+        router.push({ name: 'create-game', params: { code: roomCode.value } });
+    } catch (error) {
+        console.error('La sala no existe', error);
+    }
+}
+
+// Comprueba si el usuario está registrado
+const userRegistered = () => {
+    if (!isLoggedIn()) {
+        console.log("No registrado")
+        return;
+    } else {
+        console.log("Usuario registrado");
+    }
+}
+
+// Introduce a un usuario registrado en la sala
+const enterRoom = () => {
+    axios.post('/api/enter-room', {
+        code: roomCode.value
+    }).then(response => {
+        console.log(response.data.mensaje);
+    }).catch(error => {
+        console.error("Error al unirse a la sala: ", error);
+    });
+};
 
 </script>
 
