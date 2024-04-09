@@ -11,44 +11,26 @@
 </template>
 <script setup>
 
-//Takes the "user" props from <chat-form> … :user="{{ Auth::user() }}"></chat-form> in the parent chat.blade.php.
-const props = defineProps(['user'])
+import { defineProps, defineEmits, ref } from 'vue';
 
-sendMessage()
+//Takes the "user" props from <chat-form> … :user="{{ Auth::user() }}"></chat-form> in the parent chat.blade.php.
+const props = defineProps([ 'user' ]);
+
+const { emit } = defineEmits(["messagesent"]);
+const newMessage = ref('');
+
+function sendMessage()
 {
   //Emit a "messagesent" event including the user who sent the message along with the message content
-  this.$emit("messagesent", {
-    user: this.user,
+  emit("messagesent", {
+    user: props.user,
     //newMessage is bound to the earlier "btn-input" input field
-    message: this.newMessage,
+    message: newMessage.value,
   });
   //Clear the input
-  this.newMessage = "";
+  newMessage.value = '';
 }
 
-
-// ======== DEPRECATED ===========
-// export default {
-//   //Takes the "user" props from <chat-form> … :user="{{ Auth::user() }}"></chat-form> in the parent chat.blade.php.
-//   props: ["user"],
-//   data() {
-//     return {
-//       newMessage: "",
-//     };
-//   },
-//   methods: {
-//     sendMessage() {
-//       //Emit a "messagesent" event including the user who sent the message along with the message content
-//       this.$emit("messagesent", {
-//         user: this.user,
-//         //newMessage is bound to the earlier "btn-input" input field
-//         message: this.newMessage,
-//       });
-//       //Clear the input
-//       this.newMessage = "";
-//     },
-//   },
-// };
 </script>
 
 <style scoped>

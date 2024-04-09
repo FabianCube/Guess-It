@@ -153,7 +153,7 @@ const app = createApp({
     created() {
         useAuth().getUser();
 
-        this.fetchMessages();
+        this.fetchMessages(); //! not needed
         window.Echo.private('chat')
             .listen('MessageSent', (e) => {
                 this.messages.push({
@@ -177,8 +177,10 @@ const app = createApp({
                 this.messages = response.data;
             });
         },
-        addMessage(message) { //! NOT NEEDED
+        addMessage(message) {
             this.messages.push(message);
+
+            //! this post is not needed anymore
             axios.post('/messages', message).then(response => {
                 console.log(response.data);
             });

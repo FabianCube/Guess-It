@@ -16,28 +16,19 @@
 </template>
 
 <script setup>
-import { onUpdated } from 'vue';
+import { onUpdated, nextTick, ref } from 'vue';
 
 const props = defineProps([ 'messages' ])
+const chatContainer = ref(null);
 
 onUpdated()
 {
-  this.$nextTick(() => {
-    const container = this.$refs.chatContainer;
+  nextTick(() => {
+    const container = chatContainer.value;
     container.scrollTop = container.scrollHeight;
   });
 }
 
-// ============ DEPRECATED ==========
-// export default {
-//   props: ["messages"],
-//   updated() {
-//     this.$nextTick(() => {
-//       const container = this.$refs.chatContainer;
-//       container.scrollTop = container.scrollHeight;
-//     });
-//   },
-// };
 </script>
 <style scoped>
 .chat {
