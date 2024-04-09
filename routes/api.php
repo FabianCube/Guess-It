@@ -60,3 +60,4 @@ Route::post('enter-room', [RoomController::class, 'enterRoom']);
 Route::get('/room/players/{code}', [RoomController::class, 'getPlayers']);
 Route::get('/room/owner/{code}', [RoomController::class, 'getOwner']);
 Route::get('find-room/{code}', [RoomController::class, 'findRoom']);
+Route::post('leave-room/{code}', [RoomController::class, 'leaveRoom']);
