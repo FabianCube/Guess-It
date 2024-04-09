@@ -172,12 +172,12 @@ const app = createApp({
 
     },
     methods: {
-        fetchMessages() {
+        fetchMessages() { //! NOT NEEDED
             axios.get('/messages').then(response => {
                 this.messages = response.data;
             });
         },
-        addMessage(message) {
+        addMessage(message) { //! NOT NEEDED
             this.messages.push(message);
             axios.post('/messages', message).then(response => {
                 console.log(response.data);

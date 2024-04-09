@@ -14,14 +14,6 @@
 //Takes the "user" props from <chat-form> … :user="{{ Auth::user() }}"></chat-form> in the parent chat.blade.php.
 const props = defineProps(['user'])
 
-data()
-{
-  return
-  {
-    newMessage: ""
-  }
-}
-
 sendMessage()
 {
   //Emit a "messagesent" event including the user who sent the message along with the message content
