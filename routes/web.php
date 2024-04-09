@@ -23,11 +23,9 @@ Route::post('logout', [AuthenticatedSessionController::class, 'logout']);
 Route::post('/messages', [App\Http\Controllers\ChatsController::class, 'sendMessage']);
 Route::get('/canvas', [App\Http\Controllers\ChatsController::class, 'fetchCanvas']);
 Route::post('/canvas', [App\Http\Controllers\ChatsController::class, 'sendCanvas']);
- 
 
 
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
 
 Route::view('/{any?}', 'main-view')
     ->name('dashboard')

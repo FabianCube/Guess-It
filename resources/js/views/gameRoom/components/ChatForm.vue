@@ -1,7 +1,7 @@
 <template>
   <div class="text-input flex flex-row">
-    <input autocomplete="off" id="btn-input" type="text" name="message" class="form-control input-sm" placeholder="Escribe aquí..."
-      v-model="newMessage" @keyup.enter="sendMessage">
+    <input autocomplete="off" id="btn-input" type="text" name="message" class="form-control input-sm"
+      placeholder="Escribe aquí..." v-model="newMessage" @keyup.enter="sendMessage">
     <button class="send-btn" id="btn-chat" @click="sendMessage">
       <img src="/storage/icons/icon-send.svg" alt="">
     </button>
@@ -9,28 +9,54 @@
     </input>
   </div>
 </template>
-<script>
-export default {
-  //Takes the "user" props from <chat-form> … :user="{{ Auth::user() }}"></chat-form> in the parent chat.blade.php.
-  props: ["user"],
-  data() {
-    return {
-      newMessage: "",
-    };
-  },
-  methods: {
-    sendMessage() {
-      //Emit a "messagesent" event including the user who sent the message along with the message content
-      this.$emit("messagesent", {
-        user: this.user,
-        //newMessage is bound to the earlier "btn-input" input field
-        message: this.newMessage,
-      });
-      //Clear the input
-      this.newMessage = "";
-    },
-  },
-};
+<script setup>
+
+//Takes the "user" props from <chat-form> … :user="{{ Auth::user() }}"></chat-form> in the parent chat.blade.php.
+const props = defineProps(['user'])
+
+data()
+{
+  return
+  {
+    newMessage: ""
+  }
+}
+
+sendMessage()
+{
+  //Emit a "messagesent" event including the user who sent the message along with the message content
+  this.$emit("messagesent", {
+    user: this.user,
+    //newMessage is bound to the earlier "btn-input" input field
+    message: this.newMessage,
+  });
+  //Clear the input
+  this.newMessage = "";
+}
+
+
+// ======== DEPRECATED ===========
+// export default {
+//   //Takes the "user" props from <chat-form> … :user="{{ Auth::user() }}"></chat-form> in the parent chat.blade.php.
+//   props: ["user"],
+//   data() {
+//     return {
+//       newMessage: "",
+//     };
+//   },
+//   methods: {
+//     sendMessage() {
+//       //Emit a "messagesent" event including the user who sent the message along with the message content
+//       this.$emit("messagesent", {
+//         user: this.user,
+//         //newMessage is bound to the earlier "btn-input" input field
+//         message: this.newMessage,
+//       });
+//       //Clear the input
+//       this.newMessage = "";
+//     },
+//   },
+// };
 </script>
 
 <style scoped>

@@ -50,6 +50,7 @@ class ChatsController extends Controller
         $canvas = $request->input('canvas'); 
 
         broadcast(new CanvasUpdate($user, $canvas))->toOthers();
+        // broadcast(new CanvasUpdate($canvas))->toOthers();
 
         return ['status' => 'Canvas Sent!'];
     }
