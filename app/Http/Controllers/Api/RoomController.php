@@ -47,8 +47,6 @@ class RoomController extends Controller
             $uuid = $request->uuid;
         }
 
-
-
         // Si el código proporcionado no coincide con ninguna sala se muestra mensaje de error
         $room = Cache::get('room_' . $code);
         if (!$room) {
