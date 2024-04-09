@@ -1,6 +1,6 @@
 <template>
     <div class="carousel">
-        <img src="/storage/icons/settings.svg" class="settings">
+        <!-- <img src="/storage/icons/settings.svg" class="settings"> si hay tiempo aplicamos la opción de cambiar entre opciones y tutorial-->
         <vueper-slides :dragging-distance="50" class="no-shadow" fixed-height="33rem" slide-image-inside>
             <vueper-slide v-for="(slide, i) in slides" :key="i" :image="slide.image" />
         </vueper-slides>

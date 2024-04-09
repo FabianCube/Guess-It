@@ -1,6 +1,6 @@
 <template>
     <div>
-        <img src="/storage/icons/info-circle-black.svg" class="info">
+        <!-- <img src="/storage/icons/info-circle-black.svg" class="info"> si hay tiempo aplicamos la opción de cambiar entre opciones y tutorial-->
         <div class="d-flex flex-column align-items-center">
             <h2 class="ms-0 settings-font settings">AJUSTES DE PARTIDA</h2>
             <div class="d-flex justify-content-between align-items-center w-50">

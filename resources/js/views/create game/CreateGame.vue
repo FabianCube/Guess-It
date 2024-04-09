@@ -55,7 +55,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeMount, inject } from 'vue';
+import { ref, onMounted, onBeforeMount, onBeforeUnmount, inject } from 'vue';
 import { useRoute } from 'vue-router';
 import sweetAlertNotifications from '@/utils/swal_notifications';
 
@@ -123,6 +123,14 @@ onMounted(() => {
         // Aplica la transformación
         bg.style.transform = `translate(${bgX}px, ${bgY}px) translateZ(0)`;
     });
+});
+
+onBeforeUnmount(() => {
+    // Usamos sendBeacon porque permite enviar datos de forma asíncrona al servidor
+    // sin afectar en la experiencia del usuario
+    navigator.sendBeacon(`/api/leave-room/${codigoSala.value}`, JSON.stringify({
+        uuid: storedUserData.uuid
+    }));
 });
 
 // Obtenemos el id del creador de partida
