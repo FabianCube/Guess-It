@@ -1,15 +1,15 @@
 <template>
     <!-- CANVAS COMPONENT -->
-    <canvas id="can"></canvas>
+    <canvas ref="canvas" id="can"></canvas>
 
     <div class="controls">
-        <button id="clearArea">Clear Area</button>
-        Line width : <select id="selWidth">
+        <button @click="clearArea" id="clearArea">Clear Area</button>
+        Line width : <select v-model="lineWidth" id="selWidth">
             <option value="11">11</option>
             <option value="13" selected="selected">13</option>
             <option value="15">15</option>
         </select>
-        Color : <select id="selColor">
+        Color : <select v-model="lineColor" id="selColor">
             <option value="black">black</option>
             <option value="blue" selected="selected">blue</option>
             <option value="red">red</option>
@@ -22,134 +22,86 @@
     <!-- END CANVAS COMPONENT -->
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted, onUpdated, nextTick } from 'vue';
 
-// window.onload = adjustCanvas;
+const canvas = ref(null);
+const ctx = ref(null);
+const isDrawing = ref(false);
+const movements = ref([]);
+const lineWidth = ref("13");
+const lineColor = ref("blue");
 
-export default {
-    props: ["newCanvas"],
-    updated() {
-        this.$nextTick(() => {
-            if (this.newCanvas) {
+const init = () => {
+    canvas.value = document.getElementById('can');
+    ctx.value = canvas.value.getContext("2d");
 
-                if (this.newCanvas == "clear") {
-                    this.clearArea();
-                } else {
-                    let positions = JSON.parse(this.newCanvas);
+    canvas.value.addEventListener('mousedown', (e) => {
+        isDrawing.value = true;
+    });
 
-                    // Dibujamos punto por punto los movimientos
-                    positions.forEach((movement, index) => {
-                        setTimeout(() => {
-                            this.drawLine(this.ctx, movement.x, movement.y, movement.offsetX, movement.offsetY);
-                        }, index * 15); //El valor es el tiempo de espera en milisegundos
-                    });
-                }
-
-            }
-        })
-    },
-    data() {
-        return {
-            isDrawing: false,
-            canvas: null,
-            ctx: null,
-            flag: false,
-            x: 0,
-            y: 0,
-            offsetX: null,
-            offsetY: null,
-            movements: []
-        };
-    },
-    mounted() {
-        this.init();
-        window.addEventListener('resize', this.adjustCanvas);
-        this.adjustCanvas();
-    },
-    methods: {
-        sendCanvas(params) 
-        {
-            this.$emit("canvasupdate", {
-                user: this.user,
-
-                canvas: params,
-            });
-            console.log("canvas sent");
-        },
-        getParams() 
-        {
-            console.log("Dentro de getParams");
-            const params = JSON.stringify(this.movements);
-            this.sendCanvas(params)
-        },
-        init() 
-        {
-            this.canvas = document.getElementById('can');
-            this.ctx = this.canvas.getContext("2d");
-
-            this.canvas.addEventListener('mousedown', (e) => {
-                this.x = e.offsetX;
-                this.y = e.offsetY;
-                this.isDrawing = true;
-            });
-
-            this.canvas.addEventListener('mousemove', (e) => {
-                if (this.isDrawing) {
-                    this.movements.push({ x: this.x, y: this.y, offsetX: e.offsetX, offsetY: e.offsetY });
-                    this.drawLine(this.ctx, this.x, this.y, e.offsetX, e.offsetY);
-                    this.x = e.offsetX;
-                    this.y = e.offsetY;
-
-                    if (this.movements.length >= 1000) {
-                        this.getParams();
-                        this.movements = [];
-                    }
-                }
-            });
-
-            this.canvas.addEventListener('mouseup', (e) => {
-                if (this.isDrawing) {
-                    this.movements.push({ x: this.x, y: this.y, offsetx: e.offsetX, offsetY: e.offsetY });
-                    this.drawLine(this.ctx, this.x, this.y, e.offsetX, e.offsetY);
-                    this.getParams();
-                    this.x = 0;
-                    this.y = 0;
-                    this.isDrawing = false;
-                    this.movements = [];
-                }
-            });
-
-            let clear = document.getElementById('clearArea');
-
-            clear.addEventListener('click', (e) => {
-                this.clearArea();
-                this.sendCanvas("clear");
-            })
-        },
-        drawLine(ctx, x1, y1, x2, y2) 
-        {
-            ctx.beginPath();
-            ctx.strokeStyle = document.getElementById('selColor').value;
-            ctx.lineWidth = document.getElementById('selWidth').value;
-            ctx.lineJoin = "round";
-            ctx.moveTo(x1, y1);
-            ctx.lineTo(x2, y2);
-            ctx.closePath();
-            ctx.stroke();
-        },
-        clearArea() 
-        {
-            this.ctx.setTransform(1, 0, 0, 1, 0, 0);
-            this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-        },
-        adjustCanvas()
-        {
-            let style = getComputedStyle(this.canvas);
-            this.canvas.width = parseInt(style.width);
-            this.canvas.height = parseInt(style.height);
+    canvas.value.addEventListener('mousemove', (e) => {
+        if (isDrawing.value) {
+            movements.value.push({ x: e.offsetX, y: e.offsetY });
+            drawLine(ctx.value, e.offsetX, e.offsetY);
         }
-    }
-}
+    });
+
+    canvas.value.addEventListener('mouseup', (e) => {
+        if (isDrawing.value) {
+            movements.value.push({ x: e.offsetX, y: e.offsetY });
+            drawLine(ctx.value, e.offsetX, e.offsetY);
+            getParams();
+            isDrawing.value = false;
+            movements.value = [];
+        }
+    });
+
+    let clear = document.getElementById('clearArea');
+
+    clear.addEventListener('click', clearArea);
+};
+
+const drawLine = (ctx, x1, y1, x2, y2) => {
+    ctx.beginPath();
+    ctx.strokeStyle = lineColor.value;
+    ctx.lineWidth = lineWidth.value;
+    ctx.lineJoin = "round";
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.closePath();
+    ctx.stroke();
+};
+
+const clearArea = () => {
+    ctx.value.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.value.clearRect(0, 0, ctx.value.canvas.width, ctx.value.canvas.height);
+};
+
+const getParams = () => {
+    const params = JSON.stringify(movements.value);
+    console.log(params);
+};
+
+const adjustCanvas = () => {
+    let style = getComputedStyle(canvas.value);
+    canvas.value.width = parseInt(style.width);
+    canvas.value.height = parseInt(style.height);
+};
+
+onMounted(() => {
+    init();
+    window.addEventListener('resize', adjustCanvas);
+    adjustCanvas();
+});
+
+onUpdated(() => {
+    nextTick(() => {
+        if (lineWidth.value === "clear") {
+            clearArea();
+        }
+    });
+});
 
 </script>
 
@@ -164,8 +116,7 @@ export default {
     border-radius: 22px;
 }
 
-.controls
-{
+.controls {
     position: absolute;
     bottom: 0%;
     left: 50%;
