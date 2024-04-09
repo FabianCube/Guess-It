@@ -29,16 +29,6 @@ onUpdated()
   });
 }
 
-// ============ DEPRECATED ==========
-// export default {
-//   props: ["messages"],
-//   updated() {
-//     this.$nextTick(() => {
-//       const container = this.$refs.chatContainer;
-//       container.scrollTop = container.scrollHeight;
-//     });
-//   },
-// };
 </script>
 <style scoped>
 .chat {
