@@ -35,6 +35,9 @@ import { defineEmits, ref } from 'vue';
 import axios from 'axios';
 import useAuth from '@/composables/auth';
 import { useRouter } from 'vue-router';
+import sweetAlertNotifications from '@/utils/swal_notifications';
+
+const { throwErrorMessage } = sweetAlertNotifications();
 
 const emits = defineEmits(['close-enterGame']);
 
@@ -45,7 +48,6 @@ function toggleEnterGame() {
 const { isLoggedIn } = useAuth();
 
 const roomCode = ref();
-const playerUuid = ref();
 const router = useRouter();
 
 const roomExists = ref();
@@ -61,7 +63,8 @@ const findRoom = async () => {
         await enterRoom();
         router.push({ name: 'create-game', params: { code: roomCode.value } });
     } catch (error) {
-        console.error('La sala no existe', error);
+        throwErrorMessage("Código no válido");
+        roomCode.value = "";
     }
 }
 

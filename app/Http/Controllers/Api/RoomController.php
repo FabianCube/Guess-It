@@ -39,7 +39,7 @@ class RoomController extends Controller
             $nickname = $user->name;
 
             // Obtenemos el nombre del archivo del avatar a través de su id
-            $avatar = Avatar::findOrFail($user->avatar_id)->image;
+            $avatar = "/storage/avatars/" . Avatar::findOrFail($user->avatar_id)->image;
             $uuid = $user->id;
         } else {
             $nickname = $request->nickname;
@@ -58,6 +58,10 @@ class RoomController extends Controller
         // Insertamos al jugador en la caché de la sala
         $room['players'][] = ['nickname' => $nickname, 'avatar' => $avatar, 'uuid' => $uuid];
         Cache::put('room_' . $code, $room, now()->addMinutes(120));
+
+        Log::info('Usuario autenticado', [
+            $room
+        ]);
 
         return response()->json(['mensaje' => 'Jugador añadido a la sala']);
     }
