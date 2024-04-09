@@ -114,6 +114,8 @@ class RoomController extends Controller
 
             $uuid = $user->id;
         } else {
+
+            Log::info('UUID recibido', ['uuid' => $request->input('uuid')]);
             $uuid = $request->input('uuid');
         }
 

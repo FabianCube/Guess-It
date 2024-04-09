@@ -39,7 +39,7 @@
 </template>
 
 <script setup>
-import { defineEmits, ref, onMounted, onBeforeMount } from 'vue';
+import { defineProps, defineEmits, ref, onMounted, onBeforeMount } from 'vue';
 import axios from 'axios';
 import useAuth from '@/composables/auth';
 import { useRouter } from 'vue-router';
@@ -50,6 +50,10 @@ const emits = defineEmits(['close-anonymous']);
 function toggleAnonymous() {
     emits('close-anonymous');
 }
+
+const passedRoomCode = defineProps({
+    roomCode: String
+});
 
 const baseAvatar = '/storage/avatars/';
 const router = useRouter();
@@ -82,23 +86,41 @@ const changeAvatar = () => {
     loadAvatar();
 };
 
+
+
 const roomCode = ref();
 const playerUuid = ref();
 
 // Se crea la sala, se añade al jugador anónimo y se redirige a la sala
 const createRoom = async () => {
-    try {
-        // Generamos el uuid del jugador anónimo
-        playerUuid.value = uuidv4();
+    console.log(passedRoomCode.roomCode);
+    if (passedRoomCode.roomCode) {
+        console.log("Uniendo al jugador a la sala existente con código:", passedRoomCode.roomCode);
+        try {
+            playerUuid.value = uuidv4();
 
-        const response = await axios.post(`/api/create-room/${playerUuid.value}`);
-        roomCode.value = response.data.code;
-        console.log("Sala creada con código:", roomCode.value);
-        await submitAnonymousLogin();
-        await enterRoom();
-        router.push({ name: 'create-game', params: { code: roomCode.value } });
-    } catch (error) {
-        console.error("Error al crear la sala: ", error);
+            await submitAnonymousLogin();
+            await enterRoom(passedRoomCode.roomCode);
+            router.push({ name: 'create-game', params: { code: passedRoomCode.roomCode } });
+        } catch (error) {
+            console.error("Error al unirse a la sala existente:", error);
+        }
+    } else {
+        // Si no hay código de sala se crea una nueva sala
+        try {
+            // Genera el uuid para el jugador anónimo
+            playerUuid.value = uuidv4();
+
+            const response = await axios.post(`/api/create-room/${playerUuid.value}`);
+            roomCode.value = response.data.code;
+
+            console.log("Sala creada con código:", roomCode.value);
+            await submitAnonymousLogin();
+            await enterRoom(roomCode.value);
+            router.push({ name: 'create-game', params: { code: roomCode.value } });
+        } catch (error) {
+            console.error("Error al crear la sala:", error);
+        }
     }
 };
 
@@ -120,9 +142,9 @@ const submitAnonymousLogin = () => {
 
 
 // Se inserta al jugador anónimo en el array de jugadores de la sala
-const enterRoom = () => {
+const enterRoom = (code) => {
     axios.post('/api/enter-room', {
-        code: roomCode.value,
+        code: code,
         nickname: nickname.value,
         avatar: avatarImage.value,
         uuid: playerUuid.value,
