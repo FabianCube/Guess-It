@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUpdated, nextTick } from 'vue';
+import { ref, onMounted, onUpdated, nextTick, defineEmits } from 'vue';
 
 const canvas = ref(null);
 const ctx = ref(null);
@@ -62,6 +62,16 @@ const init = () => {
     clear.addEventListener('click', clearArea);
 };
 
+const { emit } = (["canvasupdate"]);
+
+const sendCanvas = (params) => {
+    emit("canvasupdate", {
+        user: this.user,
+        canvas: params,
+    });
+    console.log("canvas sent");
+}
+
 const drawLine = (ctx, x1, y1, x2, y2) => {
     ctx.beginPath();
     ctx.strokeStyle = lineColor.value;
@@ -81,6 +91,7 @@ const clearArea = () => {
 const getParams = () => {
     const params = JSON.stringify(movements.value);
     console.log(params);
+    sendCanvas(params);
 };
 
 const adjustCanvas = () => {
