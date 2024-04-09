@@ -1,33 +1,35 @@
 <template>
     <div class="login">
-        <login-popup @close-popup="toggleLogin" @open-register="toggleRegister"/> 
+        <login-popup @close-popup="toggleLogin" @open-register="toggleRegister" />
     </div>
     <div class="register">
-        <register-popup/>
+        <register-popup />
     </div>
     <div class="account">
-        <account-management @close-account="toggleAccount"/> 
+        <account-management @close-account="toggleAccount" />
     </div>
     <div class="anonymous">
-        <anonymous-user @close-anonymous="toggleAnonymous"/>
+        <anonymous-user @close-anonymous="toggleAnonymous" :roomCode="passedRoomCode" />
     </div>
     <div class="enter-game">
-        <enter-game @close-enterGame="toggleEnterGame"/>
+        <enter-game @close-enterGame="toggleEnterGame" @open-anonymous="enterAnonymous" />
     </div>
     <div id="background"></div>
     <div class="relative flex items-top justify-center min-h-screen sm:items-center py-4 sm:pt-0">
         <div class="w-100 flex flex-row justify-between py-5">
             <div class="col-2 flex flex-column justify-content-end align-items-end">
-                <button class="btn-smll-default mb-5" style="border: none;"><img src="/storage/icons/info-circle.svg" alt=""></button>
-                <button class="btn-smll-default" style="border: none;"><img src="/storage/icons/volume-on.svg" alt=""></button>
+                <button class="btn-smll-default mb-5" style="border: none;"><img src="/storage/icons/info-circle.svg"
+                        alt=""></button>
+                <button class="btn-smll-default" style="border: none;"><img src="/storage/icons/volume-on.svg"
+                        alt=""></button>
             </div>
 
             <div class="col-8 flex justify-center align-items-center flex-column pt-8">
-                <img id="logo" src="/storage/guess-it-logo.svg" class="shake-img"></img> 
+                <img id="logo" src="/storage/guess-it-logo.svg" class="shake-img"></img>
 
                 <button @click="toggleAnonymous()" to="/create-game" class="btn-default">CREAR PARTIDA</button>
                 <button @click="toggleEnterGame()" class="btn-default">UNIRSE A PARTIDA</button>
-                
+
             </div>
 
             <div class="col-2 flex flex-column justify-content-between">
@@ -49,7 +51,7 @@
 </template>
 
 <script setup>
-import { ref , onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import useAuth from '@/composables/auth'
 
@@ -57,11 +59,13 @@ const { isLoggedIn, logout } = useAuth();
 
 const logged = ref();
 
+const passedRoomCode = ref();
+
 onMounted(() => {
 
     logged.value = isLoggedIn();
 
-    // Backgorund animation
+    // Background animation
     const bg = document.getElementById('background');
     if (!bg) {
         console.error('Elemento #background no encontrado.');
@@ -88,8 +92,7 @@ document.addEventListener('loggin-done', () => {
 })
 
 // Abrir cerrar popup de login
-function toggleLogin()
-{
+function toggleLogin() {
     let login = document.querySelector('.login');
     let isOpen = login.classList.contains('active');
     isOpen ? login.classList.remove('active') : login.classList.add('active');
@@ -99,22 +102,19 @@ function toggleLogin()
 }
 
 // Abrir cerrar popup de usuario anónimo
-function toggleAnonymous()
-{
+function toggleAnonymous() {
     let anonymous = document.querySelector('.anonymous');
     let isOpen = anonymous.classList.contains('active');
     isOpen ? anonymous.classList.remove('active') : anonymous.classList.add('active');
 }
 
-function toggleAccount()
-{
+function toggleAccount() {
     let account = document.querySelector('.account');
     let isOpen = account.classList.contains('active');
     isOpen ? account.classList.remove('active') : account.classList.add('active');
 }
 
-function toggleRegister()
-{
+function toggleRegister() {
     toggleLogin();
     let register = document.querySelector('.register');
     let isOpen = register.classList.contains('active');
@@ -122,111 +122,138 @@ function toggleRegister()
 }
 
 // Abrir cerrar popup de unirse a partida
-function toggleEnterGame()
-{
+function toggleEnterGame() {
     let enterGame = document.querySelector('.enter-game');
     let isOpen = enterGame.classList.contains('active');
     isOpen ? enterGame.classList.remove('active') : enterGame.classList.add('active');
 }
 
+const enterAnonymous = (code) => {
+    let anonymous = document.querySelector('.anonymous');
+    let isOpen = anonymous.classList.contains('active');
+    isOpen ? anonymous.classList.remove('active') : anonymous.classList.add('active'); 
+    passedRoomCode.value = code;
+}
 
 </script>
 
 <style scoped>
-
-#logo
-{
+#logo {
     width: 570px;
     height: auto;
 }
 
-.login
-{
+.login {
     width: 100%;
     height: 100%;
     position: absolute;
     z-index: 100;
     display: none;
-    background-color: rgba(0,0,0,.25);
+    background-color: rgba(0, 0, 0, .25);
     backdrop-filter: blur(4px);
 }
 
-.register
-{
+.register {
     width: 100%;
     height: 100%;
     position: absolute;
     z-index: 100;
     display: none;
-    background-color: rgba(0,0,0,.25);
+    background-color: rgba(0, 0, 0, .25);
     backdrop-filter: blur(4px);
 }
 
-.anonymous
-{
+.anonymous {
     width: 100%;
     height: 100%;
     position: absolute;
     z-index: 100;
     display: none;
-    background-color: rgba(0,0,0,.25);
+    background-color: rgba(0, 0, 0, .25);
     backdrop-filter: blur(4px);
 }
 
-.account
-{
+.account {
     width: 100%;
     height: 100%;
     position: absolute;
     z-index: 100;
     display: none;
-    background-color: rgba(0,0,0,.25);
+    background-color: rgba(0, 0, 0, .25);
     backdrop-filter: blur(4px);
 }
 
-.enter-game
-{
+.enter-game {
     width: 100%;
     height: 100%;
     position: absolute;
     z-index: 100;
     display: none;
-    background-color: rgba(0,0,0,.25);
+    background-color: rgba(0, 0, 0, .25);
     backdrop-filter: blur(4px);
 }
 
-.active
-{
-    display: block!important;
+.active {
+    display: block !important;
 }
 
 .shake-img {
-    display: inline-block; /* Necesario para que transform funcione */
+    display: inline-block;
+    /* Necesario para que transform funcione */
     animation: shake 5s infinite;
 }
 
 @keyframes shake {
-    0%, 30% { transform: translate(0px, 0px); } 
-    30%, 40% { transform: scale(0.95); } 
-    40%, 50% { transform: scale(1); } 
-    60%, 90% { transform: translate(0px, 0px); } 
-    92% { transform: translate(0px, 5px); }
-    94% { transform: translate(0px, -5px); }
-    96% { transform: translate(0px, 5px); }
-    98% { transform: translate(0px, -5px); }
-    100% { transform: translate(0px, 0px); } 
+
+    0%,
+    30% {
+        transform: translate(0px, 0px);
+    }
+
+    30%,
+    40% {
+        transform: scale(0.95);
+    }
+
+    40%,
+    50% {
+        transform: scale(1);
+    }
+
+    60%,
+    90% {
+        transform: translate(0px, 0px);
+    }
+
+    92% {
+        transform: translate(0px, 5px);
+    }
+
+    94% {
+        transform: translate(0px, -5px);
+    }
+
+    96% {
+        transform: translate(0px, 5px);
+    }
+
+    98% {
+        transform: translate(0px, -5px);
+    }
+
+    100% {
+        transform: translate(0px, 0px);
+    }
 }
 
-.avatar-image
-{
+.avatar-image {
     width: 80%;
     height: 70%;
     border-radius: 50px;
     overflow: hidden;
 }
 
-.avatar-image>img
-{
+.avatar-image>img {
     width: 100%;
     height: auto;
 }

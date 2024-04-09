@@ -128,9 +128,10 @@ onMounted(() => {
 onBeforeUnmount(() => {
     // Usamos sendBeacon porque permite enviar datos de forma asíncrona al servidor
     // sin afectar en la experiencia del usuario
-    navigator.sendBeacon(`/api/leave-room/${codigoSala.value}`, JSON.stringify({
-        uuid: storedUserData.uuid
-    }));
+    const formData = new FormData();
+    formData.append("uuid", storedUserData.uuid);
+
+    navigator.sendBeacon(`/api/leave-room/${codigoSala.value}`, formData);
 });
 
 // Obtenemos el id del creador de partida
