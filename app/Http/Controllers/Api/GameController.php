@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use App\Models\Avatar;
 
 use Illuminate\Http\Request;
 
@@ -13,6 +14,18 @@ class GameController extends Controller
 {
     public function getUserData()
     {
-        return Auth::user();
+        $user = Auth::user();
+        
+        $nickname = $user->name;
+        $avatar = "/storage/avatars/" . Avatar::findOrFail($user->avatar_id)->image;
+        $uuid = $user->id;
+
+        $userData = [
+            'nickname' => $nickname, 
+            'avatar' => $avatar, 
+            'uuid' => $uuid
+        ];
+
+        return $userData;
     }
 }

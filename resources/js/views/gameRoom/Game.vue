@@ -86,16 +86,34 @@ onMounted(() => {
 });
 
 const getUserData = async () => {
-    if( isLoggedIn )
+
+    let user = {};
+
+    if( isLoggedIn() )
     {
-        user.value = await axios.get('/getUserData');
+        console.log("[INFO]: Entrando como usuario registrado.");
+
+        let userData = await axios.get('/getUserData');
+        console.log(userData.nickname);
     }
     else
     {
-        user.value = sessionStorage.getItem('userData');
-    }
+        console.log("[INFO]: Entrando como usuario anónimo.");
 
-    console.log('=========' + user.value);
+        let getUserData = sessionStorage.getItem('userData');
+        const userData = JSON.parse(getUserData);
+        user.value = userData;
+
+        if(user.value !== undefined)
+        {
+            console.log("User Nickname -> " + user.value.nickname);
+            console.log("User UUID -> " + user.value.uuid);
+        }
+        else
+        {
+            console.log("[ERROR]: Al obtener datos de usuario anónimo.");
+        }
+    }
 }
 </script>
 
