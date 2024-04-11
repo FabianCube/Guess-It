@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use App\Models\Avatar;
+use App\Events\RoomUpdate;
 
 class RoomController extends Controller
 {
@@ -57,9 +58,16 @@ class RoomController extends Controller
         $room['players'][] = ['nickname' => $nickname, 'avatar' => $avatar, 'uuid' => $uuid];
         Cache::put('room_' . $code, $room, now()->addMinutes(120));
 
-        Log::info('Usuario autenticado', [
-            $room
+        // Obtén los datos actualizados de la sala
+        $roomData = Cache::get('room_' . $code);
+
+        Log::info('datos de sala', [
+            $roomData
         ]);
+
+        
+        // Dispara el evento con los datos de la sala
+        broadcast(new RoomUpdate($roomData))->toOthers();
 
         return response()->json(['mensaje' => 'Jugador añadido a la sala']);
     }
@@ -128,7 +136,11 @@ class RoomController extends Controller
             // Elimina la caché de la sala
             Cache::forget('room_' . $code);
 
-            // Lógica para echar a los jugadores con pusher
+            // Obtén los datos actualizados de la sala
+            $roomData = "exit";
+
+            // Dispara el evento con los datos de la sala
+            broadcast(new RoomUpdate($roomData))->toOthers();
 
             return response()->json(['mensaje' => 'Sala cerrada y caché eliminada'], 200);
         } else {
@@ -139,6 +151,12 @@ class RoomController extends Controller
 
             // Actualizamos la caché con el nuevo array de jugadores
             Cache::put('room_' . $code, $room, now()->addMinutes(120));
+
+            // Obtén los datos actualizados de la sala
+            $roomData = Cache::get('room_' . $code);
+
+            // Dispara el evento con los datos de la sala
+            broadcast(new RoomUpdate($roomData))->toOthers();
 
             return response()->json(['mensaje' => 'Jugador eliminado de la sala'], 200);
         }

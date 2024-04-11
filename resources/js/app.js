@@ -147,7 +147,8 @@ const app = createApp({
     data() {
         return {
             messages: [],
-            newCanvas: {}
+            newCanvas: {},
+            roomData: []
         };
     },
     created() {
@@ -165,9 +166,15 @@ const app = createApp({
         // routes/channels
         // Escuchamos el canal canvas para reconstruir el canvas cuando el que está dibujando hace mouseout    
         window.Echo.private('canvas')
-            .listen('CanvasUpdate', (e) =>{
+            .listen('CanvasUpdate', (e) => {
                 this.newCanvas = e.canvas;
                 console.log(this.newCanvas);
+            });
+
+        window.Echo.private('room-channel')
+            .listen('RoomUpdate', (e) => {
+                this.roomData = e.players;
+                console.log(this.roomData);
             });
 
     },
@@ -185,7 +192,7 @@ const app = createApp({
                 console.log(response.data);
             });
         },
-        sendCanvas(canvas){
+        sendCanvas(canvas) {
             axios.post('/canvas', canvas).then(response => {
                 console.log(response.data);
             });

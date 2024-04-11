@@ -24,3 +24,7 @@ Broadcast::channel('chat', function ($user) {
 Broadcast::channel('canvas', function ($user) {
     return Auth::check();
 });
+
+Broadcast::channel('room-channel', function ($user) {
+    return "hola"; //! Esto es solo para hacer pruebas
+});

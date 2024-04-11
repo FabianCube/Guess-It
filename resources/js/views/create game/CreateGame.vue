@@ -58,6 +58,7 @@
 import { ref, onMounted, onBeforeMount, onBeforeUnmount, inject } from 'vue';
 import { useRoute } from 'vue-router';
 import sweetAlertNotifications from '@/utils/swal_notifications';
+import Pusher from 'pusher-js';
 
 const { throwSuccessMessage } = sweetAlertNotifications();
 
