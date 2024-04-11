@@ -51,12 +51,20 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
+import useAuth from '@/composables/auth';
+
+const { isLoggedIn } = useAuth();
+const user = ref();
 
 onMounted(() => {
     const bg = document.getElementById('background-game');
 
-    if (!bg) {
+    // GET USER
+    getUserData();
+
+    if (!bg) 
+    {
         console.error('Elemento #background no encontrado.');
         return;
     }
@@ -76,6 +84,19 @@ onMounted(() => {
         bg.style.transform = `translate(${bgX}px, ${bgY}px) translateZ(0)`;
     });
 });
+
+const getUserData = async () => {
+    if( isLoggedIn )
+    {
+        user.value = await axios.get('/getUserData');
+    }
+    else
+    {
+        user.value = sessionStorage.getItem('userData');
+    }
+
+    console.log('=========' + user.value);
+}
 </script>
 
 <style>

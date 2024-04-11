@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\GameController;
 
 Route::post('forget-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('forget.password.post');
 Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.reset');
@@ -54,10 +55,17 @@ Route::get('category-list', [CategoryController::class, 'getList']);
 Route::get('get-posts', [PostController::class, 'getPosts']);
 Route::get('get-category-posts/{id}', [PostController::class, 'getCategoryByPosts']);
 Route::get('get-post/{id}', [PostController::class, 'getPost']);
+
+// Avatar controller
 Route::get('get-avatar/{id}', [AvatarController::class, 'getAvatar']);
+
+// Room controller
 Route::post('create-room/{owner}', [RoomController::class, 'createRoom']);
 Route::post('enter-room', [RoomController::class, 'enterRoom']);
 Route::get('/room/players/{code}', [RoomController::class, 'getPlayers']);
 Route::get('/room/owner/{code}', [RoomController::class, 'getOwner']);
 Route::get('find-room/{code}', [RoomController::class, 'findRoom']);
 Route::post('leave-room/{code}', [RoomController::class, 'leaveRoom']);
+
+// Game controller
+Route::get('get-user', [GameController::class, 'getUserData']);
