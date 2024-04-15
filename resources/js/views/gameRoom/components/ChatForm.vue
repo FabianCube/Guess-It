@@ -13,20 +13,24 @@
 
 import { defineProps, defineEmits, ref } from 'vue';
 
-//Takes the "user" props from <chat-form> … :user="{{ Auth::user() }}"></chat-form> in the parent chat.blade.php.
+//Takes the "user" props from <chat-form> … :user="user"></chat-form> in the parent Game.vue
 const props = defineProps([ 'user' ]);
-
-const { emit } = defineEmits(["messagesent"]);
+const emits = defineEmits(["messagesent"]);
+console.log(props)
 const newMessage = ref('');
 
 function sendMessage()
 {
   //Emit a "messagesent" event including the user who sent the message along with the message content
-  emit("messagesent", {
+  emits("messagesent", {
     user: props.user,
     //newMessage is bound to the earlier "btn-input" input field
     message: newMessage.value,
   });
+
+  console.log("[INFO]: User: " + props.user.nickname);
+  console.log("[INFO]: Content message: " + newMessage.value);
+
   //Clear the input
   newMessage.value = '';
 }

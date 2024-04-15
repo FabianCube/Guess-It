@@ -41,7 +41,7 @@
                             <chat-messages :messages="messages"></chat-messages>
                         </div>
                         <div class="col-4 p-0" style="width:100%">
-                            <chat-form @messagesent="addMessage"></chat-form>
+                            <chat-form @messagesent="addMessage" :user="user"></chat-form>
                         </div>
                     </div>
                 </div>
@@ -83,11 +83,13 @@ onMounted(() => {
         // Aplica la transformación
         bg.style.transform = `translate(${bgX}px, ${bgY}px) translateZ(0)`;
     });
+
+    console.log("User: " + user.value.nickname)
 });
 
 const getUserData = async () => {
 
-    let user = {};
+    //let user = {};
 
     if( isLoggedIn() )
     {
