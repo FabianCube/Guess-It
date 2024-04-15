@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeMount, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onBeforeMount, onUnmounted, watch, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 
 // Lista reactiva de jugadores
@@ -40,17 +40,19 @@ const codigoSala = ref();
 
 const route = useRoute();
 
-onMounted(() => {
-    const pusher = new Pusher('local', {
-        cluster: 'mt1',
-    });
+const props = defineProps([ 'roomData' ]);
 
-    const channel = pusher.subscribe('room-channel');
-    channel.bind('RoomUpdate', (data) => {
-        // Actualiza tu componente con los nuevos datos de la sala
-        console.log(data);
+// Usamos watch para reaccionar a cambios en la prop roomData
+watch(() => props.roomData, (newValue) => {
+    nextTick(() => {
+        if (newValue) {
+            if(newValue == "New user added" || newValue == "User exits room") {
+                clearArea();
+            }
+        }
     });
 });
+
 
 onBeforeMount(() => {
     codigoSala.value = route.params.code;

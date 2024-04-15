@@ -18,13 +18,13 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 });
 
 Broadcast::channel('chat', function ($user) {
-    return Auth::check();
+    return true;
 });
 
 Broadcast::channel('canvas', function ($user) {
-    return Auth::check();
+    return true;
 });
 
 Broadcast::channel('room-channel', function ($user) {
-    return "hola"; //! Esto es solo para hacer pruebas
+    return true;
 });
