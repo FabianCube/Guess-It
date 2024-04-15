@@ -148,7 +148,7 @@ const app = createApp({
         return {
             messages: [],
             newCanvas: {},
-            roomData: []
+            roomData: String
         };
     },
     created() {
@@ -173,7 +173,7 @@ const app = createApp({
 
         window.Echo.private('room-channel')
             .listen('RoomUpdate', (e) => {
-                this.roomData = e.players;
+                this.roomData = e;
                 console.log(this.roomData);
             });
 
