@@ -19,16 +19,17 @@
 <script setup>
 
 import axios from 'axios';
-import { defineProps, defineEmits, ref } from 'vue';
+import { defineProps, defineEmits, ref, onMounted } from 'vue';
 
 //Takes the "user" props from <chat-form> … :user="user"></chat-form> in the parent Game.vue
 const props = defineProps([ "user" ]);
 const emits = defineEmits([ "messagesent" ]);
-console.log(props)
 const newMessage = ref('');
 
 function sendMessage()
 {
+  console.log("Sending message:", newMessage.value);
+  
   //Emit a "messagesent" event including the user who sent the message along with the message content
   emits("messagesent", {
     user: props.user,

@@ -41,7 +41,7 @@
                             <chat-messages :messages="messages"></chat-messages>
                         </div>
                         <div class="col-4 p-0" style="width:100%">
-                            <chat-form v-on:messagesent="addMessage" :user="user"></chat-form>
+                            <chat-form @messagesent="addMessage" :user="user"></chat-form>
                         </div>
                     </div>
                 </div>
@@ -51,11 +51,23 @@
 </template>
 
 <script setup>
+import axios from 'axios';
 import { onMounted, ref } from 'vue';
 import useAuth from '@/composables/auth';
 
 const { isLoggedIn } = useAuth();
 const user = ref();
+const messages = ref([]);
+
+const addMessage = (newMessage) => {
+    messages.value.push(newMessage);
+    console.log("addmessage _> " + newMessage.message)
+    console.log("addmessage _> " + newMessage.user.nickname)
+
+    axios.post('/messages', newMessage).then(response => {
+        console.log(response.data);
+    });
+}
 
 onMounted(() => {
     const bg = document.getElementById('background-game');
@@ -63,8 +75,7 @@ onMounted(() => {
     // GET USER
     getUserData();
 
-    if (!bg) 
-    {
+    if (!bg) {
         console.error('Elemento #background no encontrado.');
         return;
     }
@@ -89,8 +100,7 @@ onMounted(() => {
 
 const getUserData = async () => {
 
-    if( isLoggedIn() )
-    {
+    if (isLoggedIn()) {
         console.log("[INFO]: Entrando como usuario registrado.");
 
         const userData = await axios.get('/getUserData');
@@ -98,25 +108,24 @@ const getUserData = async () => {
 
         console.log(userData.nickname);
     }
-    else
-    {
+    else {
         console.log("[INFO]: Entrando como usuario anónimo.");
 
         let getUserData = sessionStorage.getItem('userData');
         const userData = JSON.parse(getUserData);
         user.value = userData;
 
-        if(user.value !== undefined)
-        {
+        if (user.value !== undefined) {
             console.log("User Nickname -> " + user.value.nickname);
             console.log("User UUID -> " + user.value.uuid);
         }
-        else
-        {
+        else {
             console.log("[ERROR]: Al obtener datos de usuario anónimo.");
         }
     }
 }
+
+
 </script>
 
 <style>
@@ -148,19 +157,20 @@ const getUserData = async () => {
 }
 
 .main-content {
-  animation: scaleUp 0.7s ease forwards;
-  transform-origin: center;
-  will-change: transform, opacity;
+    animation: scaleUp 0.7s ease forwards;
+    transform-origin: center;
+    will-change: transform, opacity;
 }
 
 @keyframes scaleUp {
-  from {
-    transform: scale(0.1);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
+    from {
+        transform: scale(0.1);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 </style>
