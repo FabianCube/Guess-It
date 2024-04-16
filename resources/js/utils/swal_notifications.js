@@ -3,10 +3,14 @@
  */
 
 import { inject } from 'vue';
+import { useRouter } from 'vue-router';
+
 
 export default function sweetAlertNotifications()
 {
-    const swal = inject('$swal')
+    const swal = inject('$swal');
+
+    const router = useRouter();
 
     const throwSuccessMessage = ($message = '¡ÉXITO!') => {
         console.log('Sending success message...');
@@ -64,10 +68,30 @@ export default function sweetAlertNotifications()
         });
     }
 
+    const throwRedirectMessage = ($message = 'Ok') => {
+        console.log('Sending information message...');
+
+        swal({
+            title: 'Redireccionando...',
+            text: 'El creador de la partida ha salido, serás redirigido a la página principal en 5 segundos.',
+            icon: 'info',
+            timer: 5000,
+            timerProgressBar: true,
+            customClass: { 
+                popup: "swal2-custom swal2-custom-info-redirect"
+            },
+            willClose: () => {
+                // Navegar a Home después de que el mensaje se cierre
+                router.push({ name: 'home' });
+            }
+        });
+    }
+
     return {
         throwSuccessMessage,
         throwInfoMessage,
         throwErrorMessage,
-        throwAcceptMessage
+        throwAcceptMessage,
+        throwRedirectMessage
     }
 }

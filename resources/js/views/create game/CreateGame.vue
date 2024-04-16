@@ -56,15 +56,17 @@
 
 <script setup>
 import { ref, onMounted, onBeforeMount, onBeforeUnmount, inject } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import sweetAlertNotifications from '@/utils/swal_notifications';
 import Pusher from 'pusher-js';
 
-const { throwSuccessMessage } = sweetAlertNotifications();
+const { throwSuccessMessage , throwRedirectMessage } = sweetAlertNotifications();
 
 
 const codigoSala = ref();
 const route = useRoute();
+
+const router = useRouter();
 
 const swal = inject('$swal');
 
@@ -124,6 +126,11 @@ onMounted(() => {
         // Aplica la transformación
         bg.style.transform = `translate(${bgX}px, ${bgY}px) translateZ(0)`;
     });
+
+    Echo.channel('room-channel')
+        .listen('.room-owner-left', (e) => {
+            throwRedirectMessage();
+        });
 });
 
 onBeforeUnmount(() => {
