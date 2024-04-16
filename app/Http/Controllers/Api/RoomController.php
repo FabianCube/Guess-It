@@ -54,14 +54,18 @@ class RoomController extends Controller
             return response()->json(['mensaje' => 'Sala no encontrada'], 404);
         }
 
-        // Insertamos al jugador en la caché de la sala
-        $room['players'][] = ['nickname' => $nickname, 'avatar' => $avatar, 'uuid' => $uuid];
-        Cache::put('room_' . $code, $room, now()->addMinutes(120));
-        
-        // Dispara el evento con los datos de la sala
-        broadcast(new RoomUpdate("New user added"))->toOthers();
+        if (count($room['players']) < 6) {
+            // Insertamos al jugador en la caché de la sala
+            $room['players'][] = ['nickname' => $nickname, 'avatar' => $avatar, 'uuid' => $uuid];
+            Cache::put('room_' . $code, $room, now()->addMinutes(120));
 
-        return response()->json(['mensaje' => 'Jugador añadido a la sala']);
+            // Dispara el evento con los datos de la sala
+            broadcast(new RoomUpdate("New user added"))->toOthers();
+
+            return response()->json(['mensaje' => 'Jugador añadido a la sala']);
+        } else {
+            return response()->json(['mensaje' => 'Sala completa']);
+        }
     }
 
     // Método para comprobar con el código si una sala existe
@@ -73,8 +77,12 @@ class RoomController extends Controller
             return response()->json(['mensaje' => 'Sala no encontrada'], 404);
         }
 
-        // Si se encuentra la sala devolvemos true
-        return response()->json(['mensaje' => true]);
+        if (count($room['players']) < 6) {
+            // Si se encuentra la sala devolvemos true
+            return response()->json(['mensaje' => true]);
+        } else {
+            return response()->json(['mensaje' => false]);
+        }
     }
 
     // Método para obtener los jugadores que hay en la sala

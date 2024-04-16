@@ -98,7 +98,7 @@ onBeforeMount(async () => {
     }
 
     // Finaliza la carga y muestra los componentes
-    isLoading.value = false; 
+    isLoading.value = false;
 });
 
 onMounted(() => {
@@ -164,6 +164,14 @@ const copiarCodigo = () => {
             console.error('Error al copiar el código al portapapeles:', err);
         });
 };
+
+
+window.addEventListener('beforeunload', function (event) {
+    const formData = new FormData();
+    formData.append("uuid", storedUserData.uuid);
+
+    navigator.sendBeacon(`/api/leave-room/${codigoSala.value}`, formData);
+});
 </script>
 
 <style scoped>
@@ -173,19 +181,19 @@ const copiarCodigo = () => {
 }
 
 .loading-bar-container {
-  width: 30vw;
-  background-color: #e0e0e0;
-  border-radius: 10px;
-  padding: 5px;
-  box-shadow: 0px 5px 7px 1px rgba(0, 0, 0, 0.25);
+    width: 30vw;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    padding: 5px;
+    box-shadow: 0px 5px 7px 1px rgba(0, 0, 0, 0.25);
 }
 
 .loading-bar {
-  height: 20px;
-  background-color: #66BA13;
-  width: 0%;
-  border-radius: 5px;
-  animation: fillProgress 3s ease-in-out forwards;
+    height: 20px;
+    background-color: #66BA13;
+    width: 0%;
+    border-radius: 5px;
+    animation: fillProgress 3s ease-in-out forwards;
 }
 
 .loading-logo {
@@ -193,15 +201,34 @@ const copiarCodigo = () => {
 }
 
 @keyframes fillProgress {
-  from { width: 0%; }
-  to { width: 100%; }
+    from {
+        width: 0%;
+    }
+
+    to {
+        width: 100%;
+    }
 }
 
 @keyframes logoAnimation {
-    0% { transform: translate(0); }
-  25% { transform: translate(0px, 10px); }
-  50% { transform: translate(0px, -10px); }
-  75% { transform: translate(0px, 10px); }
-  100% { transform: translate(0px, 0px); }
+    0% {
+        transform: translate(0);
+    }
+
+    25% {
+        transform: translate(0px, 10px);
+    }
+
+    50% {
+        transform: translate(0px, -10px);
+    }
+
+    75% {
+        transform: translate(0px, 10px);
+    }
+
+    100% {
+        transform: translate(0px, 0px);
+    }
 }
 </style>
