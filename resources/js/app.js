@@ -152,10 +152,10 @@ const app = createApp({
         };
     },
     created() {
-        useAuth().getUser();
+        // useAuth().getUser();
 
         this.fetchMessages(); //! not needed
-        window.Echo.private('chat')
+        Echo.channel('chat')
             .listen('MessageSent', (e) => {
                 this.messages.push({
                     message: e.message.message,
@@ -165,16 +165,16 @@ const app = createApp({
 
         // routes/channels
         // Escuchamos el canal canvas para reconstruir el canvas cuando el que está dibujando hace mouseout    
-        window.Echo.private('canvas')
+        Echo.channel('canvas')
             .listen('CanvasUpdate', (e) => {
                 this.newCanvas = e.canvas;
                 console.log(this.newCanvas);
             });
 
-        window.Echo.private('room-channel')
-            .listen('RoomUpdate', (e) => {
+        Echo.channel('room-channel')
+            .listen('.RoomUpdate', (e) => {
                 this.roomData = e;
-                console.log(this.roomData);
+                console.log("Evento recibido:", e);
             });
 
     },

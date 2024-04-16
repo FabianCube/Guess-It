@@ -40,19 +40,10 @@ const codigoSala = ref();
 
 const route = useRoute();
 
-const props = defineProps([ 'roomData' ]);
-
-// Usamos watch para reaccionar a cambios en la prop roomData
-watch(() => props.roomData, (newValue) => {
-    nextTick(() => {
-        if (newValue) {
-            if(newValue == "New user added" || newValue == "User exits room") {
-                clearArea();
-            }
-        }
-    });
+onMounted(() => {
+    cargarJugadores();
+    escucharActualizacionesDeSala();
 });
-
 
 onBeforeMount(() => {
     codigoSala.value = route.params.code;
@@ -73,6 +64,14 @@ const cargarJugadores = async () => {
     } catch (error) {
         console.error('Error al cargar los jugadores:', error);
     }
+};
+
+const escucharActualizacionesDeSala = () => {
+    window.Echo.channel('room-channel')
+        .listen('.RoomUpdate', (e) => {
+            console.log("Actualización de sala recibida:", e);
+            cargarJugadores();
+        });
 };
 </script>
 

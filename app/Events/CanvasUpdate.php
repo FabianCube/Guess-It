@@ -35,6 +35,6 @@ class CanvasUpdate implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('canvas');
+        return new Channel('canvas');
     }
 }

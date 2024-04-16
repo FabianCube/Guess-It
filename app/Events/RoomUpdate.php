@@ -9,6 +9,7 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class RoomUpdate implements ShouldBroadcast
 {
@@ -22,6 +23,7 @@ class RoomUpdate implements ShouldBroadcast
     public function __construct($roomData)
     {
         $this->roomData = $roomData;
+        Log::info("Evento RoomUpdate disparado", ['roomData' => $roomData]);
     }
 
     /**
@@ -31,6 +33,11 @@ class RoomUpdate implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('room-channel');
+        return new Channel('room-channel');
+    }
+
+    public function broadcastAs()
+    {
+        return 'RoomUpdate';
     }
 }
