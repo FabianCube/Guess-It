@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use App\Models\Avatar;
 use App\Events\RoomUpdate;
+use App\Events\RoomOwnerLeft;
 
 class RoomController extends Controller
 {
@@ -133,11 +134,13 @@ class RoomController extends Controller
 
         // Si el usuario que sale es el creador cerramos la sala
         if ($room['owner'] == $uuid) {
+
+            
             // Elimina la caché de la sala
             Cache::forget('room_' . $code);
 
             // Dispara el evento con el mensaje de que un usuario ha salido
-            broadcast(new RoomUpdate("User exits room"))->toOthers();
+            broadcast(new RoomOwnerLeft($code));
 
             return response()->json(['mensaje' => 'Sala cerrada y caché eliminada'], 200);
         } else {
