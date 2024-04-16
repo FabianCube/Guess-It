@@ -171,12 +171,6 @@ const app = createApp({
                 console.log(this.newCanvas);
             });
 
-        Echo.channel('room-channel')
-            .listen('.RoomUpdate', (e) => {
-                this.roomData = e;
-                console.log("Evento recibido:", e);
-            });
-
     },
     methods: {
         fetchMessages() { //! NOT NEEDED
