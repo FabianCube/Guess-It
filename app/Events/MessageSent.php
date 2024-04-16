@@ -12,6 +12,7 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class MessageSent implements ShouldBroadcast
 {
@@ -27,6 +28,7 @@ class MessageSent implements ShouldBroadcast
     {
         $this->user = $user;
         $this->message = $message;
+        Log::info("Evento messagesent disparado", ['user' => $user, 'message' => $message]);
     }
 
 
@@ -38,5 +40,10 @@ class MessageSent implements ShouldBroadcast
     public function broadcastOn()
     {
         return new Channel('chat');
+    }
+
+    public function broadcastAs()
+    {
+        return 'MessageSent';
     }
 }

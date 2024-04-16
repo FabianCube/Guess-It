@@ -20,7 +20,7 @@ Route::post('register', [AuthenticatedSessionController::class, 'register']);
 Route::post('logout', [AuthenticatedSessionController::class, 'logout']);
 // Route::get('/chat', [App\Http\Controllers\ChatsController::class, 'index']);
 // Route::get('/messages', [App\Http\Controllers\ChatsController::class, 'fetchMessages']);
-Route::post('/messages', [App\Http\Controllers\ChatsController::class, 'sendMessage']);
+// Route::post('/messages', [App\Http\Controllers\ChatsController::class, 'sendMessage']);
 Route::get('/canvas', [App\Http\Controllers\ChatsController::class, 'fetchCanvas']);
 Route::post('/canvas', [App\Http\Controllers\ChatsController::class, 'sendCanvas']);
 

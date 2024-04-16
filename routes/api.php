@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AvatarController;
 use App\Http\Controllers\Api\RoomController;
+use App\Http\Controllers\Api\ChatsController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -69,3 +70,5 @@ Route::post('leave-room/{code}', [RoomController::class, 'leaveRoom']);
 
 // Game controller
 Route::get('get-user', [GameController::class, 'getUserData']);
+
+Route::post('messages', [ChatsController::class, 'sendMessage']);

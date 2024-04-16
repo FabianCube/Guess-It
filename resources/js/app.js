@@ -153,15 +153,13 @@ const app = createApp({
     },
     created() {
         // useAuth().getUser();
-
-        this.fetchMessages(); //! not needed
         Echo.channel('chat')
-            .listen('MessageSent', (e) => {
-                this.messages.push({
-                    message: e.message.message,
-                    user: e.user
-                });
+        .listen('.MessageSent', (e) => {
+            this.messages.push({
+                message: e.message.message,
+                user: e.user
             });
+        });
 
         // routes/channels
         // Escuchamos el canal canvas para reconstruir el canvas cuando el que está dibujando hace mouseout    
@@ -173,19 +171,6 @@ const app = createApp({
 
     },
     methods: {
-        fetchMessages() { //! NOT NEEDED
-            axios.get('/messages').then(response => {
-                this.messages = response.data;
-            });
-        },
-        addMessage(message) {
-            this.messages.push(message);
-
-            //! this post is not needed anymore
-            axios.post('/messages', message).then(response => {
-                console.log(response.data);
-            });
-        },
         sendCanvas(canvas) {
             axios.post('/canvas', canvas).then(response => {
                 console.log(response.data);
