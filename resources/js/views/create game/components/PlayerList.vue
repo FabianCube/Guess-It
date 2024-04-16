@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeMount, onUnmounted, watch, nextTick } from 'vue';
+import { ref, computed, onMounted, onBeforeMount, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 // Lista reactiva de jugadores
@@ -40,22 +40,24 @@ const codigoSala = ref();
 
 const route = useRoute();
 
+// Una vez montado el componente escuchamos el canal "room-channel" para actualizar la lista de jugadores
+// si alguien entra o sale de la sala
 onMounted(() => {
-    cargarJugadores();
     escucharActualizacionesDeSala();
 });
 
+// Cargamos los jugadores antes de montar el componente
 onBeforeMount(() => {
     codigoSala.value = route.params.code;
     cargarJugadores();
 });
 
+// Cuando se desmonta el componente dejamos de escuchar el canal
 onUnmounted(() => {
-    // // Limpieza
-    // channel.unbind('RoomUpdate');
-    // pusher.unsubscribe('room-channel');
+    window.Echo.leave(`room-channel`);
 });
 
+// Obtenemos de la API la lista de jugadores
 const cargarJugadores = async () => {
     try {
         const response = await axios.get(`/api/room/players/${codigoSala.value}`);
@@ -66,6 +68,7 @@ const cargarJugadores = async () => {
     }
 };
 
+// Escuchamos el canal "room-channel" y si entra o sale un jugador actualizamos la lista de jugadores
 const escucharActualizacionesDeSala = () => {
     window.Echo.channel('room-channel')
         .listen('.RoomUpdate', (e) => {

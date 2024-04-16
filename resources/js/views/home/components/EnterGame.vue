@@ -39,7 +39,7 @@ import sweetAlertNotifications from '@/utils/swal_notifications';
 
 const { throwErrorMessage } = sweetAlertNotifications();
 
-const emits = defineEmits(['close-enterGame','open-anonymous']);
+const emits = defineEmits(['close-enterGame', 'open-anonymous']);
 
 function toggleEnterGame() {
     emits('close-enterGame');
@@ -57,16 +57,23 @@ const findRoom = async () => {
     try {
         const response = await axios.get(`/api/find-room/${roomCode.value}`);
         roomExists.value = response.data;
+        console.log(roomExists.value.mensaje);
 
-        console.log("Sala existe");
-        // Esperamos la ejecución de userRegistered y guardamos el resultado en una variable
-        const isRegistered = await userRegistered();
-        
-        // Si el usuario está registrado entra en la sala, sino abre el login de user anónimo
-        if (isRegistered) {
-            await enterRoom();
-            router.push({ name: 'create-game', params: { code: roomCode.value } });
+        if (roomExists.value.mensaje) {
+            console.log("Sala existe");
+            // Esperamos la ejecución de userRegistered y guardamos el resultado en una variable
+            const isRegistered = await userRegistered();
+
+            // Si el usuario está registrado entra en la sala, sino abre el login de user anónimo
+            if (isRegistered) {
+                await enterRoom();
+                router.push({ name: 'create-game', params: { code: roomCode.value } });
+            }
+        } else {
+            throwErrorMessage("Sala completa");
+            roomCode.value = "";
         }
+
     } catch (error) {
         throwErrorMessage("Código no válido");
         roomCode.value = "";
@@ -78,7 +85,7 @@ const userRegistered = () => {
     if (!isLoggedIn()) {
         console.log("No registrado");
         // Cerramos este componente y abrimos el login de usuario anónimo
-        emits('close-enterGame'); 
+        emits('close-enterGame');
         emits('open-anonymous', roomCode.value);
         return false;
     } else {
