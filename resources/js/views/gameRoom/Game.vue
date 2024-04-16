@@ -41,7 +41,7 @@
                             <chat-messages :messages="messages"></chat-messages>
                         </div>
                         <div class="col-4 p-0" style="width:100%">
-                            <chat-form @messagesent="addMessage" :user="user"></chat-form>
+                            <chat-form v-on:messagesent="addMessage" :user="user"></chat-form>
                         </div>
                     </div>
                 </div>
@@ -89,13 +89,13 @@ onMounted(() => {
 
 const getUserData = async () => {
 
-    //let user = {};
-
     if( isLoggedIn() )
     {
         console.log("[INFO]: Entrando como usuario registrado.");
 
-        let userData = await axios.get('/getUserData');
+        const userData = await axios.get('/getUserData');
+        user.value = userData;
+
         console.log(userData.nickname);
     }
     else

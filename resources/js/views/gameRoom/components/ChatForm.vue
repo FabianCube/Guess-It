@@ -1,7 +1,14 @@
 <template>
   <div class="text-input flex flex-row">
-    <input autocomplete="off" id="btn-input" type="text" name="message" class="form-control input-sm"
-      placeholder="Escribe aquí..." v-model="newMessage" @keyup.enter="sendMessage">
+    <input 
+      autocomplete="off" 
+      id="btn-input" 
+      type="text" 
+      name="message" 
+      class="form-control input-sm"
+      placeholder="Escribe aquí..." 
+      v-model="newMessage" 
+      @keyup.enter="sendMessage">
     <button class="send-btn" id="btn-chat" @click="sendMessage">
       <img src="/storage/icons/icon-send.svg" alt="">
     </button>
@@ -11,11 +18,12 @@
 </template>
 <script setup>
 
+import axios from 'axios';
 import { defineProps, defineEmits, ref } from 'vue';
 
 //Takes the "user" props from <chat-form> … :user="user"></chat-form> in the parent Game.vue
-const props = defineProps([ 'user' ]);
-const emits = defineEmits(["messagesent"]);
+const props = defineProps([ "user" ]);
+const emits = defineEmits([ "messagesent" ]);
 console.log(props)
 const newMessage = ref('');
 

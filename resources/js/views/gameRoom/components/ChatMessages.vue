@@ -1,6 +1,6 @@
 <template>
   <ul class="chat" ref="chatContainer">
-    <li class="left clearfix" v-for="message in messages" :key="message.id">
+    <li class="left clearfix" v-for="message in props.messages" :key="message.id">
       <div class="clearfix">
         <div class="header">
           <strong>
@@ -18,11 +18,13 @@
 <script setup>
 import { onUpdated, nextTick, ref } from 'vue';
 
-const props = defineProps([ 'messages' ])
+const props = defineProps(["messages"])
 const chatContainer = ref(null);
 
 onUpdated()
 {
+  console.log("[ChatMessages]: Chat updated!")
+  
   nextTick(() => {
     const container = chatContainer.value;
     container.scrollTop = container.scrollHeight;
