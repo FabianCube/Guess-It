@@ -18,7 +18,7 @@
 <script setup>
 import { onUpdated, nextTick, ref } from 'vue';
 
-const props = defineProps(["messages"])
+const props = defineProps(['messages'])
 const chatContainer = ref(null);
 
 onUpdated()

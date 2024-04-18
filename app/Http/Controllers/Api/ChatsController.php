@@ -36,8 +36,8 @@ class ChatsController extends Controller
             return response()->json(['error' => 'Datos de usuario no proporcionados'], 400);
         }
 
-        $message = ([
-            // 'name' => $userData['nickname'], // Asumiendo que tienes el ID del usuario de alguna manera
+        $message = new Message([
+            'nickname' => $userData['nickname'],
             'message' => $messageText
         ]);
 

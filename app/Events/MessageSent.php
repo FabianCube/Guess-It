@@ -26,11 +26,11 @@ class MessageSent implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct($message)
+    public function __construct(Message $message)
     {
-
-        $this->message = $message;
-        Log::info("Evento messagesent disparado", ['message' => $message]);
+        $this->user = $message->nickname;
+        $this->message = $message->message;
+        Log::info("Evento messagesent disparado", ['message' => $message->message, 'user' => $message->user]);
     }
 
 

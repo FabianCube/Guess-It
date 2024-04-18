@@ -82,10 +82,10 @@ const addMessage = (newMessage) => {
 }
 
 onMounted(() => {
-    const bg = document.getElementById('background-game');
-
-    // GET USER
+    listenEventMessageSent();
     getUserData();
+
+    const bg = document.getElementById('background-game');
 
     if (!bg) {
         console.error('Elemento #background no encontrado.');
@@ -109,6 +109,17 @@ onMounted(() => {
 
     console.log("User: " + user.value.nickname)
 });
+
+const listenEventMessageSent = () => {
+    window.Echo.channel('chat')
+        .listen('.MessageSent', (e) => {
+            console.log("Mensaje recibido");
+            messages.value.push({
+                message: e.message.message,
+                user: e.message.nickname
+            });
+        });
+}
 
 const getUserData = async () => {
 
