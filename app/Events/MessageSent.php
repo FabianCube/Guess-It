@@ -9,7 +9,9 @@ use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Http\Request;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
@@ -24,11 +26,11 @@ class MessageSent implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct(User $user, Message $message)
+    public function __construct($message)
     {
-        $this->user = $user;
+
         $this->message = $message;
-        Log::info("Evento messagesent disparado", ['user' => $user, 'message' => $message]);
+        Log::info("Evento messagesent disparado", ['message' => $message]);
     }
 
 

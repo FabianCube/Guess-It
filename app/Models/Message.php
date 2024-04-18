@@ -9,6 +9,7 @@ class Message extends Model
 {
     use HasFactory;
     protected $fillable = ['message'];
+    
 
     //Add the below function
     public function user()
