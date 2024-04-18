@@ -52,14 +52,20 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
-import useAuth from '@/composables/auth'
+import { useRoute, useRouter } from 'vue-router';
+import useAuth from '@/composables/auth';
 
 const { isLoggedIn, logout } = useAuth();
 
 const logged = ref();
 
 const passedRoomCode = ref();
+
+const roomCode = ref();
+
+const userRegistered = ref();
+
+const router = useRouter();
 
 onMounted(() => {
 
@@ -103,9 +109,15 @@ function toggleLogin() {
 
 // Abrir cerrar popup de usuario anónimo
 function toggleAnonymous() {
-    let anonymous = document.querySelector('.anonymous');
-    let isOpen = anonymous.classList.contains('active');
-    isOpen ? anonymous.classList.remove('active') : anonymous.classList.add('active');
+    if (isLoggedIn()) {
+        createRoom();
+        enterRoom();
+    } else {
+        let anonymous = document.querySelector('.anonymous');
+        let isOpen = anonymous.classList.contains('active');
+        isOpen ? anonymous.classList.remove('active') : anonymous.classList.add('active');
+    }
+
 }
 
 function toggleAccount() {
@@ -131,9 +143,36 @@ function toggleEnterGame() {
 const enterAnonymous = (code) => {
     let anonymous = document.querySelector('.anonymous');
     let isOpen = anonymous.classList.contains('active');
-    isOpen ? anonymous.classList.remove('active') : anonymous.classList.add('active'); 
+    isOpen ? anonymous.classList.remove('active') : anonymous.classList.add('active');
     passedRoomCode.value = code;
 }
+
+const createRoom = async () => {
+    try {
+        const userId = await axios.get(`/api/get-user`);
+        userRegistered.value = userId.uuid;
+
+        const response = await axios.post(`/api/create-room/${userRegistered.value}`);
+        roomCode.value = response.data.code;
+
+        console.log("Sala creada con código:", roomCode.value);
+
+        await enterRoom();
+        router.push({ name: 'create-game', params: { code: roomCode.value } });
+    } catch (error) {
+        console.error("Error al crear la sala:", error);
+    }
+};
+
+const enterRoom = async () => {
+    axios.post('/api/enter-room', {
+        code: roomCode.value
+    }).then(response => {
+        console.log(response.data.mensaje);
+    }).catch(error => {
+        console.error("Error al unirse a la sala: ", error);
+    });
+};
 
 </script>
 
