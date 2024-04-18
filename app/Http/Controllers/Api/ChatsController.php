@@ -20,6 +20,7 @@ class ChatsController extends Controller
     {
         // $user = Auth::user();
         $user = $request->input('user');
+        
         $message = $user->messages()->create([
             'message' => $request->input('message')
         ]);
