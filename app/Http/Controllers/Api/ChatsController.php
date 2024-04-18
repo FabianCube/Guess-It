@@ -19,13 +19,30 @@ class ChatsController extends Controller
     public function sendMessage(Request $request)
     {
         // $user = Auth::user();
-        $user = $request->input('user');
-        
-        $message = $user->messages()->create([
-            'message' => $request->input('message')
+        // $user = $request->user;
+        // $message = $user->messages()->create([
+        //     'message' => $request->input('message')
+        // ]);
+
+        // broadcast(new MessageSent($user, $message))->toOthers();
+
+        // return ['status' => 'Message Sent!'];
+
+
+        $userData = $request->input('user');
+        $messageText = $request->input('message');
+
+        if (!$userData) {
+            return response()->json(['error' => 'Datos de usuario no proporcionados'], 400);
+        }
+
+        $message = ([
+            // 'name' => $userData['nickname'], // Asumiendo que tienes el ID del usuario de alguna manera
+            'message' => $messageText
         ]);
 
-        broadcast(new MessageSent($user, $message))->toOthers();
+        // Broadcast del evento
+        broadcast(new MessageSent($message))->toOthers();
 
         return ['status' => 'Message Sent!'];
     }
@@ -38,7 +55,7 @@ class ChatsController extends Controller
     public function sendCanvas(Request $request)
     {
         $user = Auth::user();
-        $canvas = $request->input('canvas'); 
+        $canvas = $request->input('canvas');
 
         broadcast(new CanvasUpdate($user, $canvas))->toOthers();
         // broadcast(new CanvasUpdate($canvas))->toOthers();
