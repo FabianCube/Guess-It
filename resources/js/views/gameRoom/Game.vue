@@ -60,7 +60,7 @@ const user = ref();
 const messages = ref([]);
 
 const addMessage = (newMessage) => {
-    messages.value.push(newMessage.message);
+    messages.value.push(newMessage);
 
     console.log("addmessage _> " + newMessage.message)
     console.log("addmessage _> " + newMessage.user.nickname)
