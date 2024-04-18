@@ -11,17 +11,6 @@ use App\Events\MessageSent;
 
 class ChatsController extends Controller
 {
-    //Add the below functions
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
-    // public function index()
-    // {
-    //     return view('chat');
-    // }
-
     public function fetchMessages() //! NOT USED?
     {
         return Message::with('user')->get();

@@ -71,4 +71,5 @@ Route::post('leave-room/{code}', [RoomController::class, 'leaveRoom']);
 // Game controller
 Route::get('get-user', [GameController::class, 'getUserData']);
 
-Route::post('messages', [ChatsController::class, 'sendMessage']);
+// Chat controller
+Route::post('/messages', [ChatsController::class, 'sendMessage']);

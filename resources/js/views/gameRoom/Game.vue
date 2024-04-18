@@ -60,13 +60,16 @@ const user = ref();
 const messages = ref([]);
 
 const addMessage = (newMessage) => {
-    messages.value.push(newMessage);
+    messages.value.push(newMessage.message);
+
     console.log("addmessage _> " + newMessage.message)
     console.log("addmessage _> " + newMessage.user.nickname)
 
     axios.post('/messages', newMessage).then(response => {
         console.log(response.data);
-    });
+    }).catch(err => {console.error("Error sdanslndajndkjans", err)});
+
+    console.log(messages.value);
 }
 
 onMounted(() => {
@@ -104,7 +107,7 @@ const getUserData = async () => {
         console.log("[INFO]: Entrando como usuario registrado.");
 
         const userData = await axios.get('/getUserData');
-        user.value = userData;
+        user.value = userData.data;
 
         console.log(userData.nickname);
     }

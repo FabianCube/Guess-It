@@ -153,13 +153,13 @@ const app = createApp({
     },
     created() {
         // useAuth().getUser();
-        Echo.channel('chat')
-        .listen('.MessageSent', (e) => {
-            this.messages.push({
-                message: e.message.message,
-                user: e.user
-            });
-        });
+        // Echo.channel('chat')
+        // .listen('.MessageSent', (e) => {
+        //     this.messages.push({
+        //         message: e.message.message,
+        //         user: e.user
+        //     });
+        // });
 
         // routes/channels
         // Escuchamos el canal canvas para reconstruir el canvas cuando el que está dibujando hace mouseout    
