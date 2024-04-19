@@ -111,7 +111,6 @@ function toggleLogin() {
 function toggleAnonymous() {
     if (isLoggedIn()) {
         createRoom();
-        enterRoom();
     } else {
         let anonymous = document.querySelector('.anonymous');
         let isOpen = anonymous.classList.contains('active');
@@ -150,7 +149,9 @@ const enterAnonymous = (code) => {
 const createRoom = async () => {
     try {
         const userId = await axios.get(`/api/get-user`);
-        userRegistered.value = userId.uuid;
+        userRegistered.value = userId.data.uuid;
+
+        console.log(userRegistered.value);
 
         const response = await axios.post(`/api/create-room/${userRegistered.value}`);
         roomCode.value = response.data.code;
@@ -164,7 +165,7 @@ const createRoom = async () => {
     }
 };
 
-const enterRoom = async () => {
+const enterRoom = () => {
     axios.post('/api/enter-room', {
         code: roomCode.value
     }).then(response => {
