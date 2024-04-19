@@ -59,9 +59,11 @@ import { ref, onMounted, onBeforeMount, onBeforeUnmount, inject } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import sweetAlertNotifications from '@/utils/swal_notifications';
 import Pusher from 'pusher-js';
+import useAuth from '@/composables/auth';
 
 const { throwSuccessMessage , throwRedirectMessage } = sweetAlertNotifications();
 
+const { isLoggedIn } = useAuth();
 
 const codigoSala = ref();
 const route = useRoute();
@@ -82,6 +84,9 @@ const isLoading = ref(true);
 const storedUserDataString = sessionStorage.getItem('userData');
 const storedUserData = JSON.parse(storedUserDataString || '{}');
 
+// Id de usuario registrado
+const userRegistered = ref();
+
 onBeforeMount(async () => {
     codigoSala.value = route.params.code;
 
@@ -91,11 +96,20 @@ onBeforeMount(async () => {
     // Guardamos en una variable el método getOwner
     const ownerPromise = getOwner();
 
+    // Obtenemos el id del usuario si está autenticado
+    if(isLoggedIn()){
+        const userId = await axios.get(`/api/get-user`);
+        userRegistered.value = userId.data.uuid;
+    }
+
     // Esperamos 3 segundos después de ejecutar getOwner para que se muestre la animación de carga
     await Promise.all([loadingPromise, ownerPromise]);
 
+    console.log(userRegistered.value);
+    console.log(owner.value);
+
     // Si el usuario es el creador de partida, se le muestran las opciones de partida
-    if (owner.value === storedUserData.uuid) {
+    if (owner.value == storedUserData.uuid || owner.value == userRegistered.value) {
         options.value = true;
     }
 
