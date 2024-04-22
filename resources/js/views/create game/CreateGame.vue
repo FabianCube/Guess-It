@@ -42,10 +42,14 @@
                                 class="copiar" @click="copiarCodigo">
                         </div>
                         <div class="d-flex justify-content-end">
-                            <router-link to="/play-game" class="d-flex align-items-center btn-play">
+                            <button v-if="options" @click="startGame" class="d-flex align-items-center btn-play">
                                 <h1 class="mb-2 me-3 play-font">INICIAR</h1>
                                 <img src="../../../../storage/app/public/icons/play.svg" alt="">
-                            </router-link>
+                            </button>
+                            <div v-else class="d-flex align-items-center">
+                                <h3 class="mb-0 me-3 white">Esperando a que el anfitrión configure la partida</h3>
+                                <img id="carga" src="/storage/carga.svg" alt="">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -60,6 +64,7 @@ import { useRoute, useRouter } from 'vue-router';
 import sweetAlertNotifications from '@/utils/swal_notifications';
 import Pusher from 'pusher-js';
 import useAuth from '@/composables/auth';
+import EnterGame from '../home/components/EnterGame.vue';
 
 const { throwSuccessMessage , throwRedirectMessage } = sweetAlertNotifications();
 
@@ -193,9 +198,31 @@ window.addEventListener('beforeunload', function (event) {
 
     navigator.sendBeacon(`/api/leave-room/${codigoSala.value}`, formData);
 });
+
+
+// Se crea la sala, se añade al jugador anónimo y se redirige a la sala
+const startGame = async () => {
+    try{
+
+        router.push({ name: 'create-game', params: { code: roomCode.value } });
+    }catch (error) {
+        console.error("Error al crear la partida:", error);
+    }
+};
 </script>
 
 <style scoped>
+#carga{
+    height: 1.6rem;
+    width: auto;
+    animation: rotate 2s linear infinite;
+}
+
+.white{
+    color: #e0e0e0;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+}
+
 .loading-container {
     height: 100vh;
     width: 100vw;
@@ -219,6 +246,16 @@ window.addEventListener('beforeunload', function (event) {
 
 .loading-logo {
     animation: logoAnimation 3s infinite;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 @keyframes fillProgress {
