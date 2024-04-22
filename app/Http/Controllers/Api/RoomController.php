@@ -61,7 +61,7 @@ class RoomController extends Controller
             Cache::put('room_' . $code, $room, now()->addMinutes(120));
 
             // Dispara el evento con los datos de la sala
-            broadcast(new RoomUpdate("New user added"))->toOthers();
+            broadcast(new RoomUpdate("New user added",$code))->toOthers();
 
             return response()->json(['mensaje' => 'Jugador añadido a la sala']);
         } else {
@@ -153,7 +153,7 @@ class RoomController extends Controller
             Cache::put('room_' . $code, $room, now()->addMinutes(120));
 
             // Dispara el evento con los datos de la sala
-            broadcast(new RoomUpdate("User exits room"))->toOthers();
+            broadcast(new RoomUpdate("User exits room",$code))->toOthers();
 
             return response()->json(['mensaje' => 'Jugador eliminado de la sala'], 200);
         }
