@@ -1,13 +1,16 @@
 <template>
+  <div class="round-container">
+    <h2 class="round-title">RONDA 1/3</h2>
+  </div>
   <ul class="chat" ref="chatContainer">
-    <li class="left clearfix" v-for="message in props.messages" :key="message.id">
-      <div class="clearfix bg-primary">
+    <li class="left clearfix bubbles" v-for="message in props.messages" :key="message.id">
+      <div class="clearfix bubble-container">
         <div class="header">
           <strong>
-            {{ message.user.nickname }}
+            {{ message.user.nickname }}:
           </strong>
         </div>
-        <p>
+        <p class="bubble-text">
           {{ message.message }}
         </p>
       </div>
@@ -37,12 +40,55 @@ function scrollToBottom() {
 </script>
 <style scoped>
 .chat {
-  height: 100%;
+  height: 90%;
   width: 100%;
   overflow-y: auto;
   display: flex;
   justify-content: end;
   flex-flow: column;
   list-style: none;
+  padding: 10px;
 }
+
+.bubbles
+{
+  border: solid 2px black;
+  border-radius: 12px;
+  margin-top: 10px;
+  width: fit-content;
+}
+
+.bubble-container
+{
+  display: inline-flex;
+  align-items: center;
+  flex-flow: row;
+  min-height: 30px;
+  height: auto;
+  padding: 0 10px 0 10px;
+}
+.header
+{
+  font-family: "Lilita One", sans-serif;
+  margin-right: 7px;
+}
+.bubble-text
+{
+  /*overflow-wrap: normal;*/
+  word-break: break-word;
+}
+
+
+/* ROUND */
+
+.round-container
+{
+  padding: 0 10px 0 10px;
+}
+
+.round-title
+{
+  font-family: "Lilita One", sans-serif;
+}
+
 </style>

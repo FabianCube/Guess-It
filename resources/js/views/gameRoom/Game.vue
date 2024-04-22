@@ -37,7 +37,7 @@
                     <!-- CHAT -->
                     <div class="p-3 chat flex flex-column justify-content-between">
                         <!-- COMPONENTE CHAT  -->
-                        <div class="col-8 p-0" style="height: 90%; width:100%;">
+                        <div class="col-8 p-0" style="height: 95%; width:100%;">
                             <chat-messages :messages="messages"></chat-messages>
                         </div>
                         <div class="col-4 p-0" style="width:100%">
