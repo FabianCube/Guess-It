@@ -44,7 +44,7 @@ class ChatsController extends Controller
         // Broadcast del evento
         broadcast(new MessageSent($message))->toOthers();
 
-        return ['status' => 'Message Sent!'];
+        return ['status' => '[ChatsController.php]:sendMessage:Message Sent!'];
     }
 
     public function fetchCanvas()
