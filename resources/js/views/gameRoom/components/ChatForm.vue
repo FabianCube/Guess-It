@@ -22,23 +22,22 @@ import axios from 'axios';
 import { defineProps, defineEmits, ref, onMounted } from 'vue';
 
 //Takes the "user" props from <chat-form> … :user="user"></chat-form> in the parent Game.vue
-const props = defineProps([ "user" ]);
-const emits = defineEmits([ "messagesent" ]);
+const props = defineProps([ 'user' ]);
+const emits = defineEmits([ 'messagesent' ]);
 const newMessage = ref('');
 
 function sendMessage()
 {
-  console.log("Sending message:", newMessage.value);
+  console.log("[ChatForm.vue]:sendMessage:newMessage.value -> " + newMessage.value);
   
   //Emit a "messagesent" event including the user who sent the message along with the message content
   emits("messagesent", {
     user: props.user,
-    //newMessage is bound to the earlier "btn-input" input field
-    message: newMessage.value,
+    message: newMessage.value
   });
 
-  console.log("[INFO]: User: " + props.user.nickname);
-  console.log("[INFO]: Content message: " + newMessage.value);
+  console.log("[ChatForm.vue]:sendMessage:user.nickname -> " + props.user.nickname);
+  console.log("[ChatForm.vue]:sendMessage:message: " + newMessage.value);
 
   //Clear the input
   newMessage.value = '';

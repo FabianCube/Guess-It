@@ -62,8 +62,8 @@ const messages = ref([]);
 const addMessage = (newMessage) => {
     messages.value.push(newMessage);
 
-    console.log("addmessage _> " + newMessage.message)
-    console.log("addmessage _> " + newMessage.user.nickname)
+    console.log("[Game.vue]:addMessage:user.nickname -> " + newMessage.user.nickname)
+    console.log("[Game.vue]:addMessage:message -> " + newMessage.message)
 
     // axios.post('/api/messages', newMessage).then(response => {
     //     console.log(response.data);
@@ -78,7 +78,7 @@ const addMessage = (newMessage) => {
         console.error("Error sdanslndajndkjans", error);
     });
 
-    console.log(messages.value);
+    console.log("[Game.vue]:addMessage:messages{} -> " + messages.value);
 }
 
 onMounted(() => {
@@ -113,11 +113,12 @@ onMounted(() => {
 const listenEventMessageSent = () => {
     window.Echo.channel('chat')
         .listen('.MessageSent', (e) => {
-            console.log("Mensaje recibido");
-            messages.value.push({
-                message: e.message.message,
-                user: e.message.nickname
-            });
+            console.log("[Game.vue]:listenEventMessageSent:.MessageSent -> " + e.message);
+            messages.value.push(e.message);
+            // messages.value.push({
+            //     message: e.message.message,
+            //     user: e.message.nickname
+            // });
         });
 }
 

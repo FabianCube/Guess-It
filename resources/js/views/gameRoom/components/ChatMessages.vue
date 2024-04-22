@@ -1,7 +1,7 @@
 <template>
   <ul class="chat" ref="chatContainer">
     <li class="left clearfix" v-for="message in props.messages" :key="message.id">
-      <div class="clearfix">
+      <div class="clearfix bg-primary">
         <div class="header">
           <strong>
             {{ message.user.nickname }}
@@ -16,19 +16,22 @@
 </template>
 
 <script setup>
-import { onUpdated, nextTick, ref } from 'vue';
+import { onUpdated, nextTick, watch, ref, onMounted } from 'vue';
 
 const props = defineProps(['messages'])
 const chatContainer = ref(null);
 
-onUpdated()
-{
-  console.log("[ChatMessages]: Chat updated!")
-  
-  nextTick(() => {
-    const container = chatContainer.value;
-    container.scrollTop = container.scrollHeight;
-  });
+watch(() => props.messages, (newMessages) => {
+  messages.value = newMessages;
+});
+
+onMounted(() => {
+  scrollToBottom();
+});
+
+function scrollToBottom() {
+  const container = chatContainer.value;
+  container.scrollBottom = container.scrollHeight;
 }
 
 </script>
@@ -37,5 +40,9 @@ onUpdated()
   height: 100%;
   width: 100%;
   overflow-y: auto;
+  display: flex;
+  justify-content: end;
+  flex-flow: column;
+  list-style: none;
 }
 </style>
