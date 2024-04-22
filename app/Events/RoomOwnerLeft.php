@@ -23,7 +23,7 @@ class RoomOwnerLeft implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        return new Channel('room-channel');
+        return new Channel('room-' . $this->code);
     }
 
     public function broadcastAs()

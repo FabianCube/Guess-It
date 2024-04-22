@@ -16,13 +16,15 @@ class RoomUpdate implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $roomData;
+    public $code;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($roomData)
+    public function __construct($roomData , $code)
     {
         $this->roomData = $roomData;
+        $this->code = $code;
         Log::info("Evento RoomUpdate disparado", ['roomData' => $roomData]);
     }
 
@@ -33,7 +35,7 @@ class RoomUpdate implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('room-channel');
+        return new Channel('room-' . $this->code);
     }
 
     public function broadcastAs()

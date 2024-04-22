@@ -54,7 +54,7 @@ onBeforeMount(() => {
 
 // Cuando se desmonta el componente dejamos de escuchar el canal
 onUnmounted(() => {
-    window.Echo.leave(`room-channel`);
+    window.Echo.leave(`room-${codigoSala.value}`);
 });
 
 // Obtenemos de la API la lista de jugadores
@@ -70,7 +70,7 @@ const cargarJugadores = async () => {
 
 // Escuchamos el canal "room-channel" y si entra o sale un jugador actualizamos la lista de jugadores
 const escucharActualizacionesDeSala = () => {
-    window.Echo.channel('room-channel')
+    window.Echo.channel(`room-${codigoSala.value}`)
         .listen('.RoomUpdate', (e) => {
             console.log("Actualización de sala recibida:", e);
             cargarJugadores();

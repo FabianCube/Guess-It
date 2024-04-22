@@ -109,6 +109,7 @@ function toggleLogin() {
 
 // Abrir cerrar popup de usuario anónimo
 function toggleAnonymous() {
+    // Si el usuario está logueado creamos directamente la partida
     if (isLoggedIn()) {
         createRoom();
     } else {

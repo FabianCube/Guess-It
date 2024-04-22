@@ -141,7 +141,7 @@ onMounted(() => {
         bg.style.transform = `translate(${bgX}px, ${bgY}px) translateZ(0)`;
     });
 
-    Echo.channel('room-channel')
+    Echo.channel('room-' + codigoSala.value)
         .listen('.room-owner-left', (e) => {
             throwRedirectMessage();
         });
