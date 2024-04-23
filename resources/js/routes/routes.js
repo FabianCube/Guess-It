@@ -89,7 +89,7 @@ export default [
                 component: () => import('../views/create game/CreateGame.vue'),
             },
             {
-                path: 'play-game',
+                path: 'play-game/:code',
                 name: 'play-game',
                 component: () => import('../views/gameRoom/Game.vue'),
             }
