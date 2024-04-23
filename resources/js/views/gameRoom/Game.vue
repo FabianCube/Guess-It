@@ -29,7 +29,7 @@
                         <!-- COMPONENTE STATUS BAR -->
                         <status-bar />
                         <!-- COMPONENTE CANVAS -->
-                        <canvas-component :new-canvas="newCanvas" @canvasupdate="sendCanvas"></canvas-component>
+                        <canvas-component :user="user" :new-canvas="newCanvas" @canvasupdate="sendCanvas"></canvas-component>
                     </div>
                 </div>
 
