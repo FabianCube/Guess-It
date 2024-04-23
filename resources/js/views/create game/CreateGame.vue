@@ -37,7 +37,7 @@
                     </div>
                     <div class="d-flex justify-content-between pb-3">
                         <div class="align-self-start d-flex alig-items-center background-code">
-                            <h4 id="room-code" class="mb-0 me-4">CODE: {{ codigoSala }}</h4>
+                            <h4 id="room-code" class="mb-0 me-4">CODE: {{ roomCode }}</h4>
                             <img src="../../../../storage/app/public/icons/copy-03.svg" alt="Copiar código"
                                 class="copiar" @click="copiarCodigo">
                         </div>
@@ -65,15 +65,11 @@ import sweetAlertNotifications from '@/utils/swal_notifications';
 import useAuth from '@/composables/auth';
 
 const { throwSuccessMessage, throwRedirectMessage } = sweetAlertNotifications();
-
 const { isLoggedIn } = useAuth();
 
-const codigoSala = ref();
+const roomCode = ref();
 const route = useRoute();
-
 const router = useRouter();
-
-const swal = inject('$swal');
 
 // Variable con el id del creador de partida
 const owner = ref();
@@ -103,7 +99,7 @@ const handleSettingsUpdate = (newSettings) => {
 };
 
 onBeforeMount(async () => {
-    codigoSala.value = route.params.code;
+    roomCode.value = route.params.code;
 
     // Definimos una espera de 3 segundos
     const loadingPromise = new Promise((resolve) => setTimeout(resolve, 3000));
@@ -156,14 +152,14 @@ onMounted(() => {
         bg.style.transform = `translate(${bgX}px, ${bgY}px) translateZ(0)`;
     });
 
-    Echo.channel('room-' + codigoSala.value)
+    Echo.channel('room-' + roomCode.value)
         .listen('.room-owner-left', (e) => {
             throwRedirectMessage();
         });
 
-    Echo.channel('room-' + codigoSala.value)
+    Echo.channel('room-' + roomCode.value)
         .listen('.GameStart', (e) => {
-            router.push({ name: 'play-game', params: { roomCode: codigoSala.value } });
+            router.push({ name: 'play-game', params: { code: roomCode.value } });
         });
 });
 
@@ -173,13 +169,13 @@ onBeforeUnmount(() => {
     const formData = new FormData();
     formData.append("uuid", storedUserData.uuid);
 
-    navigator.sendBeacon(`/api/leave-room/${codigoSala.value}`, formData);
+    navigator.sendBeacon(`/api/leave-room/${roomCode.value}`, formData);
 });
 
 // Obtenemos el id del creador de partida
 const getOwner = async () => {
     try {
-        const response = await axios.get(`/api/room/owner/${codigoSala.value}`);
+        const response = await axios.get(`/api/room/owner/${roomCode.value}`);
         owner.value = response.data;
         console.log(owner.value);
     } catch (error) {
@@ -196,7 +192,7 @@ const copiarCodigo = () => {
     }
 
 
-    navigator.clipboard.writeText(codigoSala.value)
+    navigator.clipboard.writeText(roomCode.value)
         .then(() => {
             console.log('Código copiado al portapapeles');
             throwSuccessMessage('Código de partida copiado');
@@ -211,7 +207,7 @@ window.addEventListener('beforeunload', function (event) {
     const formData = new FormData();
     formData.append("uuid", storedUserData.uuid);
 
-    navigator.sendBeacon(`/api/leave-room/${codigoSala.value}`, formData);
+    navigator.sendBeacon(`/api/leave-room/${roomCode.value}`, formData);
 });
 
 
@@ -219,8 +215,8 @@ window.addEventListener('beforeunload', function (event) {
 const startGame = async () => {
     try {
         console.log(gameSettings.value);
-        const response = await axios.post(`/api/start-game/${codigoSala.value}`, {
-            roomCode: codigoSala.value,
+        const response = await axios.post(`/api/start-game/${roomCode.value}`, {
+            roomCode: roomCode.value,
             settings: gameSettings.value
         });
         console.log('Partida creada:', response.data);
