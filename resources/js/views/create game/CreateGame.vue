@@ -92,8 +92,8 @@ const userRegistered = ref();
 
 // Parámetros de la partida
 const gameSettings = ref({
-    numberRounds: '2',
-    roundTime: '30',
+    numberRounds: 2,
+    roundTime: 30,
     difficulty: 'Fácil'
 });
 
@@ -218,12 +218,13 @@ window.addEventListener('beforeunload', function (event) {
 // Se crea la partida y se le pasa la configuración y los jugadores 
 const startGame = async () => {
     try {
+        console.log(gameSettings.value);
         const response = await axios.post(`/api/start-game/${codigoSala.value}`, {
             roomCode: codigoSala.value,
             settings: gameSettings.value
         });
         console.log('Partida creada:', response.data);
-        
+
     } catch (error) {
         console.error("Error al crear la partida:", error);
     }
