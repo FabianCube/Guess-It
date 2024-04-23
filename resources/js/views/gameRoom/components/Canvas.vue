@@ -1,3 +1,138 @@
+<script setup>
+import { ref, onMounted, onUpdated, nextTick, defineEmits } from 'vue';
+
+const isDrawing = ref(false);
+const canvas = ref(null);
+const ctx = ref(null);
+// const flag = ref(false); 
+const x = ref(0);
+const y = ref(0);
+const lineWidth = ref("13");
+const lineColor = ref("blue");
+const movements = ref([]);
+
+const props = defineProps([ 'user', 'newCanvas' ]);
+const emits = defineEmits([ 'canvasupdate' ]);
+
+onMounted(() => {
+    init();
+    window.addEventListener('resize', adjustCanvas);
+    adjustCanvas();
+});
+
+onUpdated(() => {
+    nextTick(() => {
+        if (props.newCanvas)
+        {
+            if (props.newCanvas == "clear")
+            {
+                clearArea();
+            }
+            else
+            {
+                let positions = JSON.parse(props.newCanvas);
+
+                positions.forEach((movement, index) => {
+                    setTimeout(() => {
+                        drawLine(ctx.value, movement.x, movement.y, movement.offsetX, movement.offsetY);
+                    }, index * 5);
+                })
+            }
+        }
+    });
+});
+
+const init = () => {
+    canvas.value = document.getElementById('can');
+    ctx.value = canvas.value.getContext("2d");
+
+    canvas.value.addEventListener('mousedown', (e) => {
+        x.value = e.offsetX;
+        y.value = e.offsetY;
+        isDrawing.value = true;
+    });
+
+    canvas.value.addEventListener('mousemove', (e) => {
+        if (isDrawing.value) 
+        {
+            movements.value.push({ x: x.value, y: y.value, offsetX: e.offsetX, offsetY: e.offsetY });
+            drawLine(ctx.value, x.value, y.value, e.offsetX, e.offsetY);
+            x.value = e.offsetX;
+            y.value = e.offsetY;
+
+            if (movements.value.length >= 1000)
+            {
+                getParams();
+                movements.value = [];
+            }
+        }
+    });
+
+    canvas.value.addEventListener('mouseup', (e) => {
+        if (isDrawing.value) 
+        {
+            movements.value.push({ x: x.value, y: y.value, offsetX: e.offsetX, offsetY: e.offsetY });
+            drawLine(ctx.value, x.value, y.value, e.offsetX, e.offsetY);
+            getParams();
+            x.value = 0;
+            y.value = 0;
+            isDrawing.value = false;
+            movements.value = [];
+        }
+    });
+
+    let clear = document.getElementById('clearArea');
+
+    clear.addEventListener('click', (e) => {
+        clearArea();
+        sendCanvas("clear");
+    });
+};
+
+
+const sendCanvas = (params) => {
+    emits("canvasupdate", {
+        user: props.user,
+        canvas: params,
+    });
+    console.log("[Canvas.vue]:sendCanvas: Canvas sent!");
+}
+
+const getParams = () => {
+    console.log("[Canvas.vue]:getParams: Entrado en getParams!");
+
+    const params = JSON.stringify(movements.value);
+
+    console.log(params);
+    sendCanvas(params);
+};
+
+const drawLine = (ctx, x1, y1, x2, y2) => {
+    ctx.beginPath();
+    ctx.strokeStyle = document.getElementById('selColor').value;;
+    ctx.lineWidth = document.getElementById('selWidth').value;
+    ctx.lineJoin = "round";
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.closePath();
+    ctx.stroke();
+};
+
+const clearArea = () => {
+    ctx.value.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.value.clearRect(0, 0, ctx.value.canvas.width, ctx.value.canvas.height);
+};
+
+const adjustCanvas = () => {
+    let style = getComputedStyle(canvas.value);
+    canvas.value.width = parseInt(style.width);
+    canvas.value.height = parseInt(style.height);
+};
+
+
+
+</script>
+
 <template>
     <!-- CANVAS COMPONENT -->
     <canvas ref="canvas" id="can"></canvas>
@@ -21,100 +156,6 @@
 
     <!-- END CANVAS COMPONENT -->
 </template>
-
-<script setup>
-import { ref, onMounted, onUpdated, nextTick, defineEmits } from 'vue';
-
-const canvas = ref(null);
-const ctx = ref(null);
-const isDrawing = ref(false);
-const movements = ref([]);
-const lineWidth = ref("13");
-const lineColor = ref("blue");
-
-const init = () => {
-    canvas.value = document.getElementById('can');
-    ctx.value = canvas.value.getContext("2d");
-
-    canvas.value.addEventListener('mousedown', (e) => {
-        isDrawing.value = true;
-    });
-
-    canvas.value.addEventListener('mousemove', (e) => {
-        if (isDrawing.value) {
-            movements.value.push({ x: e.offsetX, y: e.offsetY });
-            drawLine(ctx.value, e.offsetX, e.offsetY);
-        }
-    });
-
-    canvas.value.addEventListener('mouseup', (e) => {
-        if (isDrawing.value) {
-            movements.value.push({ x: e.offsetX, y: e.offsetY });
-            drawLine(ctx.value, e.offsetX, e.offsetY);
-            getParams();
-            isDrawing.value = false;
-            movements.value = [];
-        }
-    });
-
-    let clear = document.getElementById('clearArea');
-
-    clear.addEventListener('click', clearArea);
-};
-
-const { emit } = (["canvasupdate"]);
-
-const sendCanvas = (params) => {
-    emit("canvasupdate", {
-        user: this.user,
-        canvas: params,
-    });
-    console.log("canvas sent");
-}
-
-const drawLine = (ctx, x1, y1, x2, y2) => {
-    ctx.beginPath();
-    ctx.strokeStyle = lineColor.value;
-    ctx.lineWidth = lineWidth.value;
-    ctx.lineJoin = "round";
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
-    ctx.closePath();
-    ctx.stroke();
-};
-
-const clearArea = () => {
-    ctx.value.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.value.clearRect(0, 0, ctx.value.canvas.width, ctx.value.canvas.height);
-};
-
-const getParams = () => {
-    const params = JSON.stringify(movements.value);
-    console.log(params);
-    sendCanvas(params);
-};
-
-const adjustCanvas = () => {
-    let style = getComputedStyle(canvas.value);
-    canvas.value.width = parseInt(style.width);
-    canvas.value.height = parseInt(style.height);
-};
-
-onMounted(() => {
-    init();
-    window.addEventListener('resize', adjustCanvas);
-    adjustCanvas();
-});
-
-onUpdated(() => {
-    nextTick(() => {
-        if (lineWidth.value === "clear") {
-            clearArea();
-        }
-    });
-});
-
-</script>
 
 <style scoped>
 #can {
