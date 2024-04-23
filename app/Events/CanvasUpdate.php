@@ -29,7 +29,7 @@ class CanvasUpdate implements ShouldBroadcast
         $this->code = $code;
         $this->user = $user;
         $this->canvas = $canvas;
-        Log::info("Evento canvasUpdate disparado", ['message' => $user, 'user' => $canvas, 'code' => $code]);
+        Log::info("Evento canvasUpdate disparado", ['user' => $user, 'canvas' => $canvas, 'code' => $code]);
     }
 
     /**

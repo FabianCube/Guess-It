@@ -155,7 +155,7 @@ const listenEventMessageSent = () => {
 const listenEventCanvasUpdate = () => {
     console.log("[Game.vue]:listenEventCanvasUpdate: Entrado!");
 
-    window.Echo.channel('room-' + roomCode)
+    window.Echo.channel('room-' + roomCode.value)
         .listen('.CanvasUpdate', (e) =>{
             console.log("[Game.vue]:listenEventCanvasUpdate:.CanvasUpdate -> " + e.canvas);
 
