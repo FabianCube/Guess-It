@@ -62,7 +62,7 @@ const messages = ref([]);
 const addMessage = (newMessage) => {
     messages.value.push(newMessage);
 
-    console.log("[Game.vue]:addMessage:user.nickname -> " + newMessage.user)
+    console.log("[Game.vue]:addMessage:user.nickname -> " + newMessage.user.nickname)
     console.log("[Game.vue]:addMessage:message -> " + newMessage.message)
 
     // axios.post('/api/messages', newMessage).then(response => {
@@ -119,8 +119,8 @@ const listenEventMessageSent = () => {
 
             // messages.value.push(e);
             messages.value.push({
-                message: e.message.message,
-                user: e.message.user
+                message: e.message,
+                user: e.user
             });
         });
 }

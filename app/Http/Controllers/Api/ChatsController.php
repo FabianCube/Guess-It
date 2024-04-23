@@ -30,7 +30,7 @@ class ChatsController extends Controller
         // return ['status' => 'Message Sent!'];
 
 
-        $userData = $request->user;
+        $userData = $request->input('user');
         $messageText = $request->input('message');
 
         if (!$userData) {
