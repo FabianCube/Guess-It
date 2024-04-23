@@ -50,4 +50,9 @@ class User extends Authenticatable
     {
         $this->notify(new UserResetPasswordNotification($token));
     }
+
+    public static function getUserById($id)
+    {
+        return self::find($id);
+    }
 }
