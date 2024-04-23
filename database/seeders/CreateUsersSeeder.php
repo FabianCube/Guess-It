@@ -14,14 +14,14 @@ class CreateUsersSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'name' => 'Davinci69',
+            'nickname' => 'Davinci69',
             'email' => 'davinci@demo.com',
             'password' => bcrypt('12345678'),
             'avatar_id' => '1'
         ]);
 
         User::create([
-            'name' => 'SuperDrawer2000',
+            'nickname' => 'SuperDrawer2000',
             'email' => 'superdrawer2000@demo.com',
             'password' => bcrypt('12345678'),
             'avatar_id' => '2'
