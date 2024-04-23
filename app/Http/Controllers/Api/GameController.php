@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\Avatar;
+use App\Models\User;
 use App\Models\Game;
+use App\Models\History;
 use App\Events\GameStart;
 
 use Illuminate\Http\Request;
@@ -44,6 +46,25 @@ class GameController extends Controller
         $game->time_per_round = $settings['roundTime'];
         $game->difficulty = $settings['difficulty'];
         $game->save();
+
+        // Obtener jugadores de la caché
+        $players = Cache::get('room_' . $code)['players'];
+
+        // Crear registros en la tabla 'history' para cada jugador
+        foreach ($players as $player) {
+            $registeredUser = User::getUserById($player['uuid']);
+
+            $history = new History();
+            $history->game_id = $game->id;
+            if($registeredUser){
+                $history->user_id = $player['uuid'];
+            }else{
+                $history->anonymous_user_id = $player['uuid'];
+            }
+            $history->user_points = 0; // Iniciar puntos a 0
+            $history->user_position = 0; // Iniciar posición a 0
+            $history->save();
+        }
 
         // Notificar a todos los jugadores en la sala
         broadcast(new GameStart($code));
