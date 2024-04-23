@@ -138,26 +138,114 @@ const adjustCanvas = () => {
     <canvas ref="canvas" id="can"></canvas>
 
     <div class="controls">
-        <button @click="clearArea" id="clearArea">Clear Area</button>
-        Line width : <select v-model="lineWidth" id="selWidth">
-            <option value="11">11</option>
-            <option value="13" selected="selected">13</option>
-            <option value="15">15</option>
-        </select>
-        Color : <select v-model="lineColor" id="selColor">
+        <!-- Line width : <select v-model="lineWidth" id="selWidth">
+            <option value="6">6</option>
+            <option value="11" selected="selected">11</option>
+            <option value="13">13</option>
+        </select> -->
+        <div id="select-size">
+            <div class="size size-small"></div>
+            <div class="size size-medium"></div>
+            <div class="size size-large"></div>
+            <div class="size size-large-plus"></div>
+        </div>
+        <div id="select-tool">
+            <button class="tool tool-paint active-tool">x</button>
+            <button class="tool tool-erase">x</button>
+        </div>
+        <!-- <select v-model="lineColor" id="selColor">
             <option value="black">black</option>
             <option value="blue" selected="selected">blue</option>
             <option value="red">red</option>
             <option value="green">green</option>
             <option value="yellow">yellow</option>
             <option value="gray">gray</option>
-        </select>
+        </select> -->
+        <div id="select-color">
+            <div class="color active-color"></div>
+            <div class="color"></div>
+            <div class="color"></div>
+            <div class="color"></div>
+            <div class="color"></div>
+            <div class="color"></div>
+            <div class="color"></div>
+            <div class="color"></div>
+        </div>
+        <!-- <button @click="clearArea" id="clearArea">Clear Area</button> -->
     </div>
 
     <!-- END CANVAS COMPONENT -->
 </template>
 
 <style scoped>
+
+/*  SELECT SIZE  */
+#select-size
+{
+    width: 33%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: row;
+}
+
+.size
+{
+    background-color: #5F5F5F;
+    border-radius: 50px;
+    margin-right: 5px;
+}
+
+.size-small
+{
+    width: 8px;
+    height: 8px;
+}
+.size-medium
+{
+    width: 14px;
+    height: 14px;
+}
+.size-large
+{
+    width: 20px;
+    height: 20px;
+}
+
+.size-large-plus
+{
+    width: 30px;
+    height: 30px;
+}
+
+/*  END SELECT SIZE   */
+
+#select-tool
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 33%;
+}
+
+.tool{
+    width: 35px;
+    height: 35px;
+    border: rgba(149, 2, 152, 54%) solid 2px;
+    border-radius: 6px;
+    margin: 3px;
+    transition: all .3s ease-in-out;
+}
+
+.active-tool
+{
+    width: 45px!important;
+    height: 45px!important;
+    border: #950298 solid 2px;
+}
+
+/*   CANVAS   */
+
 #can {
     width: 100%;
     height: 100%;
@@ -176,12 +264,74 @@ const adjustCanvas = () => {
     z-index: 100;
     background-color: white;
     border-radius: 15px;
-    border: solid 2px;
-    width: 350px;
+    border: solid 1px black;
+    width: 380px;
     height: 65px;
+    box-shadow: 0 4px 4px rgba(0,0,0,.25);
 
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
+}
+
+/*  END CANVAS   */
+
+
+#select-color
+{
+    width: 33%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+    padding: 0 20px 0 20px;
+}
+
+.color
+{
+    width: 17px;
+    height: 17px;
+    border-radius: 50px;
+    background-color: red;
+    opacity: 50%;
+}
+
+.active-color
+{
+    border: solid 1px;
+    opacity: 100%;
+}
+
+.color:nth-child(2)
+{
+    background-color: blue;
+}
+.color:nth-child(3)
+{
+    background-color: purple;
+}
+.color:nth-child(4)
+{
+    background-color: green;
+}
+.color:nth-child(5)
+{
+    background-color: brown;
+}
+.color:nth-child(6)
+{
+    background-color: black;
+}
+.color:nth-child(7)
+{
+    background-color: pink;
+}
+.color:nth-child(8)
+{
+    background-color: orange;
+}
+
+#selColor
+{
+    width: 33%;
 }
 </style>
