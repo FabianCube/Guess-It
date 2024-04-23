@@ -56,12 +56,13 @@ class ChatsController extends Controller
 
     public function sendCanvas(Request $request)
     {
-        $user = Auth::user();
+        $user = $request->input('user');
         $canvas = $request->input('canvas');
 
         broadcast(new CanvasUpdate($user, $canvas))->toOthers();
         // broadcast(new CanvasUpdate($canvas))->toOthers();
 
+        Log::info("ChatsController ===== canvas ===== ", ['canvas' => $canvas, 'user' => $user]);
         return ['status' => 'Canvas Sent!'];
     }
 }

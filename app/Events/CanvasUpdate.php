@@ -22,7 +22,7 @@ class CanvasUpdate implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct(User $user, $canvas)
+    public function __construct($user, $canvas)
     {
         $this->user = $user;
         $this->canvas = $canvas;

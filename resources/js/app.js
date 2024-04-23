@@ -163,19 +163,19 @@ const app = createApp({
 
         // routes/channels
         // Escuchamos el canal canvas para reconstruir el canvas cuando el que está dibujando hace mouseout    
-        Echo.channel('canvas')
-            .listen('CanvasUpdate', (e) => {
-                this.newCanvas = e.canvas;
-                console.log(this.newCanvas);
-            });
+        // Echo.channel('canvas')
+        //     .listen('CanvasUpdate', (e) => {
+        //         this.newCanvas = e.canvas;
+        //         console.log(this.newCanvas);
+        //     });
 
     },
     methods: {
-        sendCanvas(canvas) {
-            axios.post('/canvas', canvas).then(response => {
-                console.log(response.data);
-            });
-        }
+        // sendCanvas(canvas) {
+        //     axios.post('/canvas', canvas).then(response => {
+        //         console.log(response.data);
+        //     });
+        // }
     }
 });
 

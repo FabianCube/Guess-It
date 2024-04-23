@@ -74,3 +74,4 @@ Route::post('start-game/{code}', [GameController::class, 'startGame']);
 
 // Chat controller
 Route::post('messages', [ChatsController::class, 'sendMessage']);
+Route::post('canvas', [ChatsController::class, 'sendCanvas']);

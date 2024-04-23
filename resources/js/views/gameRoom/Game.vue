@@ -58,6 +58,7 @@ import useAuth from '@/composables/auth';
 const { isLoggedIn } = useAuth();
 const user = ref();
 const messages = ref([]);
+const newCanvas = ref();
 
 const addMessage = (newMessage) => {
     messages.value.push(newMessage);
@@ -81,9 +82,25 @@ const addMessage = (newMessage) => {
     console.log("[Game.vue]:addMessage:messages{} -> " + messages.value);
 }
 
+const sendCanvas = (canvas) => {
+
+    console.log("[Game.vue]:sendCanvas:user.nickname -> " + canvas.user.nickname)
+    console.log("[Game.vue]:sendCanvas:canvas -> " + canvas.canvas)
+
+    axios.post('/api/canvas', {
+        user: canvas.user,
+        canvas: canvas.canvas
+    }).then(response => {
+        console.log(response.data);
+    }).catch(error => {
+        console.error("Error sdanslndajndkjans", error);
+    });
+}
+
 onMounted(() => {
     getUserData();
     listenEventMessageSent();
+    listenEventCanvasUpdate();
 
     const bg = document.getElementById('background-game');
 
@@ -122,6 +139,17 @@ const listenEventMessageSent = () => {
                 message: e.message,
                 user: e.user
             });
+        });
+}
+
+const listenEventCanvasUpdate = () => {
+    console.log("[Game.vue]:listenEventCanvasUpdate: Entrado!");
+
+    window.Echo.channel('canvas')
+        .listen('.CanvasUpdate', (e) =>{
+            console.log("[Game.vue]:listenEventCanvasUpdate:.CanvasUpdate -> " + e.canvas);
+
+            newCanvas.value = e.canvas;
         });
 }
 
