@@ -52,13 +52,16 @@
 
 <script setup>
 import axios from 'axios';
-import { onMounted, ref } from 'vue';
+import { onBeforeMount, onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
 import useAuth from '@/composables/auth';
 
+const route = useRoute();
 const { isLoggedIn } = useAuth();
 const user = ref();
 const messages = ref([]);
 const newCanvas = ref();
+const roomCode = ref();
 
 const addMessage = (newMessage) => {
     messages.value.push(newMessage);
@@ -72,7 +75,8 @@ const addMessage = (newMessage) => {
 
     axios.post('/api/messages', {
         user: newMessage.user,
-        message: newMessage.message
+        message: newMessage.message,
+        code: roomCode.value
     }).then(response => {
         console.log(response.data.status);
     }).catch(error => {
@@ -89,13 +93,19 @@ const sendCanvas = (canvas) => {
 
     axios.post('/api/canvas', {
         user: canvas.user,
-        canvas: canvas.canvas
+        canvas: canvas.canvas,
+        code: roomCode.value
     }).then(response => {
         console.log(response.data);
     }).catch(error => {
         console.error("Error sdanslndajndkjans", error);
     });
 }
+
+onBeforeMount(async () => {
+    roomCode.value = route.params.code;
+    console.log('Playing in channel ==== room-' + roomCode.value);
+})
 
 onMounted(() => {
     getUserData();
@@ -130,7 +140,7 @@ onMounted(() => {
 const listenEventMessageSent = () => {
     console.log("[Game.vue]:listenEventMessageSent: Entrado!");
 
-    window.Echo.channel('chat')
+    window.Echo.channel('room-' + roomCode.value)
         .listen('.MessageSent', (e) => {
             console.log("[Game.vue]:listenEventMessageSent:.MessageSent -> " + e.message);
 
@@ -145,7 +155,7 @@ const listenEventMessageSent = () => {
 const listenEventCanvasUpdate = () => {
     console.log("[Game.vue]:listenEventCanvasUpdate: Entrado!");
 
-    window.Echo.channel('canvas')
+    window.Echo.channel('room-' + roomCode)
         .listen('.CanvasUpdate', (e) =>{
             console.log("[Game.vue]:listenEventCanvasUpdate:.CanvasUpdate -> " + e.canvas);
 

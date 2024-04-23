@@ -29,7 +29,7 @@ class ChatsController extends Controller
 
         // return ['status' => 'Message Sent!'];
 
-
+        $code = $request->input('code');
         $userData = $request->input('user');
         $messageText = $request->input('message');
 
@@ -43,7 +43,7 @@ class ChatsController extends Controller
         ]);
 
         // Broadcast del evento
-        broadcast(new MessageSent($message))->toOthers();
+        broadcast(new MessageSent($message, $code))->toOthers();
 
         Log::info("ChatsController ===== ", ['message' => $message->message, 'user' => $message->user]);
         return ['status' => '[ChatsController.php]:sendMessage:Message Sent!'];
@@ -56,10 +56,11 @@ class ChatsController extends Controller
 
     public function sendCanvas(Request $request)
     {
+        $code = $request->input('code');
         $user = $request->input('user');
         $canvas = $request->input('canvas');
 
-        broadcast(new CanvasUpdate($user, $canvas))->toOthers();
+        broadcast(new CanvasUpdate($user, $canvas, $code))->toOthers();
         // broadcast(new CanvasUpdate($canvas))->toOthers();
 
         Log::info("ChatsController ===== canvas ===== ", ['canvas' => $canvas, 'user' => $user]);

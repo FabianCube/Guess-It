@@ -11,6 +11,7 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class CanvasUpdate implements ShouldBroadcast
 {
@@ -18,14 +19,17 @@ class CanvasUpdate implements ShouldBroadcast
 
     public $user;
     public $canvas;
+    public $code;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($user, $canvas)
+    public function __construct($user, $canvas, $code)
     {
+        $this->code = $code;
         $this->user = $user;
         $this->canvas = $canvas;
+        Log::info("Evento canvasUpdate disparado", ['message' => $user, 'user' => $canvas, 'code' => $code]);
     }
 
     /**
@@ -35,7 +39,7 @@ class CanvasUpdate implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('canvas');
+        return new Channel('room-' . $this->code);
     }
 
     public function broadcastAs()
