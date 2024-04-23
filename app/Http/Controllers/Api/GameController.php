@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\Avatar;
+use App\Models\Game;
 use App\Events\GameStart;
 
 use Illuminate\Http\Request;
@@ -33,14 +34,20 @@ class GameController extends Controller
 
     public function startGame(Request $request)
     {
-        $roomCode = $request->roomCode;
+        $code = $request->roomCode;
+        // Asumiendo que los ajustes vienen directamente en el cuerpo de la petición y no bajo una clave 'settings'
         $settings = $request->settings;
 
-        // Lógica para guardar la configuración de la partida
+        // Crear un nuevo registro en la tabla 'game'
+        $game = new Game();
+        $game->rounds = $settings['numberRounds'];
+        $game->time_per_round = $settings['roundTime'];
+        $game->difficulty = $settings['difficulty'];
+        $game->save();
 
         // Notificar a todos los jugadores en la sala
-        broadcast(new GameStart($roomCode));
+        broadcast(new GameStart($code));
 
-        return response()->json(['mensaje' => 'Partida iniciada']);
+        return response()->json(['mensaje' => 'Partida iniciada', 'game_id' => $game->id]);
     }
 }

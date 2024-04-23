@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('rounds');
             $table->integer('time_per_round');
-            $table->string('dificulty');
+            $table->string('difficulty');
             $table->timestamps();
         });
     }

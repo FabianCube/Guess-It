@@ -40,8 +40,8 @@ import { defineEmits } from 'vue';
 // Función para enviar eventos al componente padre
 const emits = defineEmits(['updateSettings']);
 
-const numberRounds = ref('2');
-const roundTime = ref('30');
+const numberRounds = ref(2);
+const roundTime = ref(30);
 const difficulty = ref('Fácil');
 
 
