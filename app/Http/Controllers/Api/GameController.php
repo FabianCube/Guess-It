@@ -29,4 +29,8 @@ class GameController extends Controller
 
         return $userData;
     }
+
+    public function createGame($config){
+        
+    }
 }
