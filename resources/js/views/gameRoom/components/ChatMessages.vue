@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { onUpdated, nextTick, watch, ref, onMounted } from 'vue';
+import { watch, ref, onMounted } from 'vue';
 
 const props = defineProps(['messages'])
 const chatContainer = ref(null);

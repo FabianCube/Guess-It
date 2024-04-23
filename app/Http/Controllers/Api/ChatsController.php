@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Message;
 use Illuminate\Support\Facades\Auth;
 use App\Events\MessageSent;
+use Illuminate\Support\Facades\Log;
 
 class ChatsController extends Controller
 {
@@ -29,7 +30,7 @@ class ChatsController extends Controller
         // return ['status' => 'Message Sent!'];
 
 
-        $userData = $request->input('user');
+        $userData = $request->user;
         $messageText = $request->input('message');
 
         if (!$userData) {
@@ -37,13 +38,14 @@ class ChatsController extends Controller
         }
 
         $message = new Message([
-            'nickname' => $userData['nickname'],
+            'user' => $userData,
             'message' => $messageText
         ]);
 
         // Broadcast del evento
         broadcast(new MessageSent($message))->toOthers();
 
+        Log::info("ChatsController ===== ", ['message' => $message->message, 'user' => $message->user]);
         return ['status' => '[ChatsController.php]:sendMessage:Message Sent!'];
     }
 
