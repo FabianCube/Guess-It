@@ -19,7 +19,7 @@ class GameController extends Controller
     {
         $user = Auth::user();
 
-        $nickname = $user->name;
+        $nickname = $user->nickname;
         $avatar = "/storage/avatars/" . Avatar::findOrFail($user->avatar_id)->image;
         $uuid = $user->id;
 
