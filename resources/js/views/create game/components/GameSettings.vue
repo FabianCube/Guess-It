@@ -23,7 +23,7 @@
             </div>
             <div class="d-flex justify-content-between align-items-center w-50 mt-4">
                 <h3 class="mb-0">DIFICULTAD</h3>
-                <select class="select-font select-settings-dificulty" v-model="dificulty">
+                <select class="select-font select-settings-dificulty" v-model="difficulty">
                     <option>Fácil</option>
                     <option>Medio</option>
                     <option>Difícil</option>
@@ -34,11 +34,25 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+import { defineEmits } from 'vue';
+
+// Función para enviar eventos al componente padre
+const emits = defineEmits(['updateSettings']);
 
 const numberRounds = ref('2');
 const roundTime = ref('30');
-const dificulty = ref('Fácil');
+const difficulty = ref('Fácil');
+
+
+// Cada vez que cambia una de las configuraciones se emite al componente padre
+watch([numberRounds, roundTime, difficulty], () => {
+    emits('updateSettings', {
+        numberRounds: numberRounds.value,
+        roundTime: roundTime.value,
+        difficulty: difficulty.value
+    });
+});
 
 </script>
 
@@ -76,6 +90,4 @@ const dificulty = ref('Fácil');
     border: 3px solid #000000;
     border-radius: 10px;
 }
-
-
 </style>

@@ -31,7 +31,7 @@
                 <div class="col-8 d-flex flex-column justify-content-between ps-5">
                     <div class="background-instructions">
                         <div class="p-3 h-100">
-                            <GameSettings v-if="options" />
+                            <GameSettings v-if="options" @update-settings="handleSettingsUpdate" />
                             <Carousel v-else />
                         </div>
                     </div>
@@ -62,11 +62,9 @@
 import { ref, onMounted, onBeforeMount, onBeforeUnmount, inject } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import sweetAlertNotifications from '@/utils/swal_notifications';
-import Pusher from 'pusher-js';
 import useAuth from '@/composables/auth';
-import EnterGame from '../home/components/EnterGame.vue';
 
-const { throwSuccessMessage , throwRedirectMessage } = sweetAlertNotifications();
+const { throwSuccessMessage, throwRedirectMessage } = sweetAlertNotifications();
 
 const { isLoggedIn } = useAuth();
 
@@ -92,6 +90,18 @@ const storedUserData = JSON.parse(storedUserDataString || '{}');
 // Id de usuario registrado
 const userRegistered = ref();
 
+// Parámetros de la partida
+const gameSettings = ref({
+    numberRounds: '2',
+    roundTime: '30',
+    difficulty: 'Fácil'
+});
+
+// Función para manejar la actualización de la configuración
+const handleSettingsUpdate = (newSettings) => {
+    gameSettings.value = newSettings;
+};
+
 onBeforeMount(async () => {
     codigoSala.value = route.params.code;
 
@@ -102,7 +112,7 @@ onBeforeMount(async () => {
     const ownerPromise = getOwner();
 
     // Obtenemos el id del usuario si está autenticado
-    if(isLoggedIn()){
+    if (isLoggedIn()) {
         const userId = await axios.get(`/api/get-user`);
         userRegistered.value = userId.data.uuid;
     }
@@ -149,6 +159,11 @@ onMounted(() => {
     Echo.channel('room-' + codigoSala.value)
         .listen('.room-owner-left', (e) => {
             throwRedirectMessage();
+        });
+
+    Echo.channel('room-' + codigoSala.value)
+        .listen('.GameStart', (e) => {
+            router.push({ name: 'play-game', params: { roomCode: codigoSala.value } });
         });
 });
 
@@ -200,25 +215,31 @@ window.addEventListener('beforeunload', function (event) {
 });
 
 
-// Se crea la sala, se añade al jugador anónimo y se redirige a la sala
+// Se crea la partida y se le pasa la configuración y los jugadores 
 const startGame = async () => {
-    try{
-
-        router.push({ name: 'create-game', params: { code: roomCode.value } });
-    }catch (error) {
+    try {
+        const response = await axios.post(`/api/start-game/${codigoSala.value}`, {
+            roomCode: codigoSala.value,
+            settings: gameSettings.value
+        });
+        console.log('Partida creada:', response.data);
+        
+    } catch (error) {
         console.error("Error al crear la partida:", error);
     }
 };
+
+
 </script>
 
 <style scoped>
-#carga{
+#carga {
     height: 1.6rem;
     width: auto;
     animation: rotate 2s linear infinite;
 }
 
-.white{
+.white {
     color: #e0e0e0;
     text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
 }
