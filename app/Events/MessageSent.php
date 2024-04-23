@@ -22,12 +22,14 @@ class MessageSent implements ShouldBroadcast
 
     public $user;
     public $message;
+    public $code;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(Message $message)
+    public function __construct(Message $message, $code)
     {
+        $this->code = $code;
         $this->user = $message->user;
         $this->message = $message->message;
         Log::info("Evento messagesent disparado", ['message' => $message->message, 'user' => $message->user]);
@@ -41,7 +43,7 @@ class MessageSent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('chat');
+        return new Channel('room-' . $this->code);
     }
 
     public function broadcastAs()
