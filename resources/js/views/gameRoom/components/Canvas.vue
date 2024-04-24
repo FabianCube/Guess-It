@@ -8,9 +8,10 @@ const ctx = ref(null);
 const x = ref(0);
 const y = ref(0);
 const lineWidth = ref("8");
-const lineColor = ref("blue");
+const lineColor = ref("black");
 const movements = ref([]);
 const keepLastColor = ref('');
+const currentTool = ref('draw');
 
 const props = defineProps([ 'user', 'newCanvas' ]);
 const emits = defineEmits([ 'canvasupdate' ]);
@@ -157,7 +158,10 @@ const updateSize = (element, size) =>
 
 const updateColor = (element, color) => 
 {
-    changeTool("draw");
+    if(currentTool.value === "erase")
+    {
+        changeTool("draw");
+    }
 
     lineColor.value = color;
 
@@ -184,6 +188,8 @@ const changeTool = (tool) =>
         lineColor.value = keepLastColor.value;
     }
 
+    currentTool.value = tool;
+    
     document.querySelectorAll('.tool').forEach(el => 
     {
         el.classList.contains('active-tool') ?
@@ -216,12 +222,12 @@ const changeTool = (tool) =>
         </div>
 
         <div id="select-color">
-            <div @click="updateColor($event.target, 'red')" class="color active-color"></div>
+            <div @click="updateColor($event.target, 'black')" class="color active-color"></div>
             <div @click="updateColor($event.target, 'blue')" class="color"></div>
             <div @click="updateColor($event.target, 'purple')" class="color"></div>
             <div @click="updateColor($event.target, 'green')" class="color"></div>
             <div @click="updateColor($event.target, 'brown')" class="color"></div>
-            <div @click="updateColor($event.target, 'black')" class="color"></div>
+            <div @click="updateColor($event.target, 'red')" class="color"></div>
             <div @click="updateColor($event.target, 'pink')" class="color"></div>
             <div @click="updateColor($event.target, 'orange')" class="color"></div>
         </div>
@@ -370,7 +376,7 @@ const changeTool = (tool) =>
     width: 17px;
     height: 17px;
     border-radius: 50px;
-    background-color: red;
+    background-color: black;
     opacity: 50%;
     box-shadow: 0 4px 4px rgba(0,0,0,.25);
     cursor: pointer;
@@ -406,7 +412,7 @@ const changeTool = (tool) =>
 }
 .color:nth-child(6)
 {
-    background-color: black;
+    background-color: red;
 }
 .color:nth-child(7)
 {
