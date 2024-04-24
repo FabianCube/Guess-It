@@ -38,7 +38,7 @@ class RoomController extends Controller
 
         if (Auth::check()) {
             $user = Auth::user();
-            $nickname = $user->name;
+            $nickname = $user->nickname;
 
             // Obtenemos el nombre del archivo del avatar a través de su id
             $avatar = "/storage/avatars/" . Avatar::findOrFail($user->avatar_id)->image;
