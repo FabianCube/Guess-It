@@ -91,7 +91,7 @@ export default [
             {
                 path: 'play-game/:code',
                 name: 'play-game',
-                component: () => import('../views/gameRoom/Game.vue'),
+                component: () => import('../views/gameRoom/Game.vue')
             }
         ]
     },

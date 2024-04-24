@@ -71,6 +71,8 @@ const roomCode = ref();
 const route = useRoute();
 const router = useRouter();
 
+const gameData = ref();
+
 // Variable con el id del creador de partida
 const owner = ref();
 
@@ -159,7 +161,8 @@ onMounted(() => {
 
     Echo.channel('room-' + roomCode.value)
         .listen('.GameStart', (e) => {
-            router.push({ name: 'play-game', params: { code: roomCode.value } });
+            const encodedGameData = encodeURIComponent(JSON.stringify(gameData.value));
+            router.push({ name: 'play-game', params: { code: roomCode.value }, query: { gameData: encodedGameData }});
         });
 });
 
@@ -214,12 +217,21 @@ window.addEventListener('beforeunload', function (event) {
 // Se crea la partida y se le pasa la configuración y los jugadores 
 const startGame = async () => {
     try {
-        console.log(gameSettings.value);
         const response = await axios.post(`/api/start-game/${roomCode.value}`, {
             roomCode: roomCode.value,
             settings: gameSettings.value
         });
+        // Datos de la partida
+        gameData.value = response.data;
+
         console.log('Partida creada:', response.data);
+
+        // Emitimos un evento para redirigir a los jugadores al juego después de haber definido gameData
+        const response2 = await axios.post(`/api/redirect-game`, {
+            roomCode: roomCode.value
+        });
+
+        console.log('Evento emitido:', response2.data);
 
     } catch (error) {
         console.error("Error al crear la partida:", error);
