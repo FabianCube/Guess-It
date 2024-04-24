@@ -7,21 +7,25 @@ const ctx = ref(null);
 // const flag = ref(false); 
 const x = ref(0);
 const y = ref(0);
-const lineWidth = ref("13");
+const lineWidth = ref("8");
 const lineColor = ref("blue");
 const movements = ref([]);
+const keepLastColor = ref('');
 
 const props = defineProps([ 'user', 'newCanvas' ]);
 const emits = defineEmits([ 'canvasupdate' ]);
 
-onMounted(() => {
+onMounted(() => 
+{
     init();
     window.addEventListener('resize', adjustCanvas);
     adjustCanvas();
 });
 
-onUpdated(() => {
-    nextTick(() => {
+onUpdated(() => 
+{
+    nextTick(() => 
+    {
         if (props.newCanvas)
         {
             if (props.newCanvas == "clear")
@@ -32,7 +36,8 @@ onUpdated(() => {
             {
                 let positions = JSON.parse(props.newCanvas);
 
-                positions.forEach((movement, index) => {
+                positions.forEach((movement, index) => 
+                {
                     setTimeout(() => {
                         drawLine(ctx.value, movement.x, movement.y, movement.offsetX, movement.offsetY);
                     }, index * 5);
@@ -42,17 +47,20 @@ onUpdated(() => {
     });
 });
 
-const init = () => {
+const init = () => 
+{
     canvas.value = document.getElementById('can');
     ctx.value = canvas.value.getContext("2d");
 
-    canvas.value.addEventListener('mousedown', (e) => {
+    canvas.value.addEventListener('mousedown', (e) => 
+    {
         x.value = e.offsetX;
         y.value = e.offsetY;
         isDrawing.value = true;
     });
 
-    canvas.value.addEventListener('mousemove', (e) => {
+    canvas.value.addEventListener('mousemove', (e) => 
+    {
         if (isDrawing.value) 
         {
             movements.value.push({ x: x.value, y: y.value, offsetX: e.offsetX, offsetY: e.offsetY });
@@ -68,7 +76,8 @@ const init = () => {
         }
     });
 
-    canvas.value.addEventListener('mouseup', (e) => {
+    canvas.value.addEventListener('mouseup', (e) => 
+    {
         if (isDrawing.value) 
         {
             movements.value.push({ x: x.value, y: y.value, offsetX: e.offsetX, offsetY: e.offsetY });
@@ -90,7 +99,8 @@ const init = () => {
 };
 
 
-const sendCanvas = (params) => {
+const sendCanvas = (params) => 
+{
     emits("canvasupdate", {
         user: props.user,
         canvas: params,
@@ -98,7 +108,8 @@ const sendCanvas = (params) => {
     console.log("[Canvas.vue]:sendCanvas: Canvas sent!");
 }
 
-const getParams = () => {
+const getParams = () => 
+{
     console.log("[Canvas.vue]:getParams: Entrado en getParams!");
 
     const params = JSON.stringify(movements.value);
@@ -107,10 +118,13 @@ const getParams = () => {
     sendCanvas(params);
 };
 
-const drawLine = (ctx, x1, y1, x2, y2) => {
+const drawLine = (ctx, x1, y1, x2, y2) => 
+{
     ctx.beginPath();
-    ctx.strokeStyle = document.getElementById('selColor').value;;
-    ctx.lineWidth = document.getElementById('selWidth').value;
+    // ctx.strokeStyle = document.getElementById('selColor').value;
+    ctx.strokeStyle = lineColor.value;
+    // ctx.lineWidth = document.getElementById('selWidth').value;
+    ctx.lineWidth = lineWidth.value;
     ctx.lineJoin = "round";
     ctx.moveTo(x1, y1);
     ctx.lineTo(x2, y2);
@@ -118,18 +132,64 @@ const drawLine = (ctx, x1, y1, x2, y2) => {
     ctx.stroke();
 };
 
-const clearArea = () => {
+const clearArea = () => 
+{
     ctx.value.setTransform(1, 0, 0, 1, 0, 0);
     ctx.value.clearRect(0, 0, ctx.value.canvas.width, ctx.value.canvas.height);
 };
 
-const adjustCanvas = () => {
+const adjustCanvas = () => 
+{
     let style = getComputedStyle(canvas.value);
     canvas.value.width = parseInt(style.width);
     canvas.value.height = parseInt(style.height);
 };
 
+const updateSize = (element, size) => 
+{
+    lineWidth.value = size;
 
+    document.querySelectorAll('.size').forEach(el => {
+        el.classList.remove('active-size');
+    });
+    element.classList.add('active-size');
+}
+
+const updateColor = (element, color) => 
+{
+    changeTool("draw");
+
+    lineColor.value = color;
+
+    document.querySelectorAll('.color').forEach(el => {
+        el.classList.remove('active-color');
+    });
+
+    element.classList.add('active-color');
+}
+
+const changeTool = (tool) => 
+{
+    if(tool == "erase")
+    {
+        if(lineColor !== 'white')
+        {
+            keepLastColor.value = lineColor.value;
+        }
+
+        lineColor.value = "white";
+    }
+    else if(tool == "draw")
+    {
+        lineColor.value = keepLastColor.value;
+    }
+
+    document.querySelectorAll('.tool').forEach(el => 
+    {
+        el.classList.contains('active-tool') ?
+            el.classList.remove('active-tool') : el.classList.add('active-tool');
+    });
+}
 
 </script>
 
@@ -138,41 +198,37 @@ const adjustCanvas = () => {
     <canvas ref="canvas" id="can"></canvas>
 
     <div class="controls">
-        <!-- Line width : <select v-model="lineWidth" id="selWidth">
-            <option value="6">6</option>
-            <option value="11" selected="selected">11</option>
-            <option value="13">13</option>
-        </select> -->
+
         <div id="select-size">
-            <div class="size size-small"></div>
-            <div class="size size-medium"></div>
-            <div class="size size-large"></div>
-            <div class="size size-large-plus"></div>
+            <div @click="updateSize($event.target, '8')" class="size size-small active-size"></div>
+            <div @click="updateSize($event.target, '14')" class="size size-medium"></div>
+            <div @click="updateSize($event.target, '20')" class="size size-large"></div>
+            <div @click="updateSize($event.target, '30')" class="size size-large-plus"></div>
         </div>
+
         <div id="select-tool">
-            <button class="tool tool-paint active-tool">x</button>
-            <button class="tool tool-erase">x</button>
+            <button @click="changeTool('draw')" class="tool tool-paint active-tool">
+                <img src="/storage/icons/draw-tool.svg" alt="">
+            </button>
+            <button @click="changeTool('erase')" class="tool tool-erase">
+                <img src="/storage/icons/erase-tool.svg" alt="">
+            </button>
         </div>
-        <!-- <select v-model="lineColor" id="selColor">
-            <option value="black">black</option>
-            <option value="blue" selected="selected">blue</option>
-            <option value="red">red</option>
-            <option value="green">green</option>
-            <option value="yellow">yellow</option>
-            <option value="gray">gray</option>
-        </select> -->
+
         <div id="select-color">
-            <div class="color active-color"></div>
-            <div class="color"></div>
-            <div class="color"></div>
-            <div class="color"></div>
-            <div class="color"></div>
-            <div class="color"></div>
-            <div class="color"></div>
-            <div class="color"></div>
+            <div @click="updateColor($event.target, 'red')" class="color active-color"></div>
+            <div @click="updateColor($event.target, 'blue')" class="color"></div>
+            <div @click="updateColor($event.target, 'purple')" class="color"></div>
+            <div @click="updateColor($event.target, 'green')" class="color"></div>
+            <div @click="updateColor($event.target, 'brown')" class="color"></div>
+            <div @click="updateColor($event.target, 'black')" class="color"></div>
+            <div @click="updateColor($event.target, 'pink')" class="color"></div>
+            <div @click="updateColor($event.target, 'orange')" class="color"></div>
         </div>
-        <!-- <button @click="clearArea" id="clearArea">Clear Area</button> -->
+
     </div>
+
+    <button @click="clearArea" id="clearArea">Clear Area</button>
 
     <!-- END CANVAS COMPONENT -->
 </template>
@@ -191,9 +247,16 @@ const adjustCanvas = () => {
 
 .size
 {
-    background-color: #5F5F5F;
+    background-color: #717171;
     border-radius: 50px;
     margin-right: 5px;
+    cursor: pointer;
+    transition: all .1s ease-in-out;
+}
+
+.size:hover
+{
+    background-color: black;
 }
 
 .size-small
@@ -218,6 +281,11 @@ const adjustCanvas = () => {
     height: 30px;
 }
 
+.active-size
+{
+    background-color: black;
+}
+
 /*  END SELECT SIZE   */
 
 #select-tool
@@ -235,13 +303,24 @@ const adjustCanvas = () => {
     border-radius: 6px;
     margin: 3px;
     transition: all .3s ease-in-out;
+    opacity: .5;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tool>img
+{
+    width: 100%;
+    height: auto;
 }
 
 .active-tool
 {
     width: 45px!important;
     height: 45px!important;
-    border: #950298 solid 2px;
+    opacity: 1;
 }
 
 /*   CANVAS   */
@@ -293,6 +372,14 @@ const adjustCanvas = () => {
     border-radius: 50px;
     background-color: red;
     opacity: 50%;
+    box-shadow: 0 4px 4px rgba(0,0,0,.25);
+    cursor: pointer;
+    transition: all .1s ease-in-out;
+}
+
+.color:hover
+{
+    opacity: 1;
 }
 
 .active-color
