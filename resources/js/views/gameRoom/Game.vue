@@ -20,7 +20,7 @@
                 <!-- PLAYER INFO -->
                 <div class="col-1 p-0 info-jugador">
                     <!-- COMPONENTE INFO JUGADOR -->
-                    <info-players />
+                    <info-players :players="players" />
                 </div>
 
                 <div class="col-8 p-0" style="height: 622.5px; width: 830px;">
@@ -64,6 +64,7 @@ const messages = ref([]);
 const newCanvas = ref();
 const roomCode = ref();
 const gameData = ref(null);
+const players = ref([]);
 
 const addMessage = (newMessage) => {
     messages.value.push(newMessage);
@@ -106,11 +107,14 @@ const sendCanvas = (canvas) => {
 
 onBeforeMount(async () => {
 
-    if (route.query.gameData) {
-        const decodedData = decodeURIComponent(route.query.gameData);
-        gameData.value = JSON.parse(decodedData);
-        console.log(gameData.value); 
-    }
+    const decodedData = decodeURIComponent(route.query.gameData);
+    gameData.value = JSON.parse(decodedData);
+
+    players.value = gameData.value.players;
+
+    console.log(gameData.value);
+    console.log(players.value);
+
     roomCode.value = route.params.code;
 
     console.log('Playing in channel ==== room-' + roomCode.value);
