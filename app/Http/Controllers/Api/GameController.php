@@ -69,12 +69,14 @@ class GameController extends Controller
             $history->user_position = $index; 
             $history->save();
 
-            // A cada jugador le asignamos el mimso color que tenía en create-room
+            // A cada jugador le asignamos el mismo color que tenía en create-room
             $playerDetails[] = [
                 'uuid' => $player['uuid'],
                 'nickname' => $player['nickname'],
                 'avatar' => $player['avatar'],
                 'color' => $colors[$index % count($colors)],
+                'position' => $index+1,
+                'points' => 0
             ];
         }
 
