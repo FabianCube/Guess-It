@@ -34,6 +34,7 @@ class GameController extends Controller
         return $userData;
     }
 
+    // Método para crear las tablas para la partida con la configuración y jugadores
     public function startGame(Request $request)
     {
         $code = $request->roomCode;
@@ -51,24 +52,51 @@ class GameController extends Controller
         $players = Cache::get('room_' . $code)['players'];
 
         // Crear registros en la tabla 'history' para cada jugador
-        foreach ($players as $player) {
+        foreach ($players as  $index => $player) {
             $registeredUser = User::getUserById($player['uuid']);
+
+            // Los colores a asignar a cada jugador
+            $colors = ['#950398', '#d42424', '#1ed621', '#1f39df', '#fb930c', '#fcf010'];
 
             $history = new History();
             $history->game_id = $game->id;
-            if($registeredUser){
+            if ($registeredUser) {
                 $history->user_id = $player['uuid'];
-            }else{
+            } else {
                 $history->anonymous_user_id = $player['uuid'];
             }
-            $history->user_points = 0; // Iniciar puntos a 0
-            $history->user_position = 0; // Iniciar posición a 0
+            $history->user_points = 0; 
+            $history->user_position = $index; 
             $history->save();
+
+            // A cada jugador le asignamos el mimso color que tenía en create-room
+            $playerDetails[] = [
+                'uuid' => $player['uuid'],
+                'nickname' => $player['nickname'],
+                'avatar' => $player['avatar'],
+                'color' => $colors[$index % count($colors)],
+            ];
         }
+
+        // Devolvemos todos los datos de la partida y sus jugadores
+        return response()->json([
+            'mensaje' => 'Partida iniciada',
+            'game_id' => $game->id,
+            'rounds' => $game->rounds,
+            'time_per_round' => $game->time_per_round,
+            'difficulty' => $game->difficulty,
+            'players' => $playerDetails
+        ]);
+    }
+
+    // Método para emitir un evento y redirigir a los jugadores a la partida
+    public function redirectGame(Request $request)
+    {
+        $code = $request->roomCode;
 
         // Notificar a todos los jugadores en la sala
         broadcast(new GameStart($code));
 
-        return response()->json(['mensaje' => 'Partida iniciada', 'game_id' => $game->id]);
+        return response()->json(['mensaje' => 'Redirigiendo jugadores']);
     }
 }

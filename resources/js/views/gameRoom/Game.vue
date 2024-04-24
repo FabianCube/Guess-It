@@ -29,7 +29,8 @@
                         <!-- COMPONENTE STATUS BAR -->
                         <status-bar />
                         <!-- COMPONENTE CANVAS -->
-                        <canvas-component :user="user" :new-canvas="newCanvas" @canvasupdate="sendCanvas"></canvas-component>
+                        <canvas-component :user="user" :new-canvas="newCanvas"
+                            @canvasupdate="sendCanvas"></canvas-component>
                     </div>
                 </div>
 
@@ -62,6 +63,7 @@ const user = ref();
 const messages = ref([]);
 const newCanvas = ref();
 const roomCode = ref();
+const gameData = ref(null);
 
 const addMessage = (newMessage) => {
     messages.value.push(newMessage);
@@ -103,8 +105,16 @@ const sendCanvas = (canvas) => {
 }
 
 onBeforeMount(async () => {
+
+    if (route.query.gameData) {
+        const decodedData = decodeURIComponent(route.query.gameData);
+        gameData.value = JSON.parse(decodedData);
+        console.log(gameData.value); 
+    }
     roomCode.value = route.params.code;
+
     console.log('Playing in channel ==== room-' + roomCode.value);
+    console.log('Injected game data:', gameData.value);
 })
 
 onMounted(() => {
@@ -156,7 +166,7 @@ const listenEventCanvasUpdate = () => {
     console.log("[Game.vue]:listenEventCanvasUpdate: Entrado!");
 
     window.Echo.channel('room-' + roomCode.value)
-        .listen('.CanvasUpdate', (e) =>{
+        .listen('.CanvasUpdate', (e) => {
             console.log("[Game.vue]:listenEventCanvasUpdate:.CanvasUpdate -> " + e.canvas);
 
             newCanvas.value = e.canvas;
