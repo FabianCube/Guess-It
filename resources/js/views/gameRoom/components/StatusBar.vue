@@ -4,7 +4,7 @@
     <div class="container flex flex-row justify-content-between align-items-center px-5 bar-container">
         <div style="font-size:2rem">JUGADOR</div>
         <div style="font-size:2rem">_ _ _ _ A _</div>
-        <div id="clock-container" style="font-size:2rem">
+        <div id="clock-container">
 
             <div class="clock-icon">
                 <div class="clock-time">

@@ -39,7 +39,7 @@
                     <div class="p-3 chat flex flex-column justify-content-between">
                         <!-- COMPONENTE CHAT  -->
                         <div class="col-8 p-0" style="height: 95%; width:100%;">
-                            <chat-messages :messages="messages"></chat-messages>
+                            <chat-messages :messages="messages" :rounds="rounds"></chat-messages>
                         </div>
                         <div class="col-4 p-0" style="width:100%">
                             <chat-form @messagesent="addMessage" :user="user"></chat-form>
@@ -66,6 +66,7 @@ const roomCode = ref();
 const gameData = ref(null);
 const players = ref([]);
 const timeRound = ref();
+const rounds = ref();
 
 const addMessage = (newMessage) => {
     messages.value.push(newMessage);
@@ -109,6 +110,7 @@ onBeforeMount(async () => {
 
     players.value = gameData.value.players;
     timeRound.value = gameData.value.time_per_round;
+    rounds.value = gameData.value.rounds;
 
     console.log(gameData.value);
     console.log(players.value);
