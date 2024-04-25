@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\Game;
 use App\Models\History;
 use App\Events\GameStart;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
 
@@ -101,6 +102,18 @@ class GameController extends Controller
             'difficulty' => $game->difficulty,
             'players' => $playerDetails
         ]);
+    }
+
+    public function getWord(Request $request)
+    {
+        $difficulty = $request->difficulty;
+
+        $words = DB::table('words')->where('difficulty', $difficulty)->pluck('word')->toArray();
+        // $words = DB::table('words')->select('word')->where('difficulty', $difficulty)->get();
+        // $words = Word::where('category', $category)->pluck('word')->toArray();
+
+        Log::info("GameController ===== getWord ===== ", ['words' => $words, 'difficulty' => $difficulty]);
+        return response()->json($words);
     }
 
     // // Método para emitir un evento y redirigir a los jugadores a la partida

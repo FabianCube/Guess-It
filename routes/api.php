@@ -72,6 +72,7 @@ Route::post('leave-room/{code}', [RoomController::class, 'leaveRoom']);
 Route::get('get-user', [GameController::class, 'getUserData']);
 Route::post('start-game/{code}', [GameController::class, 'startGame']);
 Route::post('redirect-game', [GameController::class, 'redirectGame']);
+Route::get('get-word/{difficulty}', [GameController::class, 'getWord']);
 
 // Chat controller
 Route::post('messages', [ChatsController::class, 'sendMessage']);
