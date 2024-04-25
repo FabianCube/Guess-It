@@ -80,6 +80,18 @@ class GameController extends Controller
             ];
         }
 
+        $gameData = [
+            'mensaje' => 'Partida iniciada',
+            'game_id' => $game->id,
+            'rounds' => $game->rounds,
+            'time_per_round' => $game->time_per_round,
+            'difficulty' => $game->difficulty,
+            'players' => $playerDetails
+        ];
+
+        // Notificar a todos los jugadores en la sala
+        broadcast(new GameStart($code,$gameData));
+
         // Devolvemos todos los datos de la partida y sus jugadores
         return response()->json([
             'mensaje' => 'Partida iniciada',
@@ -91,14 +103,13 @@ class GameController extends Controller
         ]);
     }
 
-    // Método para emitir un evento y redirigir a los jugadores a la partida
-    public function redirectGame(Request $request)
-    {
-        $code = $request->roomCode;
+    // // Método para emitir un evento y redirigir a los jugadores a la partida
+    // public function redirectGame(Request $request)
+    // {
+    //     $code = $request->roomCode;
 
-        // Notificar a todos los jugadores en la sala
-        broadcast(new GameStart($code));
+        
 
-        return response()->json(['mensaje' => 'Redirigiendo jugadores']);
-    }
+    //     return response()->json(['mensaje' => 'Redirigiendo jugadores']);
+    // }
 }
