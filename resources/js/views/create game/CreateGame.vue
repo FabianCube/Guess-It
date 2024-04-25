@@ -171,7 +171,9 @@ onMounted(() => {
 
     Echo.channel('room-' + roomCode.value)
         .listen('.GameStart', (e) => {
-            const encodedGameData = encodeURIComponent(e.gameData);
+            console.log(e.gameData);
+            const encodedGameData = encodeURIComponent(JSON.stringify(e.gameData));
+            console.log(encodedGameData);
             router.push({ name: 'play-game', params: { code: roomCode.value }, query: { gameData: encodedGameData } });
         });
 });
