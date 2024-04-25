@@ -95,6 +95,8 @@ const gameSettings = ref({
     difficulty: 'Fácil'
 });
 
+const players = ref();
+
 // Función para manejar la actualización de la configuración
 const handleSettingsUpdate = (newSettings) => {
     gameSettings.value = newSettings;
@@ -109,6 +111,8 @@ onBeforeMount(async () => {
     // Guardamos en una variable el método getOwner
     const ownerPromise = getOwner();
 
+    const jugadoresPromise = cargarJugadores();
+
     // Obtenemos el id del usuario si está autenticado
     if (isLoggedIn()) {
         const userId = await axios.get(`/api/get-user`);
@@ -116,7 +120,7 @@ onBeforeMount(async () => {
     }
 
     // Esperamos 3 segundos después de ejecutar getOwner para que se muestre la animación de carga
-    await Promise.all([loadingPromise, ownerPromise]);
+    await Promise.all([loadingPromise, ownerPromise, jugadoresPromise]);
 
     console.log(userRegistered.value);
     console.log(owner.value);
@@ -154,6 +158,12 @@ onMounted(() => {
         bg.style.transform = `translate(${bgX}px, ${bgY}px) translateZ(0)`;
     });
 
+    window.Echo.channel(`room-${roomCode.value}`)
+        .listen('.RoomUpdate', (e) => {
+            console.log("Actualización de sala recibida:", e);
+            cargarJugadores();
+        });
+
     Echo.channel('room-' + roomCode.value)
         .listen('.room-owner-left', (e) => {
             throwRedirectMessage();
@@ -161,8 +171,8 @@ onMounted(() => {
 
     Echo.channel('room-' + roomCode.value)
         .listen('.GameStart', (e) => {
-            const encodedGameData = encodeURIComponent(JSON.stringify(gameData.value));
-            router.push({ name: 'play-game', params: { code: roomCode.value }, query: { gameData: encodedGameData }});
+            const encodedGameData = encodeURIComponent(e.gameData);
+            router.push({ name: 'play-game', params: { code: roomCode.value }, query: { gameData: encodedGameData } });
         });
 });
 
@@ -226,19 +236,28 @@ const startGame = async () => {
 
         console.log('Partida creada:', response.data);
 
-        // Emitimos un evento para redirigir a los jugadores al juego después de haber definido gameData
-        const response2 = await axios.post(`/api/redirect-game`, {
-            roomCode: roomCode.value
-        });
+        // // Emitimos un evento para redirigir a los jugadores al juego después de haber definido gameData
+        // const response2 = await axios.post(`/api/redirect-game`, {
+        //     roomCode: roomCode.value
+        // });
 
-        console.log('Evento emitido:', response2.data);
+        // console.log('Evento emitido:', response2.data);
 
     } catch (error) {
         console.error("Error al crear la partida:", error);
     }
 };
 
-
+// Obtenemos de la API la lista de jugadores
+const cargarJugadores = async () => {
+    try {
+        const response = await axios.get(`/api/room/players/${roomCode.value}`);
+        players.value = response.data;
+        console.log(players.value);
+    } catch (error) {
+        console.error('Error al cargar los jugadores:', error);
+    }
+};
 </script>
 
 <style scoped>

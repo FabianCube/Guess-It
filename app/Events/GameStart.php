@@ -15,10 +15,12 @@ class GameStart implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $code;
+    public $gameData;
 
-    public function __construct($code)
+    public function __construct($code,$gameData)
     {
         $this->code = $code;
+        $this->gameData = $gameData;
     }
 
     public function broadcastOn()
