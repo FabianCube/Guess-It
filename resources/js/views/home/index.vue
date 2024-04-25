@@ -1,17 +1,22 @@
 <template>
     <div class="login">
+        <!-- COMPONENTE LOGIN DE USUARIO -->
         <login-popup @close-popup="toggleLogin" @open-register="toggleRegister" />
     </div>
     <div class="register">
+        <!-- COMPONENTE DE REGISTRO -->
         <register-popup />
     </div>
     <div class="account">
+        <!-- COMPONENTE DE PERFIL DE USUARIO -->
         <account-management @close-account="toggleAccount" />
     </div>
     <div class="anonymous">
+        <!-- COMPONENTE LOGIN DE USUARIO ANÓNIMO -->
         <anonymous-user @close-anonymous="toggleAnonymous" :roomCode="passedRoomCode" />
     </div>
     <div class="enter-game">
+        <!-- COMPONENTE PARA ENTRAR A PARTIDA CON CÓDIGO -->
         <enter-game @close-enterGame="toggleEnterGame" @open-anonymous="enterAnonymous" />
     </div>
     <div id="background"></div>

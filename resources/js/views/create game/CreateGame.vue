@@ -31,7 +31,9 @@
                 <div class="col-8 d-flex flex-column justify-content-between ps-5">
                     <div class="background-instructions">
                         <div class="p-3 h-100">
+                            <!-- COMPONENTE AJUSTES DE PARTIDA -->
                             <GameSettings v-if="options" @update-settings="handleSettingsUpdate" />
+                            <!-- COMPONENTE CAROUSEL -->
                             <Carousel v-else />
                         </div>
                     </div>
