@@ -47,7 +47,9 @@ onMounted(async () => {
     await axios.get(`/api/get-word/${difficulty.value}`)
         .then(response => {
             words.value = response.data;
+
             selectRandomWord();
+            
         });
     
 })
