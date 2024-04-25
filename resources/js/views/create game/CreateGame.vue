@@ -18,7 +18,7 @@
                     <div class="background-players">
                         <div class="h-100 d-flex flex-column justify-content-between p-5">
                             <h2 class="mb-3 players-font">JUGADORES</h2>
-                            <PlayerList class="mb-3" />
+                            <PlayerList class="mb-3" @update-players="handlePlayers"/>
                             <div class="d-flex justify-content-center btn-invite">
                                 <div class="d-flex align-items-center">
                                     <h3 id="invitar-amigos" class="mb-0 me-3 ">INVITAR AMIGOS</h3>
@@ -42,7 +42,7 @@
                                 class="copiar" @click="copiarCodigo">
                         </div>
                         <div class="d-flex justify-content-end">
-                            <button v-if="options" @click="startGame" class="d-flex align-items-center btn-play">
+                            <button v-if="options" @click="startGame" :disabled="!startButtonEnabled" :class="{ 'btn-disabled': !startButtonEnabled }"  class="d-flex align-items-center btn-play">
                                 <h1 class="mb-2 me-3 play-font">INICIAR</h1>
                                 <img src="../../../../storage/app/public/icons/play.svg" alt="">
                             </button>
@@ -59,7 +59,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeMount, onBeforeUnmount, inject } from 'vue';
+import { ref, onMounted, onBeforeMount, onBeforeUnmount } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import sweetAlertNotifications from '@/utils/swal_notifications';
 import useAuth from '@/composables/auth';
@@ -71,12 +71,11 @@ const roomCode = ref();
 const route = useRoute();
 const router = useRouter();
 
-const gameData = ref();
-
 // Variable con el id del creador de partida
 const owner = ref();
 
 const options = ref(false);
+const startButtonEnabled = ref(false);
 
 // Constante para no mostrar componentes hasta no haber cargado los datos de la sala
 const isLoading = ref(true);
@@ -100,6 +99,19 @@ const players = ref();
 // Función para manejar la actualización de la configuración
 const handleSettingsUpdate = (newSettings) => {
     gameSettings.value = newSettings;
+    console.log(gameSettings.value);
+};
+
+// Función para manejar la actualización de la configuración
+const handlePlayers = (newPlayers) => {
+    players.value = newPlayers;
+    console.log(players.value);
+    startButtonEnabled.value = newPlayers >= 2;
+    console.log(startButtonEnabled.value);
+};
+
+const canStartGame = () => {
+    return players.value >= 2;
 };
 
 onBeforeMount(async () => {
@@ -111,8 +123,6 @@ onBeforeMount(async () => {
     // Guardamos en una variable el método getOwner
     const ownerPromise = getOwner();
 
-    const jugadoresPromise = cargarJugadores();
-
     // Obtenemos el id del usuario si está autenticado
     if (isLoggedIn()) {
         const userId = await axios.get(`/api/get-user`);
@@ -120,7 +130,8 @@ onBeforeMount(async () => {
     }
 
     // Esperamos 3 segundos después de ejecutar getOwner para que se muestre la animación de carga
-    await Promise.all([loadingPromise, ownerPromise, jugadoresPromise]);
+    // await Promise.all([loadingPromise, ownerPromise, jugadoresPromise]);
+    await Promise.all([loadingPromise, ownerPromise]);
 
     console.log(userRegistered.value);
     console.log(owner.value);
@@ -158,12 +169,6 @@ onMounted(() => {
         bg.style.transform = `translate(${bgX}px, ${bgY}px) translateZ(0)`;
     });
 
-    window.Echo.channel(`room-${roomCode.value}`)
-        .listen('.RoomUpdate', (e) => {
-            console.log("Actualización de sala recibida:", e);
-            cargarJugadores();
-        });
-
     Echo.channel('room-' + roomCode.value)
         .listen('.room-owner-left', (e) => {
             throwRedirectMessage();
@@ -171,9 +176,7 @@ onMounted(() => {
 
     Echo.channel('room-' + roomCode.value)
         .listen('.GameStart', (e) => {
-            console.log(e.gameData);
             const encodedGameData = encodeURIComponent(JSON.stringify(e.gameData));
-            console.log(encodedGameData);
             router.push({ name: 'play-game', params: { code: roomCode.value }, query: { gameData: encodedGameData } });
         });
 });
@@ -233,36 +236,32 @@ const startGame = async () => {
             roomCode: roomCode.value,
             settings: gameSettings.value
         });
-        // Datos de la partida
-        gameData.value = response.data;
 
         console.log('Partida creada:', response.data);
-
-        // // Emitimos un evento para redirigir a los jugadores al juego después de haber definido gameData
-        // const response2 = await axios.post(`/api/redirect-game`, {
-        //     roomCode: roomCode.value
-        // });
-
-        // console.log('Evento emitido:', response2.data);
-
     } catch (error) {
         console.error("Error al crear la partida:", error);
     }
 };
 
-// Obtenemos de la API la lista de jugadores
-const cargarJugadores = async () => {
-    try {
-        const response = await axios.get(`/api/room/players/${roomCode.value}`);
-        players.value = response.data;
-        console.log(players.value);
-    } catch (error) {
-        console.error('Error al cargar los jugadores:', error);
-    }
-};
 </script>
 
 <style scoped>
+.btn-disabled {
+    background-color: #9d9d9d;
+    color: rgb(230, 230, 230);
+    border: none;
+    padding: 20px 30px 15px 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: not-allowed;
+    border-radius: 15px;
+    box-shadow: 0 14px #808080;
+    pointer-events: none;
+}
+
 #carga {
     height: 1.6rem;
     width: auto;

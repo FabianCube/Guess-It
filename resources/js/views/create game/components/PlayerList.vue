@@ -24,8 +24,12 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeMount, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onBeforeMount, onUnmounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import { defineEmits } from 'vue';
+
+// Función para enviar eventos al componente padre
+const emits = defineEmits(['update-players']);
 
 // Lista reactiva de jugadores
 const jugadores = ref([]);
@@ -39,6 +43,7 @@ const espaciosVacios = computed(() => maxJugadores - jugadores.value.length);
 const codigoSala = ref();
 
 const route = useRoute();
+
 
 // Una vez montado el componente escuchamos el canal "room-channel" para actualizar la lista de jugadores
 // si alguien entra o sale de la sala
@@ -62,6 +67,7 @@ const cargarJugadores = async () => {
     try {
         const response = await axios.get(`/api/room/players/${codigoSala.value}`);
         jugadores.value = response.data;
+        emits('update-players', jugadores.value.length);
         console.log(jugadores.value);
     } catch (error) {
         console.error('Error al cargar los jugadores:', error);

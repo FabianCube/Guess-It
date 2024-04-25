@@ -75,10 +75,6 @@ const addMessage = (newMessage) => {
     console.log("[Game.vue]:addMessage:user.nickname -> " + newMessage.user.nickname)
     console.log("[Game.vue]:addMessage:message -> " + newMessage.message)
 
-    // axios.post('/api/messages', newMessage).then(response => {
-    //     console.log(response.data);
-    // }).catch(err => {console.error("Error sdanslndajndkjans", err)});
-
     axios.post('/api/messages', {
         user: newMessage.user,
         message: newMessage.message,
