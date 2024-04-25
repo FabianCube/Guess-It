@@ -27,7 +27,7 @@
                     <!-- CANVAS -->
                     <div style="width: 100%; height: 100%;border-radius: 12px; position: relative;">
                         <!-- COMPONENTE STATUS BAR -->
-                        <status-bar />
+                        <status-bar :timeRound="timeRound"/>
                         <!-- COMPONENTE CANVAS -->
                         <canvas-component :user="user" :new-canvas="newCanvas"
                             @canvasupdate="sendCanvas"></canvas-component>
@@ -65,6 +65,7 @@ const newCanvas = ref();
 const roomCode = ref();
 const gameData = ref(null);
 const players = ref([]);
+const timeRound = ref();
 
 const addMessage = (newMessage) => {
     messages.value.push(newMessage);
@@ -111,6 +112,7 @@ onBeforeMount(async () => {
     gameData.value = JSON.parse(decodedData);
 
     players.value = gameData.value.players;
+    timeRound.value = gameData.value.time_per_round;
 
     console.log(gameData.value);
     console.log(players.value);
