@@ -3,7 +3,7 @@
 <template>
     <div class="container flex flex-row justify-content-between align-items-center px-5 bar-container">
         <div style="font-size:2rem">
-            <div class="card-player">
+            <div :style="{borderColor: playerColor}" class="card-player">
                 <div class="card-avatar">
                     <div class="avatar">
                         <img src="/storage/avatars/avatar1.jpg" alt="">
@@ -11,7 +11,7 @@
                 </div>
                 <div class="card-player-info">
                     <p>DIBUJANDO:</p>
-                    <p class="card-player-name">RANDOM</p>
+                    <p :style="{color: playerColor}">{{ playerDrawing }}</p>
                 </div>
             </div>
         </div>
@@ -34,12 +34,18 @@
 import { watch, ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 
-const props = defineProps(['timeRound', 'difficulty']);
+const props = defineProps(['timeRound', 'difficulty', 'firstPlayer']);
 const words = ([]);
 const playingWord = ref('');
 const difficulty = ref('');
 
+const playerDrawing = ref('');
+const playerColor = ref('');
+
 onMounted(async () => {
+
+    playerDrawing.value = props.firstPlayer.nickname;
+    playerColor.value = props.firstPlayer.color;
     
     console.log("dificultad: " + props.difficulty)
 
@@ -63,7 +69,6 @@ onMounted(async () => {
             selectRandomWord();
             
         });
-    
 })
 
 const selectRandomWord = () => {

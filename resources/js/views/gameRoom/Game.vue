@@ -27,7 +27,7 @@
                     <!-- CANVAS -->
                     <div style="width: 100%; height: 100%;border-radius: 12px; position: relative;">
                         <!-- COMPONENTE STATUS BAR -->
-                        <status-bar :timeRound="timeRound" :difficulty="difficulty"/>
+                        <status-bar :timeRound="timeRound" :difficulty="difficulty" :firstPlayer="firstPlayer"/>
                         <!-- COMPONENTE CANVAS -->
                         <canvas-component :user="user" :new-canvas="newCanvas"
                             @canvasupdate="sendCanvas"></canvas-component>
@@ -68,6 +68,7 @@ const players = ref([]);
 const timeRound = ref();
 const rounds = ref();
 const difficulty = ref();
+const firstPlayer = ref();
 
 const addMessage = (newMessage) => {
     messages.value.push(newMessage);
@@ -113,6 +114,14 @@ onBeforeMount(async () => {
     timeRound.value = gameData.value.time_per_round;
     rounds.value = gameData.value.rounds;
     difficulty.value = gameData.value.difficulty;
+
+    firstPlayer.value = players.value[0];
+    
+    console.log("INFO DE PLAYER ==> " 
+        + " Nickame: " + players.value[0].nickname
+        + " Color: " + players.value[0].color
+        + " Points: " + players.value[0].points
+        + " Position: " + players.value[0].position);
 
     console.log(gameData.value);
     console.log(players.value);
