@@ -2,7 +2,19 @@
 
 <template>
     <div class="container flex flex-row justify-content-between align-items-center px-5 bar-container">
-        <div style="font-size:2rem">JUGADOR</div>
+        <div style="font-size:2rem">
+            <div class="card-player">
+                <div class="card-avatar">
+                    <div class="avatar">
+                        <img src="/storage/avatars/avatar1.jpg" alt="">
+                    </div>
+                </div>
+                <div class="card-player-info">
+                    <p>DIBUJANDO:</p>
+                    <p class="card-player-name">RANDOM</p>
+                </div>
+            </div>
+        </div>
         <div id="word-container" style="font-size:2rem">
             <h2>{{ playingWord }}</h2>
         </div>
@@ -102,5 +114,54 @@ const selectRandomWord = () => {
 {
     color: white;
     font-size: 2.3rem;
+}
+
+.card-player
+{
+    width: 160px;
+    height: 60px;
+    border-radius: 14px;
+    border: 3px solid red;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-around;
+    flex-flow: row;
+    align-items: center;
+}
+
+.card-player-info
+{
+    width: 60%;
+}
+
+.card-player-info>p
+{
+    font-size: 14px;
+    font-family: 'Lilita One', sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 20px;
+}
+
+.card-player-name
+{
+    color: #FD6F5A;
+}
+
+.avatar
+{
+    width: 37px;
+    height: 37px;
+    border-radius: 50px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.avatar>img
+{
+    width: auto;
+    height: 100%;
 }
 </style>
