@@ -133,6 +133,7 @@ import ChatForm from './views/gameRoom/components/ChatForm.vue';
 import Canvas from './views/gameRoom/components/Canvas.vue';
 import StatusBar from './views/gameRoom/components/StatusBar.vue';
 import InfoPlayers from './views/gameRoom/components/InfoPlayers.vue';
+import CountdownTimer from './views/gameRoom/components/CountdownTimer.vue';
 
 // Components for Home
 import LoginPopUp from './views/home/components/Login.vue';
@@ -203,6 +204,7 @@ app.component('register-popup', Register);
 app.component('anonymous-user', AnonymousUser);
 app.component('account-management', Account);
 app.component('enter-game', EnterGame);
+app.component('countdown-timer', CountdownTimer);
 
 /**PRIMEVUE */
 app.use(PrimeVue, { ripple: true });

@@ -1,5 +1,6 @@
 <template>
     <div id="background-game"></div>
+    <countdown-timer v-if="timer" @update-timer="handleTimerUpdate" />
     <div class="min-h-screen sm:items-center py-4 main-content">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
@@ -27,7 +28,7 @@
                     <!-- CANVAS -->
                     <div style="width: 100%; height: 100%;border-radius: 12px; position: relative;">
                         <!-- COMPONENTE STATUS BAR -->
-                        <status-bar :timeRound="timeRound" :difficulty="difficulty" :firstPlayer="firstPlayer"/>
+                        <status-bar :timeRound="timeRound" :difficulty="difficulty" :firstPlayer="firstPlayer" />
                         <!-- COMPONENTE CANVAS -->
                         <canvas-component :user="user" :new-canvas="newCanvas"
                             @canvasupdate="sendCanvas"></canvas-component>
@@ -69,6 +70,7 @@ const timeRound = ref();
 const rounds = ref();
 const difficulty = ref();
 const firstPlayer = ref();
+const timer = ref(true);
 
 const addMessage = (newMessage) => {
     messages.value.push(newMessage);
@@ -105,6 +107,16 @@ const sendCanvas = (canvas) => {
     });
 }
 
+// Cuándo la cuenta atrás llega a 0 deshabilitamos el componente del timer
+const handleTimerUpdate = (timeLeft) => {
+    console.log(timeLeft);
+    console.log(timer.value);
+    if (timeLeft = 0) {
+        timer.value = false;
+    }
+};
+
+
 onBeforeMount(async () => {
 
     const decodedData = decodeURIComponent(route.query.gameData);
@@ -116,8 +128,8 @@ onBeforeMount(async () => {
     difficulty.value = gameData.value.difficulty;
 
     firstPlayer.value = players.value[0];
-    
-    console.log("INFO DE PLAYER ==> " 
+
+    console.log("INFO DE PLAYER ==> "
         + " Nickame: " + players.value[0].nickname
         + " Color: " + players.value[0].color
         + " Points: " + players.value[0].points
@@ -214,7 +226,6 @@ const getUserData = async () => {
         }
     }
 }
-
 
 </script>
 

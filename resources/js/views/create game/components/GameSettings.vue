@@ -34,8 +34,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
-import { defineEmits } from 'vue';
+import { ref, watch , defineEmits } from 'vue';
 
 // Función para enviar eventos al componente padre
 const emits = defineEmits(['updateSettings']);
