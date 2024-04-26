@@ -40,7 +40,7 @@ onUpdated(() =>
                 positions.forEach((movement, index) => 
                 {
                     setTimeout(() => {
-                        drawLine(ctx.value, movement.x, movement.y, movement.offsetX, movement.offsetY);
+                        drawLine(ctx.value, movement.x, movement.y, movement.offsetX, movement.offsetY, movement.lineColor, movement.lineWidth);
                     }, index * 5);
                 })
             }
@@ -64,8 +64,8 @@ const init = () =>
     {
         if (isDrawing.value) 
         {
-            movements.value.push({ x: x.value, y: y.value, offsetX: e.offsetX, offsetY: e.offsetY });
-            drawLine(ctx.value, x.value, y.value, e.offsetX, e.offsetY);
+            movements.value.push({ x: x.value, y: y.value, offsetX: e.offsetX, offsetY: e.offsetY, lineColor: lineColor.value, lineWidth: lineWidth.value });
+            drawLine(ctx.value, x.value, y.value, e.offsetX, e.offsetY, lineColor.value, lineWidth.value);
             x.value = e.offsetX;
             y.value = e.offsetY;
 
@@ -81,8 +81,8 @@ const init = () =>
     {
         if (isDrawing.value) 
         {
-            movements.value.push({ x: x.value, y: y.value, offsetX: e.offsetX, offsetY: e.offsetY });
-            drawLine(ctx.value, x.value, y.value, e.offsetX, e.offsetY);
+            movements.value.push({ x: x.value, y: y.value, offsetX: e.offsetX, offsetY: e.offsetY, lineColor: lineColor.value, lineWidth: lineWidth.value });
+            drawLine(ctx.value, x.value, y.value, e.offsetX, e.offsetY, lineColor.value, lineWidth.value);
             getParams();
             x.value = 0;
             y.value = 0;
@@ -119,13 +119,16 @@ const getParams = () =>
     sendCanvas(params);
 };
 
-const drawLine = (ctx, x1, y1, x2, y2) => 
+const drawLine = (ctx, x1, y1, x2, y2, color, stroke) => 
 {
+    console.log("Color: " + color + " Stroke: " + stroke)
     ctx.beginPath();
     // ctx.strokeStyle = document.getElementById('selColor').value;
-    ctx.strokeStyle = lineColor.value;
+    // ctx.strokeStyle = lineColor.value;
+    ctx.strokeStyle = color;
     // ctx.lineWidth = document.getElementById('selWidth').value;
-    ctx.lineWidth = lineWidth.value;
+    // ctx.lineWidth = lineWidth.value;
+    ctx.lineWidth = stroke;
     ctx.lineJoin = "round";
     ctx.moveTo(x1, y1);
     ctx.lineTo(x2, y2);
