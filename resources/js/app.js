@@ -206,7 +206,7 @@ app.component('anonymous-user', AnonymousUser);
 app.component('account-management', Account);
 app.component('enter-game', EnterGame);
 app.component('countdown-timer', CountdownTimer);
-app.component('friends', CountdownTimer);
+app.component('friends', Friends);
 
 /**PRIMEVUE */
 app.use(PrimeVue, { ripple: true });

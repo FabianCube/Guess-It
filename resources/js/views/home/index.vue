@@ -22,14 +22,14 @@
     <div id="background"></div>
     <div class="relative flex items-top justify-center min-h-screen sm:items-center py-4 sm:pt-0">
         <div class="w-100 flex flex-row justify-between py-5">
-            <div class="col-2 flex flex-column justify-content-end align-items-end">
+            <div class="col-4 flex flex-column justify-content-end align-items-start ps-buttons">
                 <button class="btn-smll-default mb-5" style="border: none;"><img src="/storage/icons/info-circle.svg"
                         alt=""></button>
                 <button class="btn-smll-default" style="border: none;"><img src="/storage/icons/volume-on.svg"
                         alt=""></button>
             </div>
 
-            <div class="col-8 flex justify-center align-items-center flex-column pt-8">
+            <div class="col-4 flex justify-center align-items-center flex-column pt-8">
                 <img id="logo" src="/storage/guess-it-logo.svg" class="shake-img"></img>
 
                 <button @click="toggleAnonymous()" to="/create-game" class="btn-default">CREAR PARTIDA</button>
@@ -37,7 +37,7 @@
 
             </div>
 
-            <div class="col-2 flex flex-column justify-content-between">
+            <div class="col-4 flex flex-column justify-content-between align-items-end pe-buttons">
                 <button v-if="logged" @click="toggleAccount()" class="btn-smll-default flex justify-content-center">
                     <div class="avatar-image">
                         <img src="/storage/avatars/avatar1.jpg" alt="">
@@ -47,17 +47,20 @@
                     <img src="/storage/icons/account.svg" alt="">
                 </button>
 
-                <button @click="logout" class="btn-smll-default" style="border: none">
-                    <img src="/storage/icons/friends.svg" alt="">
-                </button>
+                <div class="d-flex flex-column justify-content-end">
+                    <friends v-if="friendsList" />
+                    <button @click="toggleFriendsList" class="btn-smll-default" style="border: none">
+                        <img src="/storage/icons/friends.svg" alt="">
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { ref, onMounted, nextTick } from 'vue';
+import { useRouter } from 'vue-router';
 import useAuth from '@/composables/auth';
 
 const { isLoggedIn, logout } = useAuth();
@@ -71,6 +74,8 @@ const roomCode = ref();
 const userRegistered = ref();
 
 const router = useRouter();
+
+const friendsList = ref(false);
 
 onMounted(() => {
 
@@ -143,6 +148,11 @@ function toggleEnterGame() {
     let enterGame = document.querySelector('.enter-game');
     let isOpen = enterGame.classList.contains('active');
     isOpen ? enterGame.classList.remove('active') : enterGame.classList.add('active');
+}
+
+// Abrir cerrar popup de unirse a partida
+function toggleFriendsList() {
+    friendsList.value = !friendsList.value;
 }
 
 const enterAnonymous = (code) => {
@@ -247,6 +257,14 @@ const enterRoom = () => {
     display: inline-block;
     /* Necesario para que transform funcione */
     animation: shake 5s infinite;
+}
+
+.ps-buttons {
+    padding-left: 5vw;
+}
+
+.pe-buttons {
+    padding-right: 5vw;
 }
 
 @keyframes shake {
