@@ -28,7 +28,8 @@
                     <!-- CANVAS -->
                     <div style="width: 100%; height: 100%;border-radius: 12px; position: relative;">
                         <!-- COMPONENTE STATUS BAR -->
-                        <status-bar :timeRound="timeRound" :difficulty="difficulty" :firstPlayer="firstPlayer" />
+                        <!-- <status-bar @wordselected="setPlayingWord" :timeRound="timeRound" :difficulty="difficulty" :firstPlayer="firstPlayer" /> -->
+                        <status-bar :playingWord="playingWord" :timeRound="timeRound" :difficulty="difficulty" :firstPlayer="firstPlayer" />
                         <!-- COMPONENTE CANVAS -->
                         <canvas-component :user="user" :new-canvas="newCanvas"
                             @canvasupdate="sendCanvas"></canvas-component>
@@ -72,6 +73,9 @@ const difficulty = ref();
 const firstPlayer = ref();
 const timer = ref(true);
 
+const playingWord = ref('');
+const words = ([]);
+
 const addMessage = (newMessage) => {
     messages.value.push(newMessage);
 
@@ -107,6 +111,30 @@ const sendCanvas = (canvas) => {
     });
 }
 
+const setPlayingWord = async () => {
+
+    playingWord.value = await getPlayingWord();
+    console.log("[Game.vue]:setPlayingWord:word -> " + playingWord.value)
+    
+    // Preparo un 'false' por si en las rondas tenemos que actualizar este estado...
+    if(sessionStorage.getItem('isWordSelected') === null ||
+        sessionStorage.getItem('isWordSelected') === 'false')
+    {
+        console.log("Condicion de session pasada, " + sessionStorage.getItem('isWordSelected'))
+        // playingWord.value = word.word;
+        sessionStorage.setItem('isWordSelected', true);
+
+        await axios.post('/api/word', {
+            code: roomCode.value,
+            word: playingWord.value
+        }).then(response => {
+            console.log(response.data);
+        }).catch(error => {
+            console.error("Error en la petición axios de la palabra", error);
+        });
+    }
+}
+
 // Cuándo la cuenta atrás llega a 0 deshabilitamos el componente del timer
 const handleTimerUpdate = (timeLeft) => {
     console.log(timeLeft);
@@ -115,7 +143,6 @@ const handleTimerUpdate = (timeLeft) => {
         timer.value = false;
     }
 };
-
 
 onBeforeMount(async () => {
 
@@ -145,9 +172,16 @@ onBeforeMount(async () => {
 })
 
 onMounted(() => {
+
+    if(sessionStorage.getItem('isWordSelected') === null)
+    {
+        setPlayingWord();
+    }
+    
     getUserData();
     listenEventMessageSent();
     listenEventCanvasUpdate();
+    listenEventSendWord();
 
     const bg = document.getElementById('background-game');
 
@@ -200,6 +234,17 @@ const listenEventCanvasUpdate = () => {
         });
 }
 
+const listenEventSendWord = () => {
+    console.log("[Game.vue]:listenEventSendWord: Entrado!");
+
+    window.Echo.channel('room-' + roomCode.value)
+        .listen('.SendWord', (e) => {
+            console.log("[Game.vue]:listenEventSendWord:.GameStart -> " + e.word);
+
+            playingWord.value = e.word;
+        });
+}
+
 const getUserData = async () => {
 
     if (isLoggedIn()) {
@@ -225,6 +270,57 @@ const getUserData = async () => {
             console.log("[ERROR]: Al obtener datos de usuario anónimo.");
         }
     }
+}
+
+const getPlayingWord = async () => {
+
+    let category = '';
+
+    switch(difficulty.value)
+    {
+        case 'Fácil':
+            category = 'easy';
+            break;
+        case 'Medio':
+            category = 'medium';
+            break;
+        case 'Difícil':
+            category = 'hard';
+            break;
+    }
+
+    // await axios.get(`/api/get-word/${category}`)
+    //     .then(response => {
+    //         console.log("RESPONSE ==== " + response.data);
+    //         let words = response.data;
+    //         return selectRandomWord(words);
+            
+            
+    //         // console.log("Playing word: " + playingWord.value);
+
+    //         // emits("wordselected", {
+    //         //     word: playingWord.value
+    //         // });
+    //         // setPlayingWord(playingWord.value);
+            
+    //     });
+    
+    const response = await axios.get(`/api/get-word/${category}`);
+    const words = response.data;
+    return selectRandomWord(words);
+}
+
+const selectRandomWord = (words) => {
+
+    console.log(words);
+    // length de las palabras
+    // let length = computed(() => words.length);
+    let length = words.length;
+    // indice aleatorio
+    let index = Math.floor(Math.random() * length);
+    let word = words[index].toUpperCase();
+
+    return word;
 }
 
 </script>

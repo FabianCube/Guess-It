@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\Game;
 use App\Models\History;
 use App\Events\GameStart;
+use App\Events\SendWord;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
@@ -109,11 +110,22 @@ class GameController extends Controller
         $difficulty = $request->difficulty;
 
         $words = DB::table('words')->where('difficulty', $difficulty)->pluck('word')->toArray();
-        // $words = DB::table('words')->select('word')->where('difficulty', $difficulty)->get();
-        // $words = Word::where('category', $category)->pluck('word')->toArray();
 
         Log::info("GameController ===== getWord ===== ", ['words' => $words, 'difficulty' => $difficulty]);
         return response()->json($words);
+    }
+
+    public function broadcastWord(Request $request)
+    {
+        $word = $request->word;
+        $code = $request->code;
+
+        broadcast(new SendWord($code, $word));
+        Log::info("GameController ==> broadcastWord: ", ['word' => $word]);
+
+        return response()->json([
+            'word'=> $word
+        ]);
     }
 
     // // Método para emitir un evento y redirigir a los jugadores a la partida
