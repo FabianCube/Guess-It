@@ -7,6 +7,7 @@
         </div>
     </div>
     <div v-else class="relative flex items-top justify-center min-h-screen sm:items-center sm:pt-0 lilita-one-regular">
+        <invite-friends v-if="showFriendsList" :friends="friendsList" @close="handleClose" @invited="handleInvitation"/>
         <div class="container py-4">
             <div class="d-flex justify-content-between align-items-center">
                 <router-link to="/" class="btn-smll-default"><img src="/storage/icons/home-05.svg" alt=""></router-link>
@@ -19,7 +20,7 @@
                         <div class="h-100 d-flex flex-column justify-content-between p-5">
                             <h2 class="mb-3 players-font">JUGADORES</h2>
                             <PlayerList class="mb-3" @update-players="handlePlayers"/>
-                            <div class="d-flex justify-content-center btn-invite">
+                            <div class="d-flex justify-content-center btn-invite" @click="showFriendsList = true">
                                 <div class="d-flex align-items-center">
                                     <h3 id="invitar-amigos" class="mb-0 me-3 ">INVITAR AMIGOS</h3>
                                     <img src="../../../../storage/app/public/icons/user-plus-01.svg">
@@ -98,6 +99,10 @@ const gameSettings = ref({
 
 const players = ref();
 
+// Variables para mostrar la lista de amigos
+const showFriendsList = ref(false);
+const friendsList = ref([]);
+
 // Función para manejar la actualización de la configuración
 const handleSettingsUpdate = (newSettings) => {
     gameSettings.value = newSettings;
@@ -110,6 +115,26 @@ const handlePlayers = (newPlayers) => {
     console.log(players.value);
     startButtonEnabled.value = newPlayers >= 2;
     console.log(startButtonEnabled.value);
+};
+
+const handleClose = () => {
+  showFriendsList.value = false;
+};
+
+const handleInvitation = (friendId) => {
+  console.log(`Friend ${friendId} invited`);
+  // Aquí podrías añadir lógica adicional después de que se haya enviado una invitación
+};
+
+// Cargar la lista de amigos
+const loadFriends = async () => {
+  try {
+    const response = await axios.get('/api/friends/list');
+    friendsList.value = response.data;
+    console.log(friendsList.value);
+  } catch (error) {
+    console.error('Error loading friends:', error);
+  }
 };
 
 const canStartGame = () => {
@@ -149,6 +174,8 @@ onBeforeMount(async () => {
 
 onMounted(() => {
     const bg = document.getElementById('background');
+
+    loadFriends();
 
     if (!bg) {
         console.error('Elemento #background no encontrado.');
