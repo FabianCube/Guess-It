@@ -126,6 +126,7 @@ import "primeicons/primeicons.css";
 import Carousel from "./views/create game/components/Carousel.vue";
 import PlayerList from "./views/create game/components/PlayerList.vue";
 import GameSettings from './views/create game/components/GameSettings.vue';
+import FriendsList from './views/create game/components/FriendsList.vue';
 
 // Components for Game room
 import ChatMessages from './views/gameRoom/components/ChatMessages.vue';
@@ -207,6 +208,7 @@ app.component('account-management', Account);
 app.component('enter-game', EnterGame);
 app.component('countdown-timer', CountdownTimer);
 app.component('friends', Friends);
+app.component('invite-friends', FriendsList);
 
 /**PRIMEVUE */
 app.use(PrimeVue, { ripple: true });

@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AvatarController;
 use App\Http\Controllers\Api\RoomController;
 use App\Http\Controllers\Api\ChatsController;
+use App\Http\Controllers\Api\FriendshipController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -78,3 +79,10 @@ Route::post('word', [GameController::class, 'broadcastWord']);
 // Chat controller
 Route::post('messages', [ChatsController::class, 'sendMessage']);
 Route::post('canvas', [ChatsController::class, 'sendCanvas']);
+
+// Friendship controller
+Route::post('/friends/accept/{requestId}', [FriendshipController::class, 'accept']);
+Route::post('/friends/reject/{requestId}', [FriendshipController::class, 'reject']);
+Route::get('/friends/requests', [FriendshipController::class, 'getFriendRequests']);
+Route::post('/friends/send-request', [FriendshipController::class, 'sendRequest']);
+Route::get('/friends/list', [FriendshipController::class, 'listFriends']);
