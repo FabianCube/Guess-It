@@ -16,7 +16,7 @@
             </div>
         </div>
         <div id="word-container" style="font-size:2rem">
-            <h2>{{ playingWord }}</h2>
+            <h2>{{ props.playingWord }}</h2>
         </div>
         <div id="clock-container">
 
@@ -31,16 +31,18 @@
 </template>
 
 <script setup>
-import { watch, ref, onMounted, computed } from 'vue';
+import { watch, ref, onMounted, computed, defineEmits } from 'vue';
 import axios from 'axios';
 
-const props = defineProps(['timeRound', 'difficulty', 'firstPlayer']);
+const props = defineProps(['timeRound', 'difficulty', 'firstPlayer', 'playingWord']);
+const emits = defineEmits([ 'wordselected' ]);
 const words = ([]);
-const playingWord = ref('');
 const difficulty = ref('');
 
 const playerDrawing = ref('');
 const playerColor = ref('');
+
+const isWordSelected = ref(false);
 
 onMounted(async () => {
 
@@ -48,36 +50,45 @@ onMounted(async () => {
     playerColor.value = props.firstPlayer.color;
     
     console.log("dificultad: " + props.difficulty)
+    console.log("[StatusBar.vue]:playingWord: " + props.playingWord)
 
-    switch(props.difficulty)
-    {
-        case 'Fácil':
-            difficulty.value = 'easy';
-            break;
-        case 'Medio':
-            difficulty.value = 'medium';
-            break;
-        case 'Difícil':
-            difficulty.value = 'hard';
-            break;
-    }
+    // switch(props.difficulty)
+    // {
+    //     case 'Fácil':
+    //         difficulty.value = 'easy';
+    //         break;
+    //     case 'Medio':
+    //         difficulty.value = 'medium';
+    //         break;
+    //     case 'Difícil':
+    //         difficulty.value = 'hard';
+    //         break;
+    // }
 
-    await axios.get(`/api/get-word/${difficulty.value}`)
-        .then(response => {
-            words.value = response.data;
+    // await axios.get(`/api/get-word/${difficulty.value}`)
+    //     .then(response => {
+    //         words.value = response.data;
 
-            selectRandomWord();
-            
-        });
+    //         if(isWordSelected.value === false)
+    //         {
+    //             selectRandomWord();
+    //             isWordSelected.value = true;
+    //             console.log("Playing word: " + playingWord.value);
+
+    //             emits("wordselected", {
+    //                 word: playingWord.value
+    //             });
+    //         }
+    //     });
 })
 
-const selectRandomWord = () => {
-    // length de las palabras
-    let length = computed(() => words.value.length);
-    // indice aleatorio
-    let index = Math.floor(Math.random() * length.value);
-    playingWord.value = words.value[index].toUpperCase();
-}
+// const selectRandomWord = () => {
+//     // length de las palabras
+//     let length = computed(() => words.value.length);
+//     // indice aleatorio
+//     let index = Math.floor(Math.random() * length.value);
+//     playingWord.value = words.value[index].toUpperCase();
+// }
 
 
 </script>
