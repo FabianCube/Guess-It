@@ -152,7 +152,11 @@ function toggleEnterGame() {
 
 // Abrir cerrar popup de unirse a partida
 function toggleFriendsList() {
-    friendsList.value = !friendsList.value;
+    if(isLoggedIn()){
+        friendsList.value = !friendsList.value;
+    }else{
+        toggleLogin();
+    }
 }
 
 const enterAnonymous = (code) => {
