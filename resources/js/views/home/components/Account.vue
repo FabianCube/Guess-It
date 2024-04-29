@@ -6,6 +6,7 @@
                 <img src="/storage/icons/arrow-left.svg" alt="">
             </button>
         </div>
+        <button @click="logout">LOGOUT</button>
         <div class="card-body flex flex-column p-5" style="width: 100%">
             <div class="flex justify-content-end container-info" style="width: 100%; height: 50%;">
                 <div class="user-container">
@@ -47,7 +48,7 @@ import { defineProps, defineEmits } from 'vue';
 import useAuth from '@/composables/auth';
 
 const emits = defineEmits(['close-account']);
-const { loginForm, validationErrors, processing, submitLogin } = useAuth();
+const { loginForm, validationErrors, processing, submitLogin , logout } = useAuth();
 
 function toggleAccount() {
     emits('close-account');
