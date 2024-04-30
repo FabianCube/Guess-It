@@ -68,8 +68,22 @@ export default function sweetAlertNotifications()
         });
     }
 
+    const throwInviteMessage = ($message = '¿Aceptar?') => {
+        console.log('Sending invite message...');
+
+        swal({
+            icon: 'info',
+            title: $message,
+            showConfirmButton: true,
+            showDenyButton: true,
+            customClass: { 
+                popup: "swal2-custom"
+            }
+        });
+    }
+
     const throwRedirectMessage = ($message = 'Ok') => {
-        console.log('Sending information message...');
+        console.log('Sending redirect message...');
 
         swal({
             title: 'Redireccionando...',
@@ -92,6 +106,7 @@ export default function sweetAlertNotifications()
         throwInfoMessage,
         throwErrorMessage,
         throwAcceptMessage,
-        throwRedirectMessage
+        throwRedirectMessage,
+        throwInviteMessage
     }
 }

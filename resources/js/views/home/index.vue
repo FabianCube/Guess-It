@@ -64,7 +64,7 @@ import { useRouter } from 'vue-router';
 import useAuth from '@/composables/auth';
 import sweetAlertNotifications from '@/utils/swal_notifications';
 
-const { throwSuccessMessage, throwInfoMessage } = sweetAlertNotifications();
+const { throwInviteMessage, throwInfoMessage } = sweetAlertNotifications();
 
 const { isLoggedIn, logout } = useAuth();
 
@@ -115,7 +115,7 @@ onMounted(async () => {
 
         window.Echo.private(`user.${userId.data.uuid}`)
             .listen('.GameInvitation', (event) => {
-                throwInfoMessage('Te han invitado a una partida!');
+                throwInviteMessage('Te han invitado a una partida!');
             });
     }
 });
