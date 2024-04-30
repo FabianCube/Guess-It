@@ -64,7 +64,7 @@ import { useRouter } from 'vue-router';
 import useAuth from '@/composables/auth';
 import sweetAlertNotifications from '@/utils/swal_notifications';
 
-const { throwSuccessMessage, throwRedirectMessage } = sweetAlertNotifications();
+const { throwSuccessMessage, throwInfoMessage } = sweetAlertNotifications();
 
 const { isLoggedIn, logout } = useAuth();
 
@@ -110,7 +110,7 @@ onMounted( async () => {
 
         window.Echo.private(`user.${userId.data.uuid}`)
             .listen('.FriendRequest', (event) => {
-                throwSuccessMessage('Tienes una nueva petición de amistad!');
+                throwInfoMessage('Tienes una nueva petición de amistad!');
             });
     }
 });
