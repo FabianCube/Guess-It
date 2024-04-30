@@ -8,6 +8,7 @@ use App\Models\Friends;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Events\FriendRequestSent;
 
 class FriendshipController extends Controller
 {
@@ -80,6 +81,8 @@ class FriendshipController extends Controller
             'user_id_2' => $recipient->id,
         ]);
 
+        event(new FriendRequestSent($recipient->id));
+
         return response()->json(['message' => 'Solicitud de amistad enviada correctamente']);
     }
 
@@ -88,8 +91,6 @@ class FriendshipController extends Controller
     {
         $userId = auth()->id();
         $friendRequests = FriendRequest::where('user_id_2', $userId)->with('sender')->get();
-
-        // Log::info('Petición de amistad:', $friendRequests);
 
         return response()->json($friendRequests);
     }
