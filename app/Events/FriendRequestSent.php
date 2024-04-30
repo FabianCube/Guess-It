@@ -34,7 +34,7 @@ class FriendRequestSent implements ShouldBroadcast
         return new PrivateChannel('user.' . $this->friendRequest);
     }
 
-    public function broadCastASs()
+    public function broadcastAs()
     {
         return 'FriendRequest';
     }

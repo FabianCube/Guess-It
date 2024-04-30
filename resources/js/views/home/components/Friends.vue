@@ -26,16 +26,19 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onBeforeMount } from 'vue';
+
 
 const friendEmail = ref('');
 const friendRequests = ref([]);
 const friendsList = ref([]);
 
-onMounted(async () => {
+
+onBeforeMount(async () => {
     await loadFriendRequests();
     await loadFriendsList();
 });
+
 
 const loadFriendRequests = async () => {
     try {
@@ -71,6 +74,7 @@ const acceptRequest = async (requestId) => {
         const response = await axios.post(`/api/friends/accept/${requestId}`);
         console.log(response.data.message);
         friendRequests.value = friendRequests.value.filter(req => req.id !== requestId);
+        loadFriendsList();
     } catch (error) {
         console.error('Error accepting request:', error);
     }

@@ -59,9 +59,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import useAuth from '@/composables/auth';
+import sweetAlertNotifications from '@/utils/swal_notifications';
+
+const { throwSuccessMessage, throwRedirectMessage } = sweetAlertNotifications();
 
 const { isLoggedIn, logout } = useAuth();
 
@@ -77,7 +80,7 @@ const router = useRouter();
 
 const friendsList = ref(false);
 
-onMounted(() => {
+onMounted( async () => {
 
     logged.value = isLoggedIn();
 
@@ -101,6 +104,15 @@ onMounted(() => {
         // Aplica la transformación
         bg.style.transform = `translate(${bgX}px, ${bgY}px) translateZ(0)`;
     });
+
+    if (isLoggedIn()) {
+        const userId = await axios.get(`/api/get-user`);
+
+        window.Echo.private(`user.${userId.data.uuid}`)
+            .listen('.FriendRequest', (event) => {
+                throwSuccessMessage('Tienes una nueva petición de amistad!');
+            });
+    }
 });
 
 document.addEventListener('loggin-done', () => {
