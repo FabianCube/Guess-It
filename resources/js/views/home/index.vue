@@ -80,7 +80,7 @@ const router = useRouter();
 
 const friendsList = ref(false);
 
-onMounted( async () => {
+onMounted(async () => {
 
     logged.value = isLoggedIn();
 
@@ -111,6 +111,11 @@ onMounted( async () => {
         window.Echo.private(`user.${userId.data.uuid}`)
             .listen('.FriendRequest', (event) => {
                 throwInfoMessage('Tienes una nueva petición de amistad!');
+            });
+
+        window.Echo.private(`user.${userId.data.uuid}`)
+            .listen('.GameInvitation', (event) => {
+                throwInfoMessage('Te han invitado a una partida!');
             });
     }
 });
@@ -164,9 +169,9 @@ function toggleEnterGame() {
 
 // Abrir cerrar popup de unirse a partida
 function toggleFriendsList() {
-    if(isLoggedIn()){
+    if (isLoggedIn()) {
         friendsList.value = !friendsList.value;
-    }else{
+    } else {
         toggleLogin();
     }
 }

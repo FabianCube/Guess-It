@@ -7,7 +7,7 @@
         </div>
     </div>
     <div v-else class="relative flex items-top justify-center min-h-screen sm:items-center sm:pt-0 lilita-one-regular">
-        <invite-friends v-if="showFriendsList" :friends="friendsList" @close="handleClose" @invited="handleInvitation"/>
+        <invite-friends v-if="showFriendsList" :roomCode="roomCode" :friends="friendsList" @close="handleClose" @invited="handleInvitation"/>
         <div class="container py-4">
             <div class="d-flex justify-content-between align-items-center">
                 <router-link to="/" class="btn-smll-default"><img src="/storage/icons/home-05.svg" alt=""></router-link>

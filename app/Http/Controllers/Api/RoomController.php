@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use App\Models\Avatar;
 use App\Events\RoomUpdate;
 use App\Events\RoomOwnerLeft;
+use App\Events\GameInvitationSent;
 
 class RoomController extends Controller
 {
@@ -61,7 +62,7 @@ class RoomController extends Controller
             Cache::put('room_' . $code, $room, now()->addMinutes(120));
 
             // Dispara el evento con los datos de la sala
-            broadcast(new RoomUpdate("New user added",$code))->toOthers();
+            broadcast(new RoomUpdate("New user added", $code))->toOthers();
 
             return response()->json(['mensaje' => 'Jugador añadido a la sala']);
         } else {
@@ -135,7 +136,7 @@ class RoomController extends Controller
         // Si el usuario que sale es el creador cerramos la sala
         if ($room['owner'] == $uuid) {
 
-            
+
             // Elimina la caché de la sala
             Cache::forget('room_' . $code);
 
@@ -153,9 +154,20 @@ class RoomController extends Controller
             Cache::put('room_' . $code, $room, now()->addMinutes(120));
 
             // Dispara el evento con los datos de la sala
-            broadcast(new RoomUpdate("User exits room",$code))->toOthers();
+            broadcast(new RoomUpdate("User exits room", $code))->toOthers();
 
             return response()->json(['mensaje' => 'Jugador eliminado de la sala'], 200);
         }
+    }
+
+    // Dispara un evento para enviar la invitación a partida a un usuario
+    public function inviteUser(Request $request)
+    {
+        $invitedUserId = $request->input('userId');
+        $roomCode = $request->input('roomCode');
+
+        event(new GameInvitationSent($invitedUserId, $roomCode));
+
+        return response()->json(['message' => 'Invitation sent successfully']);
     }
 }

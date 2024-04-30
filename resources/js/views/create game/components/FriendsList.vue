@@ -15,11 +15,9 @@
 import { ref, defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
-    friends: Array
+    friends: Array,
+    roomCode: String
 });
-
-
-console.log(props.friends);
 
 const emits = defineEmits(['close', 'invited']);
 
@@ -28,29 +26,31 @@ const closeModal = () => {
     emits('close');
 };
 
-const inviteFriend = (friendId) => {
-    // Aquí añadirías la lógica para procesar la invitación
-    console.log(`Inviting friend ${friendId}`);
-    // Emitir un evento cuando se invite a un amigo, si es necesario
-    emits('invited', friendId);
+const inviteFriend = async (friendId) => {
+    try {
+        const response = await axios.post((`/api/invite-user`), {
+            roomCode: props.roomCode,
+            userId: friendId
+        });
+    } catch (error) {
+        console.error('Error obteniendo detalles de la sala:', error);
+    }
 };
 </script>
 
 <style scoped>
 .modal {
     display: flex;
-    position: fixed;
-    z-index: 1000;
+    position: absolute;
+    z-index: 100;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     align-items: center;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0.6);
-    /* Semi-transparente para oscurecer el fondo */
-    backdrop-filter: blur(10px);
-    /* Desenfoca el fondo, verifica la compatibilidad del navegador */
+    background-color: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(4px);
 }
 
 .modal-content {
@@ -59,9 +59,7 @@ const inviteFriend = (friendId) => {
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 80%;
-    /* O el ancho que prefieras */
     max-width: 600px;
-    /* Para no ser demasiado grande en pantallas grandes */
 }
 
 .close {
