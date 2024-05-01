@@ -44,20 +44,28 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits, onMounted } from 'vue';
+import { ref, defineProps, defineEmits, onMounted, watch } from 'vue';
 import useAuth from '@/composables/auth';
 import axios from 'axios';
 
 const emits = defineEmits(['close-account']);
-const { loginForm, validationErrors, processing, submitLogin , logout } = useAuth();
+const { isLoggedIn, loginForm, validationErrors, processing, submitLogin , logout } = useAuth();
 const user = ref({});
 const avatar = ref();
 
 onMounted(() => {
-    getUser();
+    if(isLoggedIn())
+    {
+        getUser();
+    }
 })
 
+watch(() => isLoggedIn(), () => {
+    getUser();
+});
+
 const getUser = async () => {
+    
     return axios.get('/api/user')
         .then(response => {
             console.log(response.data.data);
