@@ -42,7 +42,7 @@
                     <div class="p-3 chat flex flex-column justify-content-between">
                         <!-- COMPONENTE CHAT  -->
                         <div class="col-8 p-0" style="height: 95%; width:100%;">
-                            <chat-messages :messages="messages" :rounds="rounds"></chat-messages>
+                            <chat-messages :messages="messages" :rounds="rounds" :currentRound="currentRound"></chat-messages>
                         </div>
                         <div class="col-4 p-0" style="width:100%">
                             <chat-form @messagesent="addMessage" :user="user"></chat-form>
@@ -76,6 +76,7 @@ const startRound = ref(false);
 const currentPlayerIndex = ref(0);
 const currentPlayer = computed(() => players.value[currentPlayerIndex.value]);
 const roundFinished = ref(false);
+const currentRound = ref(1);
 
 const playingWord = ref('');
 const words = ([]);
@@ -169,6 +170,7 @@ const moveToNextPlayer = () => {
     if (currentPlayerIndex.value < players.value.length - 1) {
         currentPlayerIndex.value++;
     } else {
+        currentRound.value++;
         currentPlayerIndex.value = 0;
     }
     console.log(currentPlayerIndex.value);

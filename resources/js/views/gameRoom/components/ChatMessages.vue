@@ -1,6 +1,6 @@
 <template>
   <div class="round-container">
-    <h2 class="round-title">RONDA {{ currentRound }} / {{ props.rounds }}</h2>
+    <h2 class="round-title">RONDA {{ props.currentRound }} / {{ props.rounds }}</h2>
   </div>
   <ul class="chat" ref="chatContainer">
     <li class="left clearfix bubbles" v-for="message in props.messages" :key="message.id">
@@ -21,9 +21,8 @@
 <script setup>
 import { watch, ref, onMounted } from 'vue';
 
-const props = defineProps(['messages', 'rounds']);
+const props = defineProps(['messages', 'rounds', 'currentRound']);
 const chatContainer = ref(null);
-const currentRound = "1";
 
 watch(() => props.messages, (newMessages) => {
   messages.value = newMessages;
