@@ -144,6 +144,9 @@ import Account from './views/home/components/Account.vue';
 import EnterGame from './views/home/components/EnterGame.vue';
 import Friends from './views/home/components/Friends.vue';
 
+// Components for Account
+import AccountHistory from './views/home/components/AccountHistory.vue';
+
 
 
 const app = createApp({
@@ -209,6 +212,7 @@ app.component('enter-game', EnterGame);
 app.component('countdown-timer', CountdownTimer);
 app.component('friends', Friends);
 app.component('invite-friends', FriendsList);
+app.component('account-history', AccountHistory)
 
 /**PRIMEVUE */
 app.use(PrimeVue, { ripple: true });

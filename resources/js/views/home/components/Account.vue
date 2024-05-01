@@ -35,7 +35,7 @@
                     </div>
                 </div>
                 <div class="history">
-
+                    <account-history/>
                 </div>
             </div>
 
@@ -52,6 +52,7 @@ const emits = defineEmits(['close-account']);
 const { isLoggedIn, loginForm, validationErrors, processing, submitLogin , logout } = useAuth();
 const user = ref({});
 const avatar = ref();
+const activeTab = ref();
 
 onMounted(() => {
     if(isLoggedIn())
