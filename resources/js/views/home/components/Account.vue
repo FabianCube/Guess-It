@@ -6,16 +6,16 @@
                 <img src="/storage/icons/arrow-left.svg" alt="">
             </button>
         </div>
-        <button @click="logout">LOGOUT</button>
         <div class="card-body flex flex-column p-5" style="width: 100%">
             <div class="flex justify-content-end container-info" style="width: 100%; height: 50%;">
                 <div class="user-container">
-                    <div>
-                        <h3>NICKNAME</h3>
-                        <h3>NIVEL</h3>
+                    <div class="info-user">
+                        <h3>{{ user.nickname }}</h3>
+                        <h3>NIVEL: {{ user.level }}</h3>
+                        <button class="btn-default btn-logout" @click="logout">LOGOUT!</button>
                     </div>
-                    <div>
-                        <!-- <img src="/storage/avatars/avatar1.jpg" alt=""> -->
+                    <div class="avatar-image">
+                        <img :src="avatar" alt="">
                     </div>
                 </div>
             </div>
@@ -44,13 +44,29 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue';
+import { ref, defineProps, defineEmits, onMounted } from 'vue';
 import useAuth from '@/composables/auth';
+import axios from 'axios';
 
 const emits = defineEmits(['close-account']);
 const { loginForm, validationErrors, processing, submitLogin , logout } = useAuth();
+const user = ref({});
+const avatar = ref();
 
-function toggleAccount() {
+onMounted(() => {
+    getUser();
+})
+
+const getUser = async () => {
+    return axios.get('/api/user')
+        .then(response => {
+            console.log(response.data.data);
+            user.value = response.data.data;
+            avatar.value = "/storage/avatars/avatar" + response.data.data.avatar_id + ".jpg";
+        })
+}
+
+const toggleAccount = () => {
     emits('close-account');
 }
 </script>
@@ -147,7 +163,46 @@ function toggleAccount() {
     width: 400px;
     height: auto;
     background-color: #fff;
-    border: black 3px solid;
+    border: #3E3E3E 3px solid;
     border-radius: 23px;
+    display: flex;
+    padding: 20px;
+    justify-content: space-between;
+    align-items: center;
 }
+
+.info-user>h3{
+    font-size: 20px;
+    color: #3E3E3E;
+    margin: 5px;
+}
+
+.avatar-image
+{
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    border-radius: 50px;
+}
+
+.avatar-image>img
+{
+    width: 100%;
+    height: auto;
+}
+
+.btn-logout
+{
+    border: none;
+    border-radius: 6px;
+    width: 100px!important;
+    height: 30px!important;
+    font-size: 14px!important;
+    line-height: 30px!important;
+    margin: 0;
+
+    background-color: #df1a1a;
+    box-shadow: 0 5px #861713;
+}
+
 </style>

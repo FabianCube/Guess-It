@@ -65,20 +65,14 @@ import useAuth from '@/composables/auth';
 import sweetAlertNotifications from '@/utils/swal_notifications';
 
 const { throwInviteMessage, throwInfoMessage } = sweetAlertNotifications();
-
 const { isLoggedIn, logout } = useAuth();
-
 const logged = ref();
-
 const passedRoomCode = ref();
-
 const roomCode = ref();
-
 const userRegistered = ref();
-
 const router = useRouter();
-
 const friendsList = ref(false);
+const user = ref();
 
 onMounted(async () => {
 
