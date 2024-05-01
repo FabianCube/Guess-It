@@ -159,6 +159,8 @@ watch(roundFinished, (newValue) => {
         console.log('Siguiente jugador');
         moveToNextPlayer();
         roundFinished.value = false;
+        timer.value = true;
+        startRound.value = false;
     }
 });
 

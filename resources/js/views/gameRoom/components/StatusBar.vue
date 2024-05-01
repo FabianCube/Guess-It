@@ -47,7 +47,7 @@ const roundTimeLeft = ref();
 const isWordSelected = ref(false);
 
 watch(() => props.startRound, (newValue) => {
-    if (newValue) {
+    if (newValue == true) {
         startRoundTimer();
     }
 });
@@ -103,7 +103,7 @@ const startRoundTimer = () => {
         } else {
             clearInterval(intervalId);
             emits('endOfRound');
-            console.log('Emitido final de ronda');
+            roundTimeLeft.value = props.timeRound;
         }
     }, 1000);
 };
