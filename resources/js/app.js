@@ -146,6 +146,8 @@ import Friends from './views/home/components/Friends.vue';
 
 // Components for Account
 import AccountHistory from './views/home/components/AccountHistory.vue';
+import AccountStats from './views/home/components/AccountStats.vue';
+import AccountSettings from './views/home/components/AccountSettings.vue';
 
 
 
@@ -212,7 +214,9 @@ app.component('enter-game', EnterGame);
 app.component('countdown-timer', CountdownTimer);
 app.component('friends', Friends);
 app.component('invite-friends', FriendsList);
-app.component('account-history', AccountHistory)
+app.component('account-history', AccountHistory);
+app.component('account-stats', AccountStats);
+app.component('account-settings', AccountSettings);
 
 /**PRIMEVUE */
 app.use(PrimeVue, { ripple: true });
