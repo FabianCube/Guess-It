@@ -21,24 +21,25 @@
             </div>
             <div class="info-container">
                 <div class="tabs">
-                    <div class="tab active">
+                    <div @click="changeFocusTab($event.target)" class="tab active">
                         <p>HISTORIAL</p>
                         <img src="/storage/icons/history-icon.svg" alt="">
                     </div>
-                    <div class="tab">
+                    <div @click="changeFocusTab($event.target)" class="tab">
                         <p>ESTADÍSTICAS</p>
                         <img src="/storage/icons/stats-icon.svg" alt="">
                     </div>
-                    <div class="tab">
+                    <div @click="changeFocusTab($event.target)" class="tab">
                         <p>AJUSTES</p>
                         <img src="/storage/icons/settings-icon.svg" alt="">
                     </div>
                 </div>
                 <div class="history">
-                    <account-history/>
+                    <account-history v-if="activeTab == 0" :user="user"/>
+                    <account-stats v-else-if="activeTab == 1" :user="user"/>
+                    <account-settings v-else-if="activeTab == 2" :user="user"/>
                 </div>
             </div>
-
         </div>
     </div>
 </template>
@@ -48,11 +49,11 @@ import { ref, defineProps, defineEmits, onMounted, watch } from 'vue';
 import useAuth from '@/composables/auth';
 import axios from 'axios';
 
-const emits = defineEmits(['close-account']);
-const { isLoggedIn, loginForm, validationErrors, processing, submitLogin , logout } = useAuth();
+const emits = defineEmits([ 'close-account' ]);
+const { isLoggedIn, logout } = useAuth();
 const user = ref({});
 const avatar = ref();
-const activeTab = ref();
+const activeTab = ref(0); // index 0-2 (history, stats, settings)
 
 onMounted(() => {
     if(isLoggedIn())
@@ -73,6 +74,40 @@ const getUser = async () => {
             user.value = response.data.data;
             avatar.value = "/storage/avatars/avatar" + response.data.data.avatar_id + ".jpg";
         })
+}
+
+const changeFocusTab = (element) => {
+
+    document.querySelectorAll('.tab').forEach(el => {
+        el.classList.remove('active');
+    });
+
+    if(element.classList.contains('tab'))
+    {
+        element.classList.add('active');
+    }
+    else
+    {
+        element.parentElement.classList.add('active');
+    }
+
+    activeTab.value = activeTabIndex();
+    // console.log(activeTab.value)
+}
+
+const activeTabIndex = () => {
+    let tabs = document.querySelectorAll('.tab');
+    let activeIndex = -1;
+
+    tabs.forEach((tab, index) => {
+        if (tab.classList.contains('active')) 
+        {
+            activeIndex = index;
+            return;
+        }
+    });
+
+    return activeIndex;
 }
 
 const toggleAccount = () => {
@@ -149,6 +184,18 @@ const toggleAccount = () => {
     flex-flow: row;
     justify-content: space-around;
     align-items: center;
+    cursor: pointer;
+    transition: all .1s;
+}
+
+.tab>p
+{
+    transition: all .1s;
+}
+
+.tab:hover p
+{
+    font-size: 16px;
 }
 
 .tab>p
@@ -160,6 +207,7 @@ const toggleAccount = () => {
 {
     background-color: #fff;
     color: black;
+    width: 200px;
 }
 
 .container-info

@@ -1,13 +1,17 @@
 <template>
     <ul>
-        <li>partida 1</li>
-        <li>partida 2</li>
-        <li>partida 3</li>
+        <li>Partida 1</li>
+        <li>Partida 2</li>
+        <li>Partida 3</li>
     </ul>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, defineProps } from 'vue';
+
+const props = defineProps([ 'user' ]);
+
+//TO-DO: - Controller history, - axios get data, - show it
 
 </script>
 
