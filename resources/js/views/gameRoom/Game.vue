@@ -30,7 +30,7 @@
                         <!-- COMPONENTE STATUS BAR -->
                         <!-- <status-bar @wordselected="setPlayingWord" :timeRound="timeRound" :difficulty="difficulty" :firstPlayer="firstPlayer" /> -->
                         <status-bar :playingWord="playingWord" :timeRound="timeRound" :difficulty="difficulty"
-                            :firstPlayer="firstPlayer" :startRound="startRound" />
+                            :currentPlayer="currentPlayer" :startRound="startRound" @endOfRound="handleEndOfRound" />
                         <!-- COMPONENTE CANVAS -->
                         <canvas-component :user="user" :new-canvas="newCanvas"
                             @canvasupdate="sendCanvas"></canvas-component>
@@ -56,7 +56,7 @@
 
 <script setup>
 import axios from 'axios';
-import { onBeforeMount, onMounted, ref } from 'vue';
+import { onBeforeMount, onMounted, ref, computed , watch} from 'vue';
 import { useRoute } from 'vue-router';
 import useAuth from '@/composables/auth';
 
@@ -71,9 +71,11 @@ const players = ref([]);
 const timeRound = ref();
 const rounds = ref();
 const difficulty = ref();
-const firstPlayer = ref();
 const timer = ref(true);
 const startRound = ref(false);
+const currentPlayerIndex = ref(0);
+const currentPlayer = computed(() => players.value[currentPlayerIndex.value]);
+const roundFinished = ref(false);
 
 const playingWord = ref('');
 const words = ([]);
@@ -142,7 +144,32 @@ const handleTimerUpdate = (timeLeft) => {
     if (timeLeft.timeLeft == 0) {
         timer.value = false;
         startRound.value = true;
-    }   
+    }
+};
+
+// Cuándo acaba el tiempo de la ronda 
+const handleEndOfRound = () => {
+    roundFinished.value = true;
+    console.log('Fin de ronda');
+};
+
+// Observa cuándo termina la ronda
+watch(roundFinished, (newValue) => {
+    if (newValue) {
+        console.log('Siguiente jugador');
+        moveToNextPlayer();
+        roundFinished.value = false;
+    }
+});
+
+// Al acabar la ronda pasa a dibujar el siguiente jugador
+const moveToNextPlayer = () => {
+    if (currentPlayerIndex.value < players.value.length - 1) {
+        currentPlayerIndex.value++;
+    } else {
+        currentPlayerIndex.value = 0;
+    }
+    console.log(currentPlayerIndex.value);
 };
 
 onBeforeMount(async () => {
@@ -155,7 +182,6 @@ onBeforeMount(async () => {
     rounds.value = gameData.value.rounds;
     difficulty.value = gameData.value.difficulty;
 
-    firstPlayer.value = players.value[0];
 
     console.log("INFO DE PLAYER ==> "
         + " Nickame: " + players.value[0].nickname

@@ -3,15 +3,15 @@
 <template>
     <div class="container flex flex-row justify-content-between align-items-center px-5 bar-container">
         <div style="font-size:2rem">
-            <div :style="{ borderColor: playerColor }" class="card-player">
+            <div :style="{ borderColor: props.currentPlayer.color }" class="card-player">
                 <div class="card-avatar">
                     <div class="avatar">
-                        <img src="/storage/avatars/avatar1.jpg" alt="">
+                        <img :src="props.currentPlayer.avatar" alt="">
                     </div>
                 </div>
                 <div class="card-player-info">
                     <p>DIBUJANDO:</p>
-                    <p :style="{ color: playerColor }">{{ playerDrawing }}</p>
+                    <p :style="{ color: props.currentPlayer.color }">{{ props.currentPlayer.nickname }}</p>
                 </div>
             </div>
         </div>
@@ -34,8 +34,8 @@
 import { watch, ref, onMounted, computed, defineEmits } from 'vue';
 import axios from 'axios';
 
-const props = defineProps(['timeRound', 'difficulty', 'firstPlayer', 'playingWord', 'startRound']);
-const emits = defineEmits(['wordselected']);
+const props = defineProps(['timeRound', 'difficulty', 'currentPlayer', 'playingWord', 'startRound']);
+const emits = defineEmits(['wordselected', 'endOfRound']);
 const words = ([]);
 const difficulty = ref('');
 
@@ -54,8 +54,6 @@ watch(() => props.startRound, (newValue) => {
 
 onMounted(async () => {
     roundTimeLeft.value = props.timeRound;
-    playerDrawing.value = props.firstPlayer.nickname;
-    playerColor.value = props.firstPlayer.color;
 
     console.log("dificultad: " + props.difficulty)
     console.log("[StatusBar.vue]:playingWord: " + props.playingWord)
@@ -102,10 +100,10 @@ const startRoundTimer = () => {
     const intervalId = setInterval(() => {
         if (roundTimeLeft.value > 0) {
             roundTimeLeft.value--;
-            console.log(roundTimeLeft.value);
         } else {
             clearInterval(intervalId);
-            // Opcional: Emitir un evento al terminar la ronda
+            emits('endOfRound');
+            console.log('Emitido final de ronda');
         }
     }, 1000);
 };
