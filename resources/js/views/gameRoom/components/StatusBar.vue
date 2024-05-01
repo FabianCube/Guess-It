@@ -3,7 +3,7 @@
 <template>
     <div class="container flex flex-row justify-content-between align-items-center px-5 bar-container">
         <div style="font-size:2rem">
-            <div :style="{borderColor: playerColor}" class="card-player">
+            <div :style="{ borderColor: playerColor }" class="card-player">
                 <div class="card-avatar">
                     <div class="avatar">
                         <img src="/storage/avatars/avatar1.jpg" alt="">
@@ -11,7 +11,7 @@
                 </div>
                 <div class="card-player-info">
                     <p>DIBUJANDO:</p>
-                    <p :style="{color: playerColor}">{{ playerDrawing }}</p>
+                    <p :style="{ color: playerColor }">{{ playerDrawing }}</p>
                 </div>
             </div>
         </div>
@@ -22,7 +22,7 @@
 
             <div class="clock-icon">
                 <div class="clock-time">
-                    <h3>{{ props.timeRound }}</h3>
+                    <h3>{{ roundTimeLeft }}</h3>
                 </div>
                 <img src="/storage/clock.svg" alt="">
             </div>
@@ -34,21 +34,29 @@
 import { watch, ref, onMounted, computed, defineEmits } from 'vue';
 import axios from 'axios';
 
-const props = defineProps(['timeRound', 'difficulty', 'firstPlayer', 'playingWord']);
-const emits = defineEmits([ 'wordselected' ]);
+const props = defineProps(['timeRound', 'difficulty', 'firstPlayer', 'playingWord', 'startRound']);
+const emits = defineEmits(['wordselected']);
 const words = ([]);
 const difficulty = ref('');
 
 const playerDrawing = ref('');
 const playerColor = ref('');
 
+const roundTimeLeft = ref();
+
 const isWordSelected = ref(false);
 
-onMounted(async () => {
+watch(() => props.startRound, (newValue) => {
+    if (newValue) {
+        startRoundTimer();
+    }
+});
 
+onMounted(async () => {
+    roundTimeLeft.value = props.timeRound;
     playerDrawing.value = props.firstPlayer.nickname;
     playerColor.value = props.firstPlayer.color;
-    
+
     console.log("dificultad: " + props.difficulty)
     console.log("[StatusBar.vue]:playingWord: " + props.playingWord)
 
@@ -90,6 +98,17 @@ onMounted(async () => {
 //     playingWord.value = words.value[index].toUpperCase();
 // }
 
+const startRoundTimer = () => {
+    const intervalId = setInterval(() => {
+        if (roundTimeLeft.value > 0) {
+            roundTimeLeft.value--;
+            console.log(roundTimeLeft.value);
+        } else {
+            clearInterval(intervalId);
+            // Opcional: Emitir un evento al terminar la ronda
+        }
+    }, 1000);
+};
 
 </script>
 
@@ -114,26 +133,22 @@ onMounted(async () => {
     transform: translate(-50%, -50%);
 }
 
-.clock-time>h3
-{
+.clock-time>h3 {
     font-family: 'Lilita One', sans-serif;
     font-size: 2rem;
     color: #494949;
 }
 
-#word-container
-{
+#word-container {
     font-family: 'Lilita One', sans-serif;
 }
 
-#word-container>h2
-{
+#word-container>h2 {
     color: white;
     font-size: 2.3rem;
 }
 
-.card-player
-{
+.card-player {
     width: 160px;
     height: 60px;
     border-radius: 14px;
@@ -145,13 +160,11 @@ onMounted(async () => {
     align-items: center;
 }
 
-.card-player-info
-{
+.card-player-info {
     width: 60%;
 }
 
-.card-player-info>p
-{
+.card-player-info>p {
     font-size: 14px;
     font-family: 'Lilita One', sans-serif;
     margin: 0;
@@ -159,13 +172,11 @@ onMounted(async () => {
     height: 20px;
 }
 
-.card-player-name
-{
+.card-player-name {
     color: #FD6F5A;
 }
 
-.avatar
-{
+.avatar {
     width: 37px;
     height: 37px;
     border-radius: 50px;
@@ -175,8 +186,7 @@ onMounted(async () => {
     align-items: center;
 }
 
-.avatar>img
-{
+.avatar>img {
     width: auto;
     height: 100%;
 }

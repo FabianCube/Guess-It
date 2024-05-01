@@ -29,7 +29,8 @@
                     <div style="width: 100%; height: 100%;border-radius: 12px; position: relative;">
                         <!-- COMPONENTE STATUS BAR -->
                         <!-- <status-bar @wordselected="setPlayingWord" :timeRound="timeRound" :difficulty="difficulty" :firstPlayer="firstPlayer" /> -->
-                        <status-bar :playingWord="playingWord" :timeRound="timeRound" :difficulty="difficulty" :firstPlayer="firstPlayer" />
+                        <status-bar :playingWord="playingWord" :timeRound="timeRound" :difficulty="difficulty"
+                            :firstPlayer="firstPlayer" :startRound="startRound" />
                         <!-- COMPONENTE CANVAS -->
                         <canvas-component :user="user" :new-canvas="newCanvas"
                             @canvasupdate="sendCanvas"></canvas-component>
@@ -72,6 +73,7 @@ const rounds = ref();
 const difficulty = ref();
 const firstPlayer = ref();
 const timer = ref(true);
+const startRound = ref(false);
 
 const playingWord = ref('');
 const words = ([]);
@@ -115,11 +117,10 @@ const setPlayingWord = async () => {
 
     playingWord.value = await getPlayingWord();
     console.log("[Game.vue]:setPlayingWord:word -> " + playingWord.value)
-    
+
     // Preparo un 'false' por si en las rondas tenemos que actualizar este estado...
-    if(sessionStorage.getItem('isWordSelected') === null ||
-        sessionStorage.getItem('isWordSelected') === 'false')
-    {
+    if (sessionStorage.getItem('isWordSelected') === null ||
+        sessionStorage.getItem('isWordSelected') === 'false') {
         console.log("Condicion de session pasada, " + sessionStorage.getItem('isWordSelected'))
         // playingWord.value = word.word;
         sessionStorage.setItem('isWordSelected', true);
@@ -137,11 +138,11 @@ const setPlayingWord = async () => {
 
 // Cuándo la cuenta atrás llega a 0 deshabilitamos el componente del timer
 const handleTimerUpdate = (timeLeft) => {
-    console.log(timeLeft);
     console.log(timer.value);
-    if (timeLeft = 0) {
+    if (timeLeft.timeLeft == 0) {
         timer.value = false;
-    }
+        startRound.value = true;
+    }   
 };
 
 onBeforeMount(async () => {
@@ -171,13 +172,12 @@ onBeforeMount(async () => {
     console.log('Injected game data:', gameData.value);
 })
 
-onMounted( async () => {
+onMounted(async () => {
 
-    if(sessionStorage.getItem('isWordSelected') === null)
-    {
+    if (sessionStorage.getItem('isWordSelected') === null) {
         setPlayingWord();
     }
-    
+
     await getUserData();
     listenEventMessageSent();
     listenEventCanvasUpdate();
@@ -276,8 +276,7 @@ const getPlayingWord = async () => {
 
     let category = '';
 
-    switch(difficulty.value)
-    {
+    switch (difficulty.value) {
         case 'Fácil':
             category = 'easy';
             break;
@@ -294,17 +293,17 @@ const getPlayingWord = async () => {
     //         console.log("RESPONSE ==== " + response.data);
     //         let words = response.data;
     //         return selectRandomWord(words);
-            
-            
+
+
     //         // console.log("Playing word: " + playingWord.value);
 
     //         // emits("wordselected", {
     //         //     word: playingWord.value
     //         // });
     //         // setPlayingWord(playingWord.value);
-            
+
     //     });
-    
+
     const response = await axios.get(`/api/get-word/${category}`);
     const words = response.data;
     return selectRandomWord(words);

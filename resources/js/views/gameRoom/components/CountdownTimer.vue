@@ -7,7 +7,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted , defineEmits , watch } from 'vue';
 
-const emits = defineEmits(['updateTimer']);
+const emits = defineEmits(['update-timer']);
 
 const timeLeft = ref(4);
 const images = [
@@ -19,8 +19,7 @@ const images = [
 const currentImage = ref(0);
 
 watch([timeLeft], () => {
-    console.log(timeLeft.value);
-    emits('updateTimer', {
+    emits('update-timer', {
         timeLeft: timeLeft.value
     });
 });
