@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AccountController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\PostController;
@@ -87,3 +88,6 @@ Route::post('/friends/reject/{requestId}', [FriendshipController::class, 'reject
 Route::get('/friends/requests', [FriendshipController::class, 'getFriendRequests']);
 Route::post('/friends/send-request', [FriendshipController::class, 'sendRequest']);
 Route::get('/friends/list', [FriendshipController::class, 'listFriends']);
+
+// Account controller
+Route::get('/account-history/{id}', [AccountController::class, 'getUserHistory']);

@@ -34,7 +34,7 @@
                         <img src="/storage/icons/settings-icon.svg" alt="">
                     </div>
                 </div>
-                <div class="history">
+                <div class="content-tab">
                     <account-history v-if="activeTab == 0" :user="user"/>
                     <account-stats v-else-if="activeTab == 1" :user="user"/>
                     <account-settings v-else-if="activeTab == 2" :user="user"/>
@@ -156,12 +156,13 @@ const toggleAccount = () => {
     padding: 13px;
 }
 
-.history
+.content-tab
 {
     background-color: white;
     width: 100%;
     height: 87%;
     border-radius: 0 23px 23px;
+    padding: 10px 30px 5px 30px;
 }
 
 .tabs
@@ -190,6 +191,7 @@ const toggleAccount = () => {
 
 .tab>p
 {
+    user-select: none; /* Para que no se pueda seleccionar el texto */
     transition: all .1s;
 }
 
