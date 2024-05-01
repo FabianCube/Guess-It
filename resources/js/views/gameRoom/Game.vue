@@ -171,14 +171,14 @@ onBeforeMount(async () => {
     console.log('Injected game data:', gameData.value);
 })
 
-onMounted(() => {
+onMounted( async () => {
 
     if(sessionStorage.getItem('isWordSelected') === null)
     {
         setPlayingWord();
     }
     
-    getUserData();
+    await getUserData();
     listenEventMessageSent();
     listenEventCanvasUpdate();
     listenEventSendWord();

@@ -6,8 +6,7 @@ import { inject } from 'vue';
 import { useRouter } from 'vue-router';
 
 
-export default function sweetAlertNotifications()
-{
+export default function sweetAlertNotifications() {
     const swal = inject('$swal');
 
     const router = useRouter();
@@ -20,8 +19,8 @@ export default function sweetAlertNotifications()
             title: $message,
             showConfirmButton: false,
             timer: 1500,
-            customClass: { 
-                popup: "swal2-custom swal2-custom-success" 
+            customClass: {
+                popup: "swal2-custom swal2-custom-success"
             }
         });
     }
@@ -34,7 +33,7 @@ export default function sweetAlertNotifications()
             title: $message,
             showConfirmButton: false,
             timer: 1500,
-            customClass: { 
+            customClass: {
                 popup: "swal2-custom swal2-custom-info"
             }
         });
@@ -48,7 +47,7 @@ export default function sweetAlertNotifications()
             title: $message,
             showConfirmButton: false,
             timer: 1500,
-            customClass: { 
+            customClass: {
                 popup: "swal2-custom swal2-custom-error"
             }
         });
@@ -62,22 +61,31 @@ export default function sweetAlertNotifications()
             title: $message,
             showConfirmButton: true,
             timer: 1500,
-            customClass: { 
+            customClass: {
                 popup: "swal2-custom"
             }
         });
     }
 
-    const throwInviteMessage = ($message = '¿Aceptar?') => {
+    const throwInviteMessage = ($message = '¿Aceptar?', onAccept, onReject) => {
         console.log('Sending invite message...');
 
         swal({
             icon: 'info',
             title: $message,
-            showConfirmButton: true,
-            showDenyButton: true,
-            customClass: { 
+            text: "¿Deseas unirte a la partida?",
+            showCancelButton: true,
+            confirmButtonText: 'Aceptar',
+            cancelButtonText: 'Rechazar',
+            reverseButtons: true,
+            customClass: {
                 popup: "swal2-custom"
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                onAccept();
+            } else if (result.isDismissed) {
+                onReject();
             }
         });
     }
@@ -91,7 +99,7 @@ export default function sweetAlertNotifications()
             icon: 'info',
             timer: 5000,
             timerProgressBar: true,
-            customClass: { 
+            customClass: {
                 popup: "swal2-custom swal2-custom-info-redirect"
             },
             willClose: () => {

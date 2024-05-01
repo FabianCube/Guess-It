@@ -115,7 +115,16 @@ onMounted(async () => {
 
         window.Echo.private(`user.${userId.data.uuid}`)
             .listen('.GameInvitation', (event) => {
-                throwInviteMessage('Te han invitado a una partida!');
+                console.log('Yep');
+                roomCode.value = event.roomCode;
+                throwInviteMessage(
+                    'Te han invitado a una partida! ¿Aceptas unirte?',
+                    async () => {
+                        await enterRoom();
+                        router.push({ name: 'create-game', params: { code: roomCode.value } });
+                    },
+                    () => console.log('Invitación rechazada')
+                );
             });
     }
 });

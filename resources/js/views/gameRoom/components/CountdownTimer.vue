@@ -9,7 +9,7 @@ import { ref, onMounted, onUnmounted , defineEmits , watch } from 'vue';
 
 const emits = defineEmits(['updateTimer']);
 
-const timeLeft = ref(4); // Empezamos la cuenta atrás desde 3
+const timeLeft = ref(4);
 const images = [
     '/storage/3.svg',
     '/storage/2.svg',
@@ -19,6 +19,7 @@ const images = [
 const currentImage = ref(0);
 
 watch([timeLeft], () => {
+    console.log(timeLeft.value);
     emits('updateTimer', {
         timeLeft: timeLeft.value
     });
@@ -26,9 +27,11 @@ watch([timeLeft], () => {
 
 
 function startCountdown() {
+    console.log(timeLeft.value);
     const intervalId = setInterval(() => {
         if (timeLeft.value > 0) {
             timeLeft.value--;
+            console.log(timeLeft.value);
             currentImage.value++;
         } else {
             clearInterval(intervalId);
