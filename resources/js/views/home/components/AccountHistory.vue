@@ -29,8 +29,8 @@ const getHistory = async () => {
 
     await axios.get(`/api/account-history/${props.user.id}`)
         .then(response => {
-            historyData.value = response.data;
-            console.log(response.data);
+            historyData.value = response.data.data;
+            console.log(response.data.data);
         })
 }
 

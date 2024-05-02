@@ -121,22 +121,15 @@ const setPlayingWord = async () => {
     playingWord.value = await getPlayingWord();
     console.log("[Game.vue]:setPlayingWord:word -> " + playingWord.value)
 
-    // Preparo un 'false' por si en las rondas tenemos que actualizar este estado...
-    if (sessionStorage.getItem('isWordSelected') === null ||
-        sessionStorage.getItem('isWordSelected') === 'false') {
-        console.log("Condicion de session pasada, " + sessionStorage.getItem('isWordSelected'))
-        // playingWord.value = word.word;
-        sessionStorage.setItem('isWordSelected', true);
-
-        await axios.post('/api/word', {
-            code: roomCode.value,
-            word: playingWord.value
-        }).then(response => {
-            console.log(response.data);
-        }).catch(error => {
-            console.error("Error en la petición axios de la palabra", error);
-        });
-    }
+    await axios.post('/api/word', {
+        code: roomCode.value,
+        word: playingWord.value
+    }).then(response => {
+        console.log(response.data);
+    }).catch(error => {
+        console.error("Error en la petición axios de la palabra", error);
+    });
+    
 }
 
 // Cuándo la cuenta atrás llega a 0 deshabilitamos el componente del timer
@@ -204,9 +197,8 @@ onBeforeMount(async () => {
 
 onMounted(async () => {
 
-    if (sessionStorage.getItem('isWordSelected') === null) {
-        setPlayingWord();
-    }
+    // it is generating a word everytime page refresh
+    setPlayingWord();    
 
     await getUserData();
     listenEventMessageSent();
@@ -267,9 +259,11 @@ const listenEventCanvasUpdate = () => {
 const listenEventSendWord = () => {
     console.log("[Game.vue]:listenEventSendWord: Entrado!");
 
+    console.log(roomCode.value);    
+
     window.Echo.channel('room-' + roomCode.value)
         .listen('.SendWord', (e) => {
-            console.log("[Game.vue]:listenEventSendWord:.GameStart -> " + e.word);
+            console.log("[Game.vue]:listenEventSendWord:.SendWord -> " + e.word);
 
             playingWord.value = e.word;
         });

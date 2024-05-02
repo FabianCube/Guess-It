@@ -16,7 +16,7 @@
             </div>
         </div>
         <div id="word-container" style="font-size:2rem">
-            <h2>{{ props.playingWord }}</h2>
+            <h2>{{ currentWord }}</h2>
         </div>
         <div id="clock-container">
 
@@ -43,8 +43,7 @@ const playerDrawing = ref('');
 const playerColor = ref('');
 
 const roundTimeLeft = ref();
-
-const isWordSelected = ref(false);
+const currentWord = ref('');
 
 watch(() => props.startRound, (newValue) => {
     if (newValue == true) {
@@ -52,49 +51,17 @@ watch(() => props.startRound, (newValue) => {
     }
 });
 
+watch(() => props.playingWord, (word) => {
+    console.log("WORD IN WATCH === > " + word);
+    currentWord.value = word;
+});
+
 onMounted(async () => {
     roundTimeLeft.value = props.timeRound;
 
     console.log("dificultad: " + props.difficulty)
     console.log("[StatusBar.vue]:playingWord: " + props.playingWord)
-
-    // switch(props.difficulty)
-    // {
-    //     case 'Fácil':
-    //         difficulty.value = 'easy';
-    //         break;
-    //     case 'Medio':
-    //         difficulty.value = 'medium';
-    //         break;
-    //     case 'Difícil':
-    //         difficulty.value = 'hard';
-    //         break;
-    // }
-
-    // await axios.get(`/api/get-word/${difficulty.value}`)
-    //     .then(response => {
-    //         words.value = response.data;
-
-    //         if(isWordSelected.value === false)
-    //         {
-    //             selectRandomWord();
-    //             isWordSelected.value = true;
-    //             console.log("Playing word: " + playingWord.value);
-
-    //             emits("wordselected", {
-    //                 word: playingWord.value
-    //             });
-    //         }
-    //     });
 })
-
-// const selectRandomWord = () => {
-//     // length de las palabras
-//     let length = computed(() => words.value.length);
-//     // indice aleatorio
-//     let index = Math.floor(Math.random() * length.value);
-//     playingWord.value = words.value[index].toUpperCase();
-// }
 
 const startRoundTimer = () => {
     const intervalId = setInterval(() => {
