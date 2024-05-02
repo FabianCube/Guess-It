@@ -142,6 +142,10 @@ const canStartGame = () => {
 };
 
 onBeforeMount(async () => {
+    if(localStorage.getItem('Sala') != route.params.code){
+        router.push({ name: 'home' });
+    }
+
     roomCode.value = route.params.code;
 
     // Definimos una espera de 3 segundos
@@ -167,6 +171,8 @@ onBeforeMount(async () => {
     if (owner.value == storedUserData.uuid || owner.value == userRegistered.value) {
         options.value = true;
     }
+
+    localStorage.removeItem('Sala');
 
     // Finaliza la carga y muestra los componentes
     isLoading.value = false;
@@ -206,6 +212,7 @@ onMounted(() => {
     Echo.channel('room-' + roomCode.value)
         .listen('.GameStart', (e) => {
             const encodedGameData = encodeURIComponent(JSON.stringify(e.gameData));
+            localStorage.setItem('Partida', roomCode.value);
             router.push({ name: 'play-game', params: { code: roomCode.value }, query: { gameData: encodedGameData } });
         });
 });

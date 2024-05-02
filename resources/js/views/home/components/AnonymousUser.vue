@@ -101,6 +101,7 @@ const createRoom = async () => {
 
             await submitAnonymousLogin();
             await enterRoom(passedRoomCode.roomCode);
+            await localStorage.setItem('Sala', passedRoomCode.roomCode);
             router.push({ name: 'create-game', params: { code: passedRoomCode.roomCode } });
         } catch (error) {
             console.error("Error al unirse a la sala existente:", error);

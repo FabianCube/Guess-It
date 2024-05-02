@@ -199,6 +199,7 @@ const createRoom = async () => {
         console.log("Sala creada con código:", roomCode.value);
 
         await enterRoom();
+        await localStorage.setItem('Sala', roomCode.value);
         router.push({ name: 'create-game', params: { code: roomCode.value } });
     } catch (error) {
         console.error("Error al crear la sala:", error);
