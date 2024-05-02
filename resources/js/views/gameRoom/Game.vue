@@ -172,9 +172,9 @@ const moveToNextPlayer = () => {
 };
 
 onBeforeMount(async () => {
-    if (localStorage.getItem('Partida') != route.params.code) {
-        await router.push({ name: 'home' });
-    }
+    // if (localStorage.getItem('Partida') != route.params.code) {
+    //     await router.push({ name: 'home' });
+    // }
 
     const decodedData = decodeURIComponent(route.query.gameData);
     gameData.value = JSON.parse(decodedData);
@@ -199,7 +199,7 @@ onBeforeMount(async () => {
     console.log('Playing in channel ==== room-' + roomCode.value);
     console.log('Injected game data:', gameData.value);
 
-    localStorage.removeItem('Partida');
+    // localStorage.removeItem('Partida');
 })
 
 onMounted(async () => {

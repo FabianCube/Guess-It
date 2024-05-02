@@ -23,7 +23,7 @@
     <div class="relative flex items-top justify-center min-h-screen sm:items-center py-4 sm:pt-0">
         <div class="w-100 flex flex-row justify-between py-5">
             <div class="col-4 flex flex-column justify-content-end align-items-start ps-buttons">
-                <button class="btn-smll-default mb-5" style="border: none;"><img src="/storage/icons/info-circle.svg"
+                <button @mouseover="() => playSound('/storage/sounds/bubble.mp3')" class="btn-smll-default mb-5" style="border: none;"><img src="/storage/icons/info-circle.svg"
                         alt=""></button>
                 <button class="btn-smll-default" style="border: none;"><img src="/storage/icons/volume-on.svg"
                         alt=""></button>
@@ -73,6 +73,12 @@ const userRegistered = ref();
 const router = useRouter();
 const friendsList = ref(false);
 const user = ref();
+
+
+const playSound = (soundFile) => {
+    const audio = new Audio(soundFile);
+    audio.play();
+}
 
 onMounted(async () => {
 
