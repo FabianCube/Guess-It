@@ -17,6 +17,7 @@
         </div>
 
         <div id="word-container" style="font-size:2rem">
+            <!-- CHECK IF USER IS DRAWING {SHOW WORD / DO NOT SHOW} -->
             <div class="letters" v-for="letter in currentWordEncrypted">
                 <h2 v-if="letter.visibility == 1"> {{ letter.letter }} </h2>
                 <h2 v-else> {{ letter.character }} </h2>
