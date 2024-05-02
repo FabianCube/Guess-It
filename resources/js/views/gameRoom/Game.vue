@@ -30,7 +30,8 @@
                         <!-- COMPONENTE STATUS BAR -->
                         <!-- <status-bar @wordselected="setPlayingWord" :timeRound="timeRound" :difficulty="difficulty" :firstPlayer="firstPlayer" /> -->
                         <status-bar :playingWord="playingWord" :timeRound="timeRound" :difficulty="difficulty"
-                            :currentPlayer="currentPlayer" :user="user" :startRound="startRound" @endOfRound="handleEndOfRound" />
+                            :currentPlayer="currentPlayer" :user="user" :startRound="startRound"
+                            @endOfRound="handleEndOfRound" />
                         <!-- COMPONENTE CANVAS -->
                         <canvas-component :user="user" :new-canvas="newCanvas"
                             @canvasupdate="sendCanvas"></canvas-component>
@@ -57,7 +58,7 @@
 
 <script setup>
 import axios from 'axios';
-import { onBeforeMount, onMounted, ref, computed, watch , nextTick} from 'vue';
+import { onBeforeMount, onMounted, ref, computed, watch, nextTick } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import useAuth from '@/composables/auth';
 
@@ -199,15 +200,15 @@ onBeforeMount(async () => {
     console.log('Playing in channel ==== room-' + roomCode.value);
     console.log('Injected game data:', gameData.value);
 
+    await getUserData();
+
+    // it is generating a word everytime page refresh
+    await setPlayingWord();
+
     // localStorage.removeItem('Partida');
 })
 
 onMounted(async () => {
-
-    // it is generating a word everytime page refresh
-    setPlayingWord();
-
-    await getUserData();
     listenEventMessageSent();
     listenEventCanvasUpdate();
     listenEventSendWord();

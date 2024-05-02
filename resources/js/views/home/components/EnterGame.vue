@@ -67,6 +67,7 @@ const findRoom = async () => {
             // Si el usuario está registrado entra en la sala, sino abre el login de user anónimo
             if (isRegistered) {
                 await enterRoom();
+                await localStorage.setItem('Sala', roomCode.value);
                 router.push({ name: 'create-game', params: { code: roomCode.value } });
             }
         } else {
