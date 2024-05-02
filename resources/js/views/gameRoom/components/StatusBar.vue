@@ -15,11 +15,15 @@
                 </div>
             </div>
         </div>
-        <div id="word-container" style="font-size:2rem">
-            <h2>{{ currentWord }}</h2>
-        </div>
-        <div id="clock-container">
 
+        <div id="word-container" style="font-size:2rem">
+            <div class="letters" v-for="letter in currentWordEncrypted">
+                <h2 v-if="letter.visibility == 1"> {{ letter.letter }} </h2>
+                <h2 v-else> {{ letter.character }} </h2>
+            </div>
+        </div>
+
+        <div id="clock-container">
             <div class="clock-icon">
                 <div class="clock-time">
                     <h3>{{ roundTimeLeft }}</h3>
@@ -44,6 +48,7 @@ const playerColor = ref('');
 
 const roundTimeLeft = ref();
 const currentWord = ref('');
+const currentWordEncrypted = ref({});
 
 watch(() => props.startRound, (newValue) => {
     if (newValue == true) {
@@ -54,6 +59,8 @@ watch(() => props.startRound, (newValue) => {
 watch(() => props.playingWord, (word) => {
     console.log("WORD IN WATCH === > " + word);
     currentWord.value = word;
+
+    encryptWord(currentWord.value);
 });
 
 onMounted(async () => {
@@ -74,6 +81,34 @@ const startRoundTimer = () => {
         }
     }, 1000);
 };
+
+const encryptWord = (word) => {
+    let splitted = word.split('');
+    let wordSplitted = [];
+
+    for(let i = 0; i < splitted.length; i++)
+    {
+        if(i % 2 == 0)
+        {
+            wordSplitted.push({
+                'letter': splitted[i],
+                'character': '_',
+                'visibility': 1
+            });
+        }
+        else
+        {
+            wordSplitted.push({
+                'letter': splitted[i],
+                'character': '_',
+                'visibility': 0
+            });
+        }
+    }
+
+    currentWordEncrypted.value = wordSplitted;
+    console.log(currentWordEncrypted.value[0]);
+}
 
 </script>
 
@@ -106,11 +141,17 @@ const startRoundTimer = () => {
 
 #word-container {
     font-family: 'Lilita One', sans-serif;
+    width: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-#word-container>h2 {
+.letters>h2
+{
     color: white;
     font-size: 2.3rem;
+    margin: 5px;
 }
 
 .card-player {
