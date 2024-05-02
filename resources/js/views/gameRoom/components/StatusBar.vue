@@ -88,6 +88,7 @@ const encryptWord = (word) => {
 
     for(let i = 0; i < splitted.length; i++)
     {
+        // setting visibility for testing
         if(i % 2 == 0)
         {
             wordSplitted.push({
