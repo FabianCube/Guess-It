@@ -10,7 +10,7 @@
                     </div>
                 </div>
                 <div class="card-player-info">
-                    <p>DIBUJANDO:</p>
+                    <p>DIBUJANDO: </p>
                     <p :style="{ color: props.currentPlayer.color }">{{ props.currentPlayer.nickname }}</p>
                 </div>
             </div>
@@ -18,9 +18,12 @@
 
         <div id="word-container" style="font-size:2rem">
             <!-- CHECK IF USER IS DRAWING {SHOW WORD / DO NOT SHOW} -->
-            <div class="letters" v-for="letter in currentWordEncrypted">
+            <div class="letters" v-if="props.currentPlayer.nickname != props.user.nickname" v-for="letter in currentWordEncrypted">
                 <h2 v-if="letter.visibility == 1"> {{ letter.letter }} </h2>
                 <h2 v-else> {{ letter.character }} </h2>
+            </div>
+            <div class="letters" v-else v-for="letter in currentWordEncrypted">
+                <h2> {{ letter.letter }} </h2>
             </div>
         </div>
 
@@ -39,7 +42,7 @@
 import { watch, ref, onMounted, computed, defineEmits } from 'vue';
 import axios from 'axios';
 
-const props = defineProps(['timeRound', 'difficulty', 'currentPlayer', 'playingWord', 'startRound']);
+const props = defineProps(['timeRound', 'difficulty', 'currentPlayer', 'playingWord', 'startRound', 'user']);
 const emits = defineEmits(['wordselected', 'endOfRound']);
 const words = ([]);
 const difficulty = ref('');
@@ -69,6 +72,8 @@ onMounted(async () => {
 
     console.log("dificultad: " + props.difficulty)
     console.log("[StatusBar.vue]:playingWord: " + props.playingWord)
+
+    // console.log("CurrentPlayer == " + props.currentPlayer + " AND user == " + props.user)
 })
 
 const startRoundTimer = () => {

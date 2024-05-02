@@ -30,7 +30,7 @@
                         <!-- COMPONENTE STATUS BAR -->
                         <!-- <status-bar @wordselected="setPlayingWord" :timeRound="timeRound" :difficulty="difficulty" :firstPlayer="firstPlayer" /> -->
                         <status-bar :playingWord="playingWord" :timeRound="timeRound" :difficulty="difficulty"
-                            :currentPlayer="currentPlayer" :startRound="startRound" @endOfRound="handleEndOfRound" />
+                            :currentPlayer="currentPlayer" :user="user" :startRound="startRound" @endOfRound="handleEndOfRound" />
                         <!-- COMPONENTE CANVAS -->
                         <canvas-component :user="user" :new-canvas="newCanvas"
                             @canvasupdate="sendCanvas"></canvas-component>
