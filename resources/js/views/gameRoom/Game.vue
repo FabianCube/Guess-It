@@ -42,7 +42,8 @@
                     <div class="p-3 chat flex flex-column justify-content-between">
                         <!-- COMPONENTE CHAT  -->
                         <div class="col-8 p-0" style="height: 95%; width:100%;">
-                            <chat-messages :messages="messages" :rounds="rounds" :currentRound="currentRound"></chat-messages>
+                            <chat-messages :messages="messages" :rounds="rounds"
+                                :currentRound="currentRound"></chat-messages>
                         </div>
                         <div class="col-4 p-0" style="width:100%">
                             <chat-form @messagesent="addMessage" :user="user"></chat-form>
@@ -56,11 +57,12 @@
 
 <script setup>
 import axios from 'axios';
-import { onBeforeMount, onMounted, ref, computed , watch} from 'vue';
-import { useRoute } from 'vue-router';
+import { onBeforeMount, onMounted, ref, computed, watch , nextTick} from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import useAuth from '@/composables/auth';
 
 const route = useRoute();
+const router = useRouter();
 const { isLoggedIn } = useAuth();
 const user = ref();
 const messages = ref([]);
@@ -129,7 +131,7 @@ const setPlayingWord = async () => {
     }).catch(error => {
         console.error("Error en la petición axios de la palabra", error);
     });
-    
+
 }
 
 // Cuándo la cuenta atrás llega a 0 deshabilitamos el componente del timer
@@ -170,6 +172,9 @@ const moveToNextPlayer = () => {
 };
 
 onBeforeMount(async () => {
+    // if (localStorage.getItem('Partida') != route.params.code) {
+    //     await router.push({ name: 'home' });
+    // }
 
     const decodedData = decodeURIComponent(route.query.gameData);
     gameData.value = JSON.parse(decodedData);
@@ -193,12 +198,14 @@ onBeforeMount(async () => {
 
     console.log('Playing in channel ==== room-' + roomCode.value);
     console.log('Injected game data:', gameData.value);
+
+    // localStorage.removeItem('Partida');
 })
 
 onMounted(async () => {
 
     // it is generating a word everytime page refresh
-    setPlayingWord();    
+    setPlayingWord();
 
     await getUserData();
     listenEventMessageSent();
@@ -227,7 +234,7 @@ onMounted(async () => {
         bg.style.transform = `translate(${bgX}px, ${bgY}px) translateZ(0)`;
     });
 
-    console.log("User: " + user.value.nickname)
+    console.log("User: " + user.value.nickname);
 });
 
 const listenEventMessageSent = () => {
@@ -259,7 +266,7 @@ const listenEventCanvasUpdate = () => {
 const listenEventSendWord = () => {
     console.log("[Game.vue]:listenEventSendWord: Entrado!");
 
-    console.log(roomCode.value);    
+    console.log(roomCode.value);
 
     window.Echo.channel('room-' + roomCode.value)
         .listen('.SendWord', (e) => {
