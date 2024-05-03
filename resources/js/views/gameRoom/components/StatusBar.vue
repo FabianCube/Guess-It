@@ -53,9 +53,25 @@ const playerColor = ref('');
 const roundTimeLeft = ref();
 const currentWord = ref('');
 const currentWordEncrypted = ref({});
+const wordLenght = ref(0);
+const currentInterval = ref(0);
+const usedIndex = ref([]);
+
+const reset = () => {
+    // currentInterval.value = 0;
+    // wordLenght.value = 0;
+    usedIndex.value = [];
+}
 
 watch(() => props.startRound, (newValue) => {
     if (newValue == true) {
+        
+        if(usedIndex.value.length != 0)
+        {
+            reset();
+            console.log("New round: Reset done. usedIndex.length -> [" + usedIndex.value + "]");
+        }
+        
         startRoundTimer();
     }
 });
@@ -74,6 +90,7 @@ onMounted(async () => {
     console.log("[StatusBar.vue]:playingWord: " + props.playingWord)
 
     // console.log("CurrentPlayer == " + props.currentPlayer + " AND user == " + props.user)
+    
 })
 
 const startRoundTimer = () => {
@@ -88,8 +105,49 @@ const startRoundTimer = () => {
     }, 1000);
 };
 
+watch(() => roundTimeLeft.value, () => {
+
+    letterRevealer();
+})
+
+
+const letterRevealer = () => {
+    let index = 0;
+    let time = props.timeRound;
+    let size = wordLenght.value;
+    let interval = Math.trunc(time / size);
+
+    // console.log("INTERVAL = " + interval + "s");
+    // console.log("CURRENT_INTERVAL = " + currentInterval.value + "s");
+
+    let antiFrezexdd = 0;
+
+    do
+    {
+        index = Math.round(Math.random() * (size - 1));
+        // console.log("Index: " + index);
+        antiFrezexdd++;
+    }
+    while(usedIndex.value.includes(index) && antiFrezexdd < 20)
+
+    if(currentInterval.value == interval)
+    {
+        if (currentWordEncrypted.value[index]) {
+            currentWordEncrypted.value[index].visibility = 1;
+            usedIndex.value.push(index);
+        }
+
+        currentInterval.value = 0;
+    }
+    else
+    {
+        currentInterval.value++;
+    }
+}
+
 const encryptWord = (word) => {
     let splitted = word.split('');
+    wordLenght.value = splitted.length;
     let wordSplitted = [];
 
     for(let i = 0; i < splitted.length; i++)
