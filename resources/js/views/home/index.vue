@@ -49,7 +49,7 @@
 
                 <div class="d-flex flex-column justify-content-end">
                     <friends v-if="friendsList" />
-                    <button @click="toggleFriendsList" class="btn-smll-default" style="border: none">
+                    <button @click="toggleFriendsList" class="btn-smll-default btn-friends" style="border: none">
                         <img src="/storage/icons/friends.svg" alt="">
                     </button>
                 </div>
@@ -296,6 +296,10 @@ const enterRoom = () => {
 
 .pe-buttons {
     padding-right: 5vw;
+}
+
+.btn-friends{
+    margin-left: auto;
 }
 
 @keyframes shake {
