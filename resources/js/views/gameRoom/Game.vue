@@ -155,6 +155,7 @@ watch(roundFinished, (newValue) => {
     if (newValue) {
         console.log('Siguiente jugador');
         moveToNextPlayer();
+        setPlayingWord();
         roundFinished.value = false;
         timer.value = true;
         startRound.value = false;
