@@ -94,16 +94,7 @@ const encryptWord = (word) => {
 
     for(let i = 0; i < splitted.length; i++)
     {
-        // setting visibility for testing
-        if(i % 2 == 0)
-        {
-            wordSplitted.push({
-                'letter': splitted[i],
-                'character': '_',
-                'visibility': 1
-            });
-        }
-        else
+        if(splitted[i] !== " ")
         {
             wordSplitted.push({
                 'letter': splitted[i],
@@ -111,6 +102,15 @@ const encryptWord = (word) => {
                 'visibility': 0
             });
         }
+        else
+        {
+            wordSplitted.push({
+                'letter': splitted[i],
+                'character': ' ',
+                'visibility': 0
+            });
+        }
+        
     }
 
     currentWordEncrypted.value = wordSplitted;
