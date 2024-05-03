@@ -1,25 +1,29 @@
 <template>
-    <div class="d-flex flex-column justify-content-between align-items-start popup-friends">
-        <div>
+    <div class="d-flex flex-column justify-content-between align-items-start popup-friends p-3 mb-2">
+        <div class="w-100 mb-3">
             <h3>Añadir amigo</h3>
-            <form @submit.prevent="sendFriendRequest">
-                <input type="email" v-model="friendEmail" placeholder="Email del amigo" required>
-                <button type="submit">Enviar Solicitud</button>
+            <form @submit.prevent="sendFriendRequest" class="d-flex flex-column w-100">
+                <input type="email" class="mail-input p-1 mb-3" v-model="friendEmail" placeholder="Email del amigo"
+                    required>
+                <button type="submit" class="btn-send">Enviar Solicitud</button>
             </form>
         </div>
-        <div>
+        <div class="w-100 mb-3">
             <h3>Peticiones de amistad</h3>
-            <div v-for="request in friendRequests" :key="request.id">
-                {{ request.sender.nickname }} -
-                <button @click="acceptRequest(request.id)">Aceptar</button>
-                <button @click="rejectRequest(request.id)">Rechazar</button>
+            <div v-for="request in friendRequests" :key="request.id"
+                class="d-flex flex-column align-items-center request">
+                <p class="mb-2">{{ request.sender.nickname }}</p>
+                <div class="w-100 d-flex justify-content-around">
+                    <button class="btn-accept" @click="acceptRequest(request.id)">Aceptar</button>
+                    <button class="btn-deny" @click="rejectRequest(request.id)">Rechazar</button>
+                </div>
             </div>
         </div>
-        <div>
+        <div class="w-100">
             <h3>Lista de amigos</h3>
-            <div v-for="friend in friendsList" :key="friend.id">
-                <img src="" alt="">
-                {{ friend.nickname }}
+            <div v-for="friend in friendsList" :key="friend.id" class="d-flex align-items-center mb-2 friend">
+                <img :src="`/storage/avatars/avatar${friend.avatar_id}.jpg`" alt="avatar" class="avatar">
+                <p class="mb-0 ms-3">{{ friend.nickname }}</p>
             </div>
         </div>
     </div>
@@ -53,6 +57,7 @@ const loadFriendsList = async () => {
     try {
         const response = await axios.get('/api/friends/list');
         friendsList.value = response.data;
+        console.log(friendsList.value);
     } catch (error) {
         console.error('Error loading friends list:', error);
     }
@@ -94,9 +99,53 @@ const rejectRequest = async (requestId) => {
 
 <style scoped>
 .popup-friends {
-    width: 15vw;
-    height: 30vh;
+    font-family: "Lilita One", sans-serif;
+    width: 100%;
+    max-height: 35vh;
     background-color: white;
     border-radius: 20px;
+    transform-origin: bottom;
+    animation: growUp 0.3s ease-out forwards;
+    overflow: hidden;
+}
+
+.mail-input {
+    width: 100%;
+    border-radius: 6px;
+    border: solid 2px #757575;
+}
+
+.request {
+    border: solid 2px #757575;
+    border-radius: 8px;
+    padding: 5px;
+    padding-bottom: 10px;
+    box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.25);
+}
+
+.friend {
+    border: 2px solid #B2B2B2;
+    border-radius: 8px;
+    height: 4.3rem;
+    padding: 0.5rem;
+    box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.25);
+}
+
+.avatar {
+    border-radius: 50%;
+    overflow: hidden;
+    height: 3rem;
+    width: 3rem;
+    flex-shrink: 0;
+}
+
+@keyframes growUp {
+    from {
+        transform: scaleY(0);
+    }
+
+    to {
+        transform: scaleY(100%);
+    }
 }
 </style>
