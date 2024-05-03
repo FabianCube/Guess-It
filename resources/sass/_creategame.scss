@@ -47,7 +47,7 @@
     height: 110vh;
     background-image: url('../../../../storage/app/public/background-home.png');
     background-position: center;
-    background-size: 100%;
+    background-size: cover;
     background-repeat: no-repeat;
     transition: transform 0.1s ease;
     transform: translateZ(0);
@@ -63,7 +63,7 @@
     height: 110vh;
     background-image: url('../../../../storage/app/public/background-play-game.svg');
     background-position: center;
-    background-size: 100%;
+    background-size: cover;
     background-repeat: no-repeat;
     transition: transform 0.1s ease;
     transform: translateZ(0);
