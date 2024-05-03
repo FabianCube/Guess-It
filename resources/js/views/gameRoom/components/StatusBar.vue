@@ -125,7 +125,7 @@ const letterRevealer = () => {
     do
     {
         index = Math.round(Math.random() * (size - 1));
-        console.log("Index: " + index);
+        // console.log("Index: " + index);
         antiFrezexdd++;
     }
     while(usedIndex.value.includes(index) && antiFrezexdd < 20)
