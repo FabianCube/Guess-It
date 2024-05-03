@@ -7,15 +7,15 @@
                 </button>
             </div>
             <div class="d-flex flex-column align-items-center w-100">
-                <h1>Invitar Amigos</h1>
-                <div v-for="friend in props.friends" :key="friend.id" class="d-flex w-70">
-                    <div>
+                <h1 class="mb-4">Invitar Amigos</h1>
+                <div v-for="friend in props.friends" :key="friend.id" class="d-flex justify-content-between w-75 etiqueta">
+                    <div class="d-flex align-items-center">
                         <div class="me-3 avatar">
                             <img :src="`/storage/avatars/avatar${friend.avatar_id}.jpg`" alt="avatar">
                         </div>
                         <p class="mb-0">{{ friend.nickname }}</p>
                     </div>
-                    <button @click="inviteFriend(friend.id)">Invitar</button>
+                    <button @click="inviteFriend(friend.id)" class="btn-invite-small">INVITAR</button>
                 </div>
             </div>
         </div>
@@ -77,11 +77,19 @@ const inviteFriend = async (friendId) => {
     overflow: hidden;
 }
 
+.etiqueta {
+    border: 3px solid #616161;
+    border-radius: 10px;
+    height: 6rem;
+    padding: 1rem;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
 .avatar {
     border-radius: 50%;
     overflow: hidden;
-    height: 4rem;
-    width: 4rem;
+    height: 4.5rem;
+    width: 4.5rem;
     flex-shrink: 0;
 }
 
