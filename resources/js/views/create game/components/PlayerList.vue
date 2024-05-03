@@ -8,7 +8,6 @@
             </div>
             <div class="nombre-jugador">
                 <p class="mb-0">{{ jugador.nickname }}</p>
-
             </div>
         </div>
 

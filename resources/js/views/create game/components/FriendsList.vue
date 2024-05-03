@@ -1,11 +1,22 @@
 <template>
     <div class="modal">
-        <div class="modal-content">
-            <span @click="closeModal" class="close">&times;</span>
-            <h3>Invitar Amigos</h3>
-            <div v-for="friend in props.friends" :key="friend.id">
-                {{ friend.nickname }}
-                <button @click="inviteFriend(friend.id)">Invitar</button>
+        <div class="p-4 modal-content">
+            <div class="w-100">
+                <button @click="closeModal" id="closeInvitation">
+                    <img src="/storage/icons/arrow-left.svg" alt="">
+                </button>
+            </div>
+            <div class="d-flex flex-column align-items-center w-100">
+                <h1>Invitar Amigos</h1>
+                <div v-for="friend in props.friends" :key="friend.id" class="d-flex w-70">
+                    <div>
+                        <div class="me-3 avatar">
+                            <img :src="`/storage/avatars/avatar${friend.avatar_id}.jpg`" alt="avatar">
+                        </div>
+                        <p class="mb-0">{{ friend.nickname }}</p>
+                    </div>
+                    <button @click="inviteFriend(friend.id)">Invitar</button>
+                </div>
             </div>
         </div>
     </div>
@@ -39,40 +50,44 @@ const inviteFriend = async (friendId) => {
 </script>
 
 <style scoped>
+#closeInvitation {
+    background-color: transparent;
+    border: none;
+}
+
 .modal {
     display: flex;
     position: absolute;
     z-index: 100;
-    left: 0;
-    top: 0;
     width: 100%;
     height: 100%;
-    align-items: center;
     justify-content: center;
     background-color: rgba(0, 0, 0, 0.25);
     backdrop-filter: blur(4px);
 }
 
 .modal-content {
+    margin-top: 10vh;
+    height: 20vh;
+    max-height: 40vh;
     background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
     width: 80%;
-    max-width: 600px;
+    max-width: 25vw;
+    overflow: hidden;
 }
 
-.close {
-    color: #aaaaaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
+.avatar {
+    border-radius: 50%;
+    overflow: hidden;
+    height: 4rem;
+    width: 4rem;
+    flex-shrink: 0;
 }
 
-.close:hover,
-.close:focus {
-    color: #000;
-    text-decoration: none;
+.avatar img {
+    height: 100%;
+    width: auto;
 }
+
 </style>

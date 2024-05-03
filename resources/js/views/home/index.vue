@@ -23,8 +23,8 @@
     <div class="relative flex items-top justify-center min-h-screen sm:items-center py-4 sm:pt-0">
         <div class="w-100 flex flex-row justify-between py-5">
             <div class="col-4 flex flex-column justify-content-end align-items-start ps-buttons">
-                <button @mouseover="() => playSound('/storage/sounds/bubble.mp3')" class="btn-smll-default mb-5" style="border: none;"><img src="/storage/icons/info-circle.svg"
-                        alt=""></button>
+                <button @mouseover="() => playSound('/storage/sounds/bubble.mp3')" class="btn-smll-default mb-5"
+                    style="border: none;"><img src="/storage/icons/info-circle.svg" alt=""></button>
                 <button class="btn-smll-default" style="border: none;"><img src="/storage/icons/volume-on.svg"
                         alt=""></button>
             </div>
@@ -59,7 +59,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import useAuth from '@/composables/auth';
 import sweetAlertNotifications from '@/utils/swal_notifications';
@@ -79,6 +79,8 @@ const playSound = (soundFile) => {
     const audio = new Audio(soundFile);
     audio.play();
 }
+
+let UserPrivateChannel;
 
 onMounted(async () => {
 
@@ -108,24 +110,34 @@ onMounted(async () => {
     if (isLoggedIn()) {
         const userId = await axios.get(`/api/get-user`);
 
-        window.Echo.private(`user.${userId.data.uuid}`)
+        UserPrivateChannel = window.Echo.private(`user.${userId.data.uuid}`);
+
+        UserPrivateChannel
             .listen('.FriendRequest', (event) => {
                 throwInfoMessage('Tienes una nueva petición de amistad!');
             });
 
-        window.Echo.private(`user.${userId.data.uuid}`)
+        UserPrivateChannel
             .listen('.GameInvitation', (event) => {
-                console.log('Yep');
                 roomCode.value = event.roomCode;
                 throwInviteMessage(
                     'Te han invitado a una partida! ¿Aceptas unirte?',
                     async () => {
                         await enterRoom();
+                        await localStorage.setItem('Sala', roomCode.value);
                         router.push({ name: 'create-game', params: { code: roomCode.value } });
                     },
                     () => console.log('Invitación rechazada')
                 );
             });
+    }
+});
+
+onUnmounted(() => {
+    // Eliminar listeners de Echo
+    if (UserPrivateChannel) {
+        UserPrivateChannel.stopListening('.FriendRequest');
+        UserPrivateChannel.stopListening('.GameInvitation');
     }
 });
 
@@ -298,7 +310,7 @@ const enterRoom = () => {
     padding-right: 5vw;
 }
 
-.btn-friends{
+.btn-friends {
     margin-left: auto;
 }
 
