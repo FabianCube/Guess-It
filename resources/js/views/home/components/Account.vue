@@ -11,7 +11,7 @@
                 <div class="user-container">
                     <div class="info-user">
                         <h3>{{ user.nickname }}</h3>
-                        <h3>NIVEL: {{ user.level }}</h3>
+                        <h3 class="rainbow-text">NIVEL: {{ user.level }}</h3>
                         <button class="btn-default btn-logout" @click="logout">LOGOUT!</button>
                     </div>
                     <div class="avatar-image">
@@ -35,8 +35,8 @@
                     </div>
                 </div>
                 <div class="content-tab">
-                    <account-history v-if="activeTab == 0" :user="user"/>
-                    <account-stats v-else-if="activeTab == 1" :user="user"/>
+                    <account-history :historyData="historyData" v-if="activeTab == 0" :user="user"/>
+                    <account-stats :historyData="historyData" v-else-if="activeTab == 1" :user="user"/>
                     <account-settings v-else-if="activeTab == 2" :user="user"/>
                 </div>
             </div>
@@ -54,11 +54,13 @@ const { isLoggedIn, logout } = useAuth();
 const user = ref({});
 const avatar = ref();
 const activeTab = ref(0); // index 0-2 (history, stats, settings)
+const historyData = ref({});
 
 onMounted(() => {
     if(isLoggedIn())
     {
         getUser();
+        getHistory();
     }
 })
 
@@ -73,6 +75,15 @@ const getUser = async () => {
             console.log(response.data.data);
             user.value = response.data.data;
             avatar.value = "/storage/avatars/avatar" + response.data.data.avatar_id + ".jpg";
+        })
+}
+
+const getHistory = async () => {
+
+    await axios.get(`/api/account-history/${user.value.id}`)
+        .then(response => {
+            historyData.value = response.data;
+            console.log(response.data[0].id);
         })
 }
 
@@ -262,6 +273,22 @@ const toggleAccount = () => {
 
     background-color: #df1a1a;
     box-shadow: 0 5px #861713;
+}
+
+@keyframes rainbow 
+{
+    0% { color: red; }
+    14% { color: orange; }
+    28% { color: yellow; }
+    42% { color: green; }
+    57% { color: blue; }
+    71% { color: indigo; }
+    85% { color: violet; }
+    100% { color: red; }
+}
+
+.rainbow-text {
+    animation: rainbow 6s infinite;
 }
 
 </style>
