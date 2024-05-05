@@ -31,10 +31,10 @@
                         <!-- <status-bar @wordselected="setPlayingWord" :timeRound="timeRound" :difficulty="difficulty" :firstPlayer="firstPlayer" /> -->
                         <status-bar :playingWord="playingWord" :timeRound="timeRound" :difficulty="difficulty"
                             :currentPlayer="currentPlayer" :user="user" :startRound="startRound"
-                            @endOfRound="handleEndOfRound"/>
+                            @endOfRound="handleEndOfRound" />
                         <!-- COMPONENTE CANVAS -->
-                        <canvas-component :user="user" :new-canvas="newCanvas"
-                            @canvasupdate="sendCanvas" :isDrawingEnabled="isDrawingEnabled" ></canvas-component>
+                        <canvas-component :user="user" :new-canvas="newCanvas" @canvasupdate="sendCanvas"
+                            :isDrawingEnabled="isDrawingEnabled"></canvas-component>
                     </div>
                 </div>
 
@@ -212,7 +212,7 @@ onBeforeMount(async () => {
     await userAcces();
 
     // it is generating a word everytime page refresh
-    if(currentPlayer.value.uuid == user.value.uuid){
+    if (currentPlayer.value.uuid == user.value.uuid) {
         await setPlayingWord();
     }
 })
@@ -226,27 +226,7 @@ onMounted(async () => {
     listenEventCanvasUpdate();
     listenEventSendWord();
 
-    const bg = document.getElementById('background-game');
-
-    if (!bg) {
-        console.error('Elemento #background no encontrado.');
-        return;
-    }
-
-    document.addEventListener("mousemove", (e) => {
-        const width = window.innerWidth / 2;
-        const height = window.innerHeight / 2;
-
-        const mouseX = e.clientX - width;
-        const mouseY = e.clientY - height;
-
-        // Ajusta estos multiplicadores para cambiar la sensibilidad del efecto
-        const bgX = mouseX * 0.02; // Por ejemplo, 0.05 para un efecto sutil
-        const bgY = mouseY * 0.02;
-
-        // Aplica la transformación
-        bg.style.transform = `translate(${bgX}px, ${bgY}px) translateZ(0)`;
-    });
+    movingBackground();
 
     console.log("User: " + user.value.nickname);
 });
@@ -333,22 +313,6 @@ const getPlayingWord = async () => {
             break;
     }
 
-    // await axios.get(`/api/get-word/${category}`)
-    //     .then(response => {
-    //         console.log("RESPONSE ==== " + response.data);
-    //         let words = response.data;
-    //         return selectRandomWord(words);
-
-
-    //         // console.log("Playing word: " + playingWord.value);
-
-    //         // emits("wordselected", {
-    //         //     word: playingWord.value
-    //         // });
-    //         // setPlayingWord(playingWord.value);
-
-    //     });
-
     const response = await axios.get(`/api/get-word/${category}`);
     const words = response.data;
     return selectRandomWord(words);
@@ -381,6 +345,30 @@ const userAcces = async () => {
         console.log(isDrawingEnabled.value);
         console.log(isChatEnabled.value);
     }
+}
+
+const movingBackground = () => {
+    const bg = document.getElementById('background-game');
+
+    if (!bg) {
+        console.error('Elemento #background no encontrado.');
+        return;
+    }
+
+    document.addEventListener("mousemove", (e) => {
+        const width = window.innerWidth / 2;
+        const height = window.innerHeight / 2;
+
+        const mouseX = e.clientX - width;
+        const mouseY = e.clientY - height;
+
+        // Ajusta estos multiplicadores para cambiar la sensibilidad del efecto
+        const bgX = mouseX * 0.02; // Por ejemplo, 0.05 para un efecto sutil
+        const bgY = mouseY * 0.02;
+
+        // Aplica la transformación
+        bg.style.transform = `translate(${bgX}px, ${bgY}px) translateZ(0)`;
+    });
 }
 
 </script>

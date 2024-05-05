@@ -86,26 +86,7 @@ onMounted(async () => {
 
     logged.value = isLoggedIn();
 
-    // Background animation
-    const bg = document.getElementById('background');
-    if (!bg) {
-        console.error('Elemento #background no encontrado.');
-        return;
-    }
-    document.addEventListener("mousemove", (e) => {
-        const width = window.innerWidth / 2;
-        const height = window.innerHeight / 2;
-
-        const mouseX = e.clientX - width;
-        const mouseY = e.clientY - height;
-
-        // Ajusta estos multiplicadores para cambiar la sensibilidad del efecto
-        const bgX = mouseX * 0.02;
-        const bgY = mouseY * 0.02;
-
-        // Aplica la transformación
-        bg.style.transform = `translate(${bgX}px, ${bgY}px) translateZ(0)`;
-    });
+    movingBackground();
 
     if (isLoggedIn()) {
         const userId = await axios.get(`/api/get-user`);
@@ -233,6 +214,29 @@ const enterRoom = () => {
         console.error("Error al unirse a la sala: ", error);
     });
 };
+
+const movingBackground = () => {
+    // Background animation
+    const bg = document.getElementById('background');
+    if (!bg) {
+        console.error('Elemento #background no encontrado.');
+        return;
+    }
+    document.addEventListener("mousemove", (e) => {
+        const width = window.innerWidth / 2;
+        const height = window.innerHeight / 2;
+
+        const mouseX = e.clientX - width;
+        const mouseY = e.clientY - height;
+
+        // Ajusta estos multiplicadores para cambiar la sensibilidad del efecto
+        const bgX = mouseX * 0.02;
+        const bgY = mouseY * 0.02;
+
+        // Aplica la transformación
+        bg.style.transform = `translate(${bgX}px, ${bgY}px) translateZ(0)`;
+    });
+}
 
 </script>
 

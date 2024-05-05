@@ -7,7 +7,8 @@
         </div>
     </div>
     <div v-else class="relative flex items-top justify-center min-h-screen sm:items-center sm:pt-0 lilita-one-regular">
-        <invite-friends v-if="showFriendsList" :roomCode="roomCode" :friends="friendsList" @close="handleClose" @invited="handleInvitation"/>
+        <invite-friends v-if="showFriendsList" :roomCode="roomCode" :friends="friendsList" @close="handleClose"
+            @invited="handleInvitation" />
         <div class="container py-4">
             <div class="d-flex justify-content-between align-items-center">
                 <router-link to="/" class="btn-smll-default"><img src="/storage/icons/home-05.svg" alt=""></router-link>
@@ -19,7 +20,7 @@
                     <div class="background-players">
                         <div class="h-100 d-flex flex-column justify-content-between p-5">
                             <h2 class="mb-3 players-font">JUGADORES</h2>
-                            <PlayerList class="mb-3" @update-players="handlePlayers"/>
+                            <PlayerList class="mb-3" @update-players="handlePlayers" />
                             <div class="d-flex justify-content-center btn-invite" @click="showFriendsList = true">
                                 <div class="d-flex align-items-center">
                                     <h3 id="invitar-amigos" class="mb-0 me-3 ">INVITAR AMIGOS</h3>
@@ -45,7 +46,9 @@
                                 class="copiar" @click="copiarCodigo">
                         </div>
                         <div class="d-flex justify-content-end">
-                            <button v-if="options" @click="startGame" :disabled="!startButtonEnabled" :class="{ 'btn-disabled': !startButtonEnabled }"  class="d-flex align-items-center btn-play">
+                            <button v-if="options" @click="startGame" :disabled="!startButtonEnabled"
+                                :class="{ 'btn-disabled': !startButtonEnabled }"
+                                class="d-flex align-items-center btn-play">
                                 <h1 class="mb-2 me-3 play-font">INICIAR</h1>
                                 <img src="../../../../storage/app/public/icons/play.svg" alt="">
                             </button>
@@ -118,23 +121,23 @@ const handlePlayers = (newPlayers) => {
 };
 
 const handleClose = () => {
-  showFriendsList.value = false;
+    showFriendsList.value = false;
 };
 
 const handleInvitation = (friendId) => {
-  console.log(`Friend ${friendId} invited`);
-  // Aquí podrías añadir lógica adicional después de que se haya enviado una invitación
+    console.log(`Friend ${friendId} invited`);
+    // Aquí podrías añadir lógica adicional después de que se haya enviado una invitación
 };
 
 // Cargar la lista de amigos
 const loadFriends = async () => {
-  try {
-    const response = await axios.get('/api/friends/list');
-    friendsList.value = response.data;
-    console.log(friendsList.value);
-  } catch (error) {
-    console.error('Error loading friends:', error);
-  }
+    try {
+        const response = await axios.get('/api/friends/list');
+        friendsList.value = response.data;
+        console.log(friendsList.value);
+    } catch (error) {
+        console.error('Error loading friends:', error);
+    }
 };
 
 const canStartGame = () => {
@@ -142,7 +145,7 @@ const canStartGame = () => {
 };
 
 onBeforeMount(async () => {
-    if(localStorage.getItem('Sala') != route.params.code){
+    if (localStorage.getItem('Sala') != route.params.code) {
         router.push({ name: 'home' });
     }
 
@@ -179,30 +182,11 @@ onBeforeMount(async () => {
 });
 
 onMounted(() => {
-    const bg = document.getElementById('background');
+    
 
     loadFriends();
 
-    if (!bg) {
-        console.error('Elemento #background no encontrado.');
-        return;
-    }
-
-    // Mueve el fondo de pantalla según el movimiento del ratón
-    document.addEventListener("mousemove", (e) => {
-        const width = window.innerWidth / 2;
-        const height = window.innerHeight / 2;
-
-        const mouseX = e.clientX - width;
-        const mouseY = e.clientY - height;
-
-        // Con esto se ajusta la sensibilidad del movimiento del fondo de pantalla
-        const bgX = mouseX * 0.02;
-        const bgY = mouseY * 0.02;
-
-        // Aplica la transformación
-        bg.style.transform = `translate(${bgX}px, ${bgY}px) translateZ(0)`;
-    });
+    movingBackground();
 
     Echo.channel('room-' + roomCode.value)
         .listen('.room-owner-left', (e) => {
@@ -278,6 +262,31 @@ const startGame = async () => {
         console.error("Error al crear la partida:", error);
     }
 };
+
+const movingBackground = () => {
+    const bg = document.getElementById('background');
+
+    if (!bg) {
+        console.error('Elemento #background no encontrado.');
+        return;
+    }
+
+    // Mueve el fondo de pantalla según el movimiento del ratón
+    document.addEventListener("mousemove", (e) => {
+        const width = window.innerWidth / 2;
+        const height = window.innerHeight / 2;
+
+        const mouseX = e.clientX - width;
+        const mouseY = e.clientY - height;
+
+        // Con esto se ajusta la sensibilidad del movimiento del fondo de pantalla
+        const bgX = mouseX * 0.02;
+        const bgY = mouseY * 0.02;
+
+        // Aplica la transformación
+        bg.style.transform = `translate(${bgX}px, ${bgY}px) translateZ(0)`;
+    });
+}
 
 </script>
 
