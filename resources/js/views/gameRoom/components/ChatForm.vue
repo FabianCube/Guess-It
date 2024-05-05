@@ -8,11 +8,11 @@
       class="form-control input-sm"
       placeholder="Escribe aquí..." 
       v-model="newMessage" 
-      @keyup.enter="sendMessage">
+      @keyup.enter="sendMessage"
+      :disabled="!props.isChatEnabled">
     <button class="send-btn" id="btn-chat" @click="sendMessage">
       <img src="/storage/icons/icon-send.svg" alt="">
     </button>
-
     </input>
   </div>
 </template>
@@ -22,14 +22,16 @@ import axios from 'axios';
 import { defineProps, defineEmits, ref, onMounted } from 'vue';
 
 //Takes the "user" props from <chat-form> … :user="user"></chat-form> in the parent Game.vue
-const props = defineProps([ 'user' ]);
+const props = defineProps([ 'user' , 'isChatEnabled']);
 const emits = defineEmits([ 'messagesent' ]);
 const newMessage = ref('');
+
+console.log(props.isChatEnabled);
 
 function sendMessage()
 {
   console.log("[ChatForm.vue]:sendMessage:newMessage.value -> " + newMessage.value);
-  
+
   //Emit a "messagesent" event including the user who sent the message along with the message content
   emits("messagesent", {
     user: props.user,

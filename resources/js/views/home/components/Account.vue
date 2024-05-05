@@ -59,7 +59,7 @@ const historyData = ref({});
 onMounted(() => {
     if(isLoggedIn())
     {
-        getUser();
+        // getUser();
         getHistory();
     }
 })

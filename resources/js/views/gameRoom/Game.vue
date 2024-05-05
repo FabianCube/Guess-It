@@ -31,7 +31,7 @@
                         <!-- <status-bar @wordselected="setPlayingWord" :timeRound="timeRound" :difficulty="difficulty" :firstPlayer="firstPlayer" /> -->
                         <status-bar :playingWord="playingWord" :timeRound="timeRound" :difficulty="difficulty"
                             :currentPlayer="currentPlayer" :user="user" :startRound="startRound"
-                            @endOfRound="handleEndOfRound" />
+                            @endOfRound="handleEndOfRound" :isDrawingEnabled="isDrawingEnabled" />
                         <!-- COMPONENTE CANVAS -->
                         <canvas-component :user="user" :new-canvas="newCanvas"
                             @canvasupdate="sendCanvas"></canvas-component>
@@ -47,7 +47,8 @@
                                 :currentRound="currentRound"></chat-messages>
                         </div>
                         <div class="col-4 p-0" style="width:100%">
-                            <chat-form @messagesent="addMessage" :user="user"></chat-form>
+                            <chat-form @messagesent="addMessage" :user="user"
+                                :isChatEnabled="isChatEnabled"></chat-form>
                         </div>
                     </div>
                 </div>
@@ -80,6 +81,8 @@ const currentPlayerIndex = ref(0);
 const currentPlayer = computed(() => players.value[currentPlayerIndex.value]);
 const roundFinished = ref(false);
 const currentRound = ref(1);
+const isDrawingEnabled = ref(false);
+const isChatEnabled = ref(true);
 
 const playingWord = ref('');
 const words = ([]);
@@ -159,6 +162,7 @@ watch(roundFinished, (newValue) => {
         roundFinished.value = false;
         timer.value = true;
         startRound.value = false;
+        userAcces();
     }
 });
 
@@ -170,7 +174,8 @@ const moveToNextPlayer = () => {
         currentRound.value++;
         currentPlayerIndex.value = 0;
     }
-    console.log(currentPlayerIndex.value);
+    console.log("[Game.vue]:currentPlayerIndex.value -> " + currentPlayerIndex.value);
+    console.log("[Game.vue]:currentPlayer.value -> " + currentPlayer.value);
 };
 
 onBeforeMount(async () => {
@@ -207,9 +212,15 @@ onBeforeMount(async () => {
     await setPlayingWord();
 
     // localStorage.removeItem('Partida');
+
+    await userAcces();
 })
 
 onMounted(async () => {
+    console.log("[Game.vue]:currentPlayerIndex.value -> " + currentPlayerIndex.value);
+    console.log("[Game.vue]:currentPlayer.value.uuid -> " + currentPlayer.value.uuid);
+    console.log("[Game.vue]:user.value.uuid -> " + user.value.uuid);
+
     listenEventMessageSent();
     listenEventCanvasUpdate();
     listenEventSendWord();
@@ -353,6 +364,22 @@ const selectRandomWord = (words) => {
     let word = words[index].toUpperCase();
 
     return word;
+}
+
+// Define si el jugador actual puede dibujar o usar el chat
+const userAcces = async () => {
+
+    if (currentPlayer.value.uuid == user.value.uuid) {
+        isDrawingEnabled.value = true;
+        isChatEnabled.value = false;
+        console.log(isDrawingEnabled.value);
+        console.log(isChatEnabled.value);
+    } else {
+        isDrawingEnabled.value = false;
+        isChatEnabled.value = true;
+        console.log(isDrawingEnabled.value);
+        console.log(isChatEnabled.value);
+    }
 }
 
 </script>
