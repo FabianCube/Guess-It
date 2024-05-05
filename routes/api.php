@@ -77,6 +77,8 @@ Route::post('start-game/{code}', [GameController::class, 'startGame']);
 Route::post('redirect-game', [GameController::class, 'redirectGame']);
 Route::get('get-word/{difficulty}', [GameController::class, 'getWord']);
 Route::post('word', [GameController::class, 'broadcastWord']);
+Route::post('bar-status', [GameController::class, 'broadcastBarStatus']);
+Route::post('round-finished', [GameController::class, 'broadcastRoundFinished']);
 
 // Chat controller
 Route::post('messages', [ChatsController::class, 'sendMessage']);

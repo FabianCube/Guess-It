@@ -18,7 +18,8 @@
 
         <div id="word-container" style="font-size:2rem">
             <!-- CHECK IF USER IS DRAWING {SHOW WORD / DO NOT SHOW} -->
-            <div class="letters" v-if="props.currentPlayer.nickname != props.user.nickname" v-for="letter in currentWordEncrypted">
+            <div class="letters" v-if="props.currentPlayer.uuid != props.user.uuid"
+                v-for="letter in currentWordEncrypted">
                 <h2 v-if="letter.visibility == 1"> {{ letter.letter }} </h2>
                 <h2 v-else> {{ letter.character }} </h2>
             </div>
@@ -42,7 +43,7 @@
 import { watch, ref, onMounted, computed, defineEmits } from 'vue';
 import axios from 'axios';
 
-const props = defineProps(['timeRound', 'difficulty', 'currentPlayer', 'playingWord', 'startRound', 'user']);
+const props = defineProps(['timeRound', 'difficulty', 'currentPlayer', 'playingWord', 'startRound', 'user', 'roomCode']);
 const emits = defineEmits(['wordselected', 'endOfRound']);
 const words = ([]);
 const difficulty = ref('');
@@ -65,14 +66,15 @@ const reset = () => {
 
 watch(() => props.startRound, (newValue) => {
     if (newValue == true) {
-        
-        if(usedIndex.value.length != 0)
-        {
+
+        if (usedIndex.value.length != 0) {
             reset();
             console.log("New round: Reset done. usedIndex.length -> [" + usedIndex.value + "]");
         }
-        
-        startRoundTimer();
+
+        if (props.currentPlayer.uuid == props.user.uuid) {
+            startRoundTimer();
+        }
     }
 });
 
@@ -90,18 +92,34 @@ onMounted(async () => {
     console.log("[StatusBar.vue]:playingWord: " + props.playingWord)
 
     // console.log("CurrentPlayer == " + props.currentPlayer + " AND user == " + props.user)
-    
+    listenBarStatus();
 })
 
+// 
 const startRoundTimer = () => {
     const intervalId = setInterval(() => {
         if (roundTimeLeft.value > 0) {
             roundTimeLeft.value--;
         } else {
             clearInterval(intervalId);
-            emits('endOfRound');
+            console.log("Ronda acaba");
+            if(props.currentPlayer.uuid == props.user.uuid){
+                emits('endOfRound');
+            }
             roundTimeLeft.value = props.timeRound;
         }
+
+        axios.post('/api/bar-status', {
+            code: props.roomCode,
+            time: roundTimeLeft.value,
+            word: props.playingWord
+        }).then(response => {
+            console.log(response.data.mensaje);
+        }).catch(error => {
+            console.error("Error al unirse a la sala: ", error);
+        });
+
+
     }, 1000);
 };
 
@@ -122,16 +140,14 @@ const letterRevealer = () => {
 
     let antiFrezexdd = 0;
 
-    do
-    {
+    do {
         index = Math.round(Math.random() * (size - 1));
         // console.log("Index: " + index);
         antiFrezexdd++;
     }
-    while(usedIndex.value.includes(index) && antiFrezexdd < 20)
+    while (usedIndex.value.includes(index) && antiFrezexdd < 20)
 
-    if(currentInterval.value == interval)
-    {
+    if (currentInterval.value == interval) {
         if (currentWordEncrypted.value[index]) {
             currentWordEncrypted.value[index].visibility = 1;
             usedIndex.value.push(index);
@@ -139,8 +155,7 @@ const letterRevealer = () => {
 
         currentInterval.value = 0;
     }
-    else
-    {
+    else {
         currentInterval.value++;
     }
 }
@@ -150,29 +165,37 @@ const encryptWord = (word) => {
     wordLenght.value = splitted.length;
     let wordSplitted = [];
 
-    for(let i = 0; i < splitted.length; i++)
-    {
-        if(splitted[i] !== " ")
-        {
+    for (let i = 0; i < splitted.length; i++) {
+        if (splitted[i] !== " ") {
             wordSplitted.push({
                 'letter': splitted[i],
                 'character': '_',
                 'visibility': 0
             });
         }
-        else
-        {
+        else {
             wordSplitted.push({
                 'letter': splitted[i],
                 'character': ' ',
                 'visibility': 0
             });
         }
-        
+
     }
 
     currentWordEncrypted.value = wordSplitted;
     console.log(currentWordEncrypted.value[0]);
+}
+
+const listenBarStatus = () => {
+    window.Echo.channel('room-' + props.roomCode)
+        .listen('.BarStatus', (e) => {
+            roundTimeLeft.value = e.time;
+            if (currentWord.value != e.word) {
+                currentWord.value = e.word;
+                encryptWord(currentWord.value);
+            }
+        });
 }
 
 </script>
@@ -212,8 +235,7 @@ const encryptWord = (word) => {
     align-items: center;
 }
 
-.letters>h2
-{
+.letters>h2 {
     color: white;
     font-size: 2.3rem;
     margin: 5px;

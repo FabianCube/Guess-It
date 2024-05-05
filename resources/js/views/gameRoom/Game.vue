@@ -28,10 +28,9 @@
                     <!-- CANVAS -->
                     <div style="width: 100%; height: 100%;border-radius: 12px; position: relative;">
                         <!-- COMPONENTE STATUS BAR -->
-                        <!-- <status-bar @wordselected="setPlayingWord" :timeRound="timeRound" :difficulty="difficulty" :firstPlayer="firstPlayer" /> -->
                         <status-bar :playingWord="playingWord" :timeRound="timeRound" :difficulty="difficulty"
                             :currentPlayer="currentPlayer" :user="user" :startRound="startRound"
-                            @endOfRound="handleEndOfRound" />
+                            @endOfRound="handleEndOfRound" :roomCode="roomCode" />
                         <!-- COMPONENTE CANVAS -->
                         <canvas-component :user="user" :new-canvas="newCanvas" @canvasupdate="sendCanvas"
                             :isDrawingEnabled="isDrawingEnabled"></canvas-component>
@@ -141,6 +140,7 @@ const setPlayingWord = async () => {
 // Cuándo la cuenta atrás llega a 0 deshabilitamos el componente del timer
 const handleTimerUpdate = (timeLeft) => {
     console.log(timer.value);
+
     if (timeLeft.timeLeft == 0) {
         timer.value = false;
         startRound.value = true;
@@ -150,6 +150,15 @@ const handleTimerUpdate = (timeLeft) => {
 // Cuándo acaba el tiempo de la ronda 
 const handleEndOfRound = () => {
     roundFinished.value = true;
+
+    axios.post('/api/round-finished', {
+            code: roomCode.value,
+            finished: true
+        }).then(response => {
+            console.log(response.data.mensaje);
+        }).catch(error => {
+            console.error("Error al unirse a la sala: ", error);
+        });
     console.log('Fin de ronda');
 };
 
@@ -158,11 +167,13 @@ watch(roundFinished, (newValue) => {
     if (newValue) {
         console.log('Siguiente jugador');
         moveToNextPlayer();
-        setPlayingWord();
         roundFinished.value = false;
         timer.value = true;
         startRound.value = false;
         userAcces();
+        if (currentPlayer.value.uuid == user.value.uuid) {
+            setPlayingWord();
+        }
     }
 });
 
@@ -225,6 +236,7 @@ onMounted(async () => {
     listenEventMessageSent();
     listenEventCanvasUpdate();
     listenEventSendWord();
+    listenRoundFinished();
 
     movingBackground();
 
@@ -267,6 +279,14 @@ const listenEventSendWord = () => {
             console.log("[Game.vue]:listenEventSendWord:.SendWord -> " + e.word);
 
             playingWord.value = e.word;
+        });
+}
+
+const listenRoundFinished = () => {
+    window.Echo.channel('room-' + roomCode.value)
+        .listen('.RoundFinished', (e) => {
+            roundFinished.value = e.finished;
+            console.log("Ronda terminada");
         });
 }
 
@@ -337,13 +357,9 @@ const userAcces = async () => {
     if (currentPlayer.value.uuid == user.value.uuid) {
         isDrawingEnabled.value = true;
         isChatEnabled.value = false;
-        console.log(isDrawingEnabled.value);
-        console.log(isChatEnabled.value);
     } else {
         isDrawingEnabled.value = false;
         isChatEnabled.value = true;
-        console.log(isDrawingEnabled.value);
-        console.log(isChatEnabled.value);
     }
 }
 

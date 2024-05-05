@@ -13,6 +13,8 @@ use App\Models\Game;
 use App\Models\History;
 use App\Events\GameStart;
 use App\Events\SendWord;
+use App\Events\BarStatus;
+use App\Events\RoundFinished;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
@@ -120,11 +122,36 @@ class GameController extends Controller
         $word = $request->word;
         $code = $request->code;
 
-        broadcast(new SendWord($code, $word));
+        broadcast(new SendWord($code, $word))->toOthers();
         Log::info("GameController ==> broadcastWord: ", ['word' => $word]);
 
         return response()->json([
             'word'=> $word
+        ]);
+    }
+
+    public function broadcastBarStatus(Request $request){
+
+        $code = $request->code;
+        $time = $request->time;
+        $word = $request->word;
+
+        broadcast(new BarStatus($code, $time, $word))->toOthers();
+
+        return response()->json([
+            'time'=> $time
+        ]);
+    }
+
+    public function broadcastRoundFinished(Request $request){
+
+        $code = $request->code;
+        $finished = $request->finished;
+
+        broadcast(new RoundFinished($code, $finished))->toOthers();
+
+        return response()->json([
+            'finished'=> $finished
         ]);
     }
 
