@@ -99,8 +99,23 @@ const addMessage = (newMessage) => {
     }).then(response => {
         console.log(response.data.status);
     }).catch(error => {
-        console.error("Error sdanslndajndkjans", error);
+        console.error("Error: ", error);
     });
+
+    // Si las palabras coinciden se suman los puntos
+    if (compareWords(playingWord.value, newMessage.message)) {
+        console.log("[Game.vue]:newMessage.user.uuid -> " + newMessage.user.uuid);
+
+        axios.post('/api/correct-word', {
+            code: roomCode.value,
+            players: players.value,
+            userId: newMessage.user.uuid
+        }).then(response => {
+            console.log(response.data.status);
+        }).catch(error => {
+            console.error("Error: ", error);
+        });
+    }
 
     console.log("[Game.vue]:addMessage:messages{} -> " + messages.value);
 }
@@ -152,13 +167,13 @@ const handleEndOfRound = () => {
     roundFinished.value = true;
 
     axios.post('/api/round-finished', {
-            code: roomCode.value,
-            finished: true
-        }).then(response => {
-            console.log(response.data.mensaje);
-        }).catch(error => {
-            console.error("Error al unirse a la sala: ", error);
-        });
+        code: roomCode.value,
+        finished: true
+    }).then(response => {
+        console.log(response.data.mensaje);
+    }).catch(error => {
+        console.error("Error al unirse a la sala: ", error);
+    });
     console.log('Fin de ronda');
 };
 
@@ -237,6 +252,7 @@ onMounted(async () => {
     listenEventCanvasUpdate();
     listenEventSendWord();
     listenRoundFinished();
+    listenCorrectWord();
 
     movingBackground();
 
@@ -287,6 +303,20 @@ const listenRoundFinished = () => {
         .listen('.RoundFinished', (e) => {
             roundFinished.value = e.finished;
             console.log("Ronda terminada");
+        });
+}
+
+// Cuando alguien acierta se le suman puntos
+const listenCorrectWord = () => {
+    window.Echo.channel('room-' + roomCode.value)
+        .listen('.CorrectWord', (e) => {
+            const playerIndex = players.value.findIndex(player => player.uuid === e.userId);
+            if (playerIndex !== -1) {
+                players.value[playerIndex].points += e.points;
+            }
+            console.log("Puntos actualizados para el usuario:", e.userId);
+            console.log("Puntos actualizados para el usuario:", e.points);
+            console.log("Puntos actualizados para el usuario:", e.code);
         });
 }
 
@@ -385,6 +415,15 @@ const movingBackground = () => {
         // Aplica la transformación
         bg.style.transform = `translate(${bgX}px, ${bgY}px) translateZ(0)`;
     });
+}
+
+// Compara la palabra del jugador con la palabra a dibujar en la ronda sin tener en cuenta acentos ni mayúsculas
+const compareWords = (playingWord, userWord) => {
+    const normalizedStr1 = playingWord.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const normalizedStr2 = userWord.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+    // Comparamos las cadenas normalizadas
+    return normalizedStr1.localeCompare(normalizedStr2, undefined, { sensitivity: 'base' }) === 0;
 }
 
 </script>

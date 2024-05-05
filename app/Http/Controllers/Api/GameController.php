@@ -15,6 +15,7 @@ use App\Events\GameStart;
 use App\Events\SendWord;
 use App\Events\BarStatus;
 use App\Events\RoundFinished;
+use App\Events\CorrectWord;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
@@ -134,9 +135,8 @@ class GameController extends Controller
 
         $code = $request->code;
         $time = $request->time;
-        $word = $request->word;
 
-        broadcast(new BarStatus($code, $time, $word))->toOthers();
+        broadcast(new BarStatus($code, $time))->toOthers();
 
         return response()->json([
             'time'=> $time
@@ -152,6 +152,26 @@ class GameController extends Controller
 
         return response()->json([
             'finished'=> $finished
+        ]);
+    }
+
+    public function correctWord(Request $request){
+
+        $code = $request->code;
+        $userId = $request->userId;
+        $points = 50;
+
+        // foreach ($players as $key => $player) {
+        //     if ($player['uuid'] === $userId) {
+        //         $players[$key]['points'] += 50; // Suma puntos
+        //         break; // Salir del bucle una vez que el jugador es encontrado y actualizado
+        //     }
+        // }
+
+        broadcast(new CorrectWord($code, $userId, $points));
+
+        return response()->json([
+            'UserId: '=> $userId
         ]);
     }
 

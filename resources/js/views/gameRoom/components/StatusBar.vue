@@ -102,7 +102,6 @@ const startRoundTimer = () => {
             roundTimeLeft.value--;
         } else {
             clearInterval(intervalId);
-            console.log("Ronda acaba");
             if(props.currentPlayer.uuid == props.user.uuid){
                 emits('endOfRound');
             }
@@ -111,8 +110,7 @@ const startRoundTimer = () => {
 
         axios.post('/api/bar-status', {
             code: props.roomCode,
-            time: roundTimeLeft.value,
-            word: props.playingWord
+            time: roundTimeLeft.value
         }).then(response => {
             console.log(response.data.mensaje);
         }).catch(error => {
@@ -191,10 +189,6 @@ const listenBarStatus = () => {
     window.Echo.channel('room-' + props.roomCode)
         .listen('.BarStatus', (e) => {
             roundTimeLeft.value = e.time;
-            if (currentWord.value != e.word) {
-                currentWord.value = e.word;
-                encryptWord(currentWord.value);
-            }
         });
 }
 

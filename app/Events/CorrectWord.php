@@ -10,24 +10,27 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class BarStatus implements ShouldBroadcast
+class CorrectWord implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $code;
-    public $time;
-
+    public $points;
+    public $userId;
     /**
      * Create a new event instance.
      */
-    public function __construct($code, $time)
+    public function __construct($code, $userId, $points)
     {
         $this->code = $code;
-        $this->time = $time; 
+        $this->userId = $userId; 
+        $this->points = $points; 
     }
 
     /**
      * Get the channels the event should broadcast on.
+     *
+     * @return array<int, \Illuminate\Broadcasting\Channel>
      */
     public function broadcastOn()
     {
@@ -36,6 +39,6 @@ class BarStatus implements ShouldBroadcast
 
     public function broadcastAs()
     {
-        return 'BarStatus';
+        return 'CorrectWord';
     }
 }
