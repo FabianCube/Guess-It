@@ -155,18 +155,12 @@ class GameController extends Controller
         ]);
     }
 
+    // Calcula la puntuación a sumar al usuario
     public function correctWord(Request $request){
 
         $code = $request->code;
         $userId = $request->userId;
         $points = 50;
-
-        // foreach ($players as $key => $player) {
-        //     if ($player['uuid'] === $userId) {
-        //         $players[$key]['points'] += 50; // Suma puntos
-        //         break; // Salir del bucle una vez que el jugador es encontrado y actualizado
-        //     }
-        // }
 
         broadcast(new CorrectWord($code, $userId, $points));
 
