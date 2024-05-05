@@ -208,11 +208,13 @@ onBeforeMount(async () => {
 
     await getUserData();
 
-    // it is generating a word everytime page refresh
-    await setPlayingWord();
-
     // localStorage.removeItem('Partida');
     await userAcces();
+
+    // it is generating a word everytime page refresh
+    if(currentPlayer.value.uuid == user.value.uuid){
+        await setPlayingWord();
+    }
 })
 
 onMounted(async () => {
