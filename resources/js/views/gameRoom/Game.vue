@@ -31,10 +31,10 @@
                         <!-- <status-bar @wordselected="setPlayingWord" :timeRound="timeRound" :difficulty="difficulty" :firstPlayer="firstPlayer" /> -->
                         <status-bar :playingWord="playingWord" :timeRound="timeRound" :difficulty="difficulty"
                             :currentPlayer="currentPlayer" :user="user" :startRound="startRound"
-                            @endOfRound="handleEndOfRound" :isDrawingEnabled="isDrawingEnabled" />
+                            @endOfRound="handleEndOfRound"/>
                         <!-- COMPONENTE CANVAS -->
                         <canvas-component :user="user" :new-canvas="newCanvas"
-                            @canvasupdate="sendCanvas"></canvas-component>
+                            @canvasupdate="sendCanvas" :isDrawingEnabled="isDrawingEnabled" ></canvas-component>
                     </div>
                 </div>
 
@@ -212,7 +212,6 @@ onBeforeMount(async () => {
     await setPlayingWord();
 
     // localStorage.removeItem('Partida');
-
     await userAcces();
 })
 

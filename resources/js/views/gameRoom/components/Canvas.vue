@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onUpdated, nextTick, defineEmits , defineProps } from 'vue';
+import { ref, onMounted, onUpdated, nextTick, defineEmits, defineProps } from 'vue';
 
 const isDrawing = ref(false);
 const canvas = ref(null);
@@ -79,12 +79,14 @@ const init = () => {
         }
     });
 
-    let clear = document.getElementById('clearArea');
+    if (props.isDrawingEnabled) {
+        let clear = document.getElementById('clearArea');
 
-    clear.addEventListener('click', (e) => {
-        clearArea();
-        sendCanvas("clear");
-    });
+        clear.addEventListener('click', (e) => {
+            clearArea();
+            sendCanvas("clear");
+        });
+    }
 };
 
 
@@ -180,7 +182,7 @@ const changeTool = (tool) => {
 <template>
     <!-- CANVAS COMPONENT -->
     <canvas ref="canvas" id="can"></canvas>
-    <div>
+    <div v-if="isDrawingEnabled">
         <div class="controls">
 
             <div id="select-size">
@@ -214,7 +216,7 @@ const changeTool = (tool) => {
 
         <button @click="clearArea" id="clearArea">Clear Area</button>
     </div>
-    <!-- <div v-else class="overlay"></div> -->
+    <div v-else class="overlay"></div>
 
     <!-- END CANVAS COMPONENT -->
 </template>
