@@ -17,14 +17,17 @@ class CorrectWord implements ShouldBroadcast
     public $code;
     public $points;
     public $userId;
+    public $guessOrder;
+
     /**
      * Create a new event instance.
      */
-    public function __construct($code, $userId, $points)
+    public function __construct($code, $userId, $points, $guessOrder)
     {
         $this->code = $code;
         $this->userId = $userId; 
         $this->points = $points; 
+        $this->guessOrder = $guessOrder; 
     }
 
     /**

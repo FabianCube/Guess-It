@@ -160,37 +160,33 @@ class GameController extends Controller
     // Calcula la puntuación a sumar al usuario
     public function correctWord(Request $request)
     {
-
         $code = $request->code;
         $userId = $request->userId;
-        $points = 50;
+        $elapsedTime = $request->elapsedTime;
+        $guessOrder = $request->guessOrder;
 
         // Puntos base por ser el primero, segundo, etc.
-        // $basePoints = [100, 75, 50, 25, 10]; // Puntos para el primero, segundo, tercero, etc.
+        $basePoints = [100, 75, 50, 25, 10];
 
-        // Factor de reducción de puntos por tiempo
-        // $timeFactor = 0.05; // Reduce los puntos en un 5% por cada 10 segundos transcurridos
+        // Reduce los puntos en un 5% por cada 10 segundos transcurridos
+        $timeFactor = 0.05;
 
         // Calcula los puntos base según el orden de acierto
-        // $points = $order - 1 < count($basePoints) ? $basePoints[$order - 1] : 0;
+        $orderPoints = $basePoints[$guessOrder - 1];
 
-        // Aplica la reducción por tiempo
-        // $points -= (int) ($elapsedTime / 10) * $timeFactor * $points;
+        // Reducción de puntos según el tiempo que ha pasado
+        $decrement = floor($elapsedTime / 10);
 
-        broadcast(new CorrectWord($code, $userId, $points));
+        // Reducción total en porcentaje
+        $reduction = $decrement * $timeFactor;
+
+        // Calcular los puntos finales
+        $points = round($orderPoints * (1 - $reduction));
+
+        broadcast(new CorrectWord($code, $userId, $points, $guessOrder));
 
         return response()->json([
             'UserId: ' => $userId
         ]);
     }
-
-    // // Método para emitir un evento y redirigir a los jugadores a la partida
-    // public function redirectGame(Request $request)
-    // {
-    //     $code = $request->roomCode;
-
-
-
-    //     return response()->json(['mensaje' => 'Redirigiendo jugadores']);
-    // }
 }
