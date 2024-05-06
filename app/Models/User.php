@@ -56,4 +56,9 @@ class User extends Authenticatable
     {
         return self::find($id);
     }
+
+    public static function getAllUsers()
+    {
+        return self::all();
+    }
 }

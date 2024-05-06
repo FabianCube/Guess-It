@@ -94,3 +94,5 @@ Route::get('/friends/list', [FriendshipController::class, 'listFriends']);
 
 // Account controller
 Route::get('/account-history/{id}', [AccountController::class, 'getUserHistory']);
+Route::get('/admin-history', [AccountController::class, 'getAllGames']);
+Route::get('/admin-players', [AccountController::class, 'getAllUsers']);

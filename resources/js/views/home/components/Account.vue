@@ -20,6 +20,8 @@
                 </div>
             </div>
             <div class="info-container">
+
+                <!-- TABS -->
                 <div v-if="user.admin_rights == 0" class="tabs">
                     <div @click="changeFocusTab($event.target)" class="tab active">
                         <p>HISTORIAL</p>
@@ -48,17 +50,20 @@
                         <img src="/storage/icons/settings-icon.svg" alt="">
                     </div>
                 </div>
+                <!-- ========== -->
 
+                <!-- COMPONENTS -->
                 <div v-if="user.admin_rights == 0" class="content-tab">
                     <account-history :historyData="historyData" v-if="activeTab == 0" :user="user"/>
                     <account-stats :historyData="historyData" v-else-if="activeTab == 1" :user="user"/>
                     <account-settings v-else-if="activeTab == 2" :user="user"/>
                 </div>
                 <div v-else class="content-tab">
-                    <admin-history v-if="activeTab == 0" />
-                    <admin-players v-else-if="activeTab == 1" />
+                    <admin-players v-if="activeTab == 0" />
+                    <admin-history v-else-if="activeTab == 1" />
                     <account-settings v-else-if="activeTab == 2" :user="user"/>
                 </div>
+                <!-- ======== -->
             </div>
         </div>
     </div>
