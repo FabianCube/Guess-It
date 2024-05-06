@@ -10,24 +10,22 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class CorrectWord implements ShouldBroadcast
+class DrawerPoints implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $code;
     public $points;
     public $userId;
-    public $guessOrder;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($code, $userId, $points, $guessOrder)
+    public function __construct($code, $userId, $points)
     {
         $this->code = $code;
         $this->userId = $userId; 
         $this->points = $points; 
-        $this->guessOrder = $guessOrder; 
     }
 
     /**
@@ -40,6 +38,6 @@ class CorrectWord implements ShouldBroadcast
 
     public function broadcastAs()
     {
-        return 'CorrectWord';
+        return 'DrawerPoints';
     }
 }

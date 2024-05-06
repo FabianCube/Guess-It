@@ -177,17 +177,29 @@ const handleTimeLeft = (time) => {
 };
 
 // Cuándo acaba el tiempo de la ronda 
-const handleEndOfRound = () => {
+const handleEndOfRound = async () => {
     roundFinished.value = true;
 
-    axios.post('/api/round-finished', {
+    await axios.post('/api/drawer-points', {
+        code: roomCode.value,
+        userId: currentPlayer.value.uuid,
+        correctPlayers: guessOrder.value -1,
+        players: players.value.length - 1
+    }).then(response => {
+        console.log(response.data);
+    }).catch(error => {
+        console.error("Error al unirse a la sala: ", error);
+    }); 
+
+    await axios.post('/api/round-finished', {
         code: roomCode.value,
         finished: true
     }).then(response => {
-        console.log(response.data.mensaje);
+        console.log(response.data);
     }).catch(error => {
         console.error("Error al unirse a la sala: ", error);
     });
+
     console.log('Fin de ronda');
 };
 
@@ -268,6 +280,7 @@ onMounted(async () => {
     listenEventSendWord();
     listenRoundFinished();
     listenCorrectWord();
+    listenDrawerpoints();
 
     movingBackground();
 
@@ -330,6 +343,17 @@ const listenCorrectWord = () => {
                 players.value[playerIndex].points += e.points;
             }
             guessOrder.value++;
+        });
+}
+
+// Al finalizar la ronda se le asignan los puntos al jugador que dibujaba
+const listenDrawerpoints = () => {
+    window.Echo.channel('room-' + roomCode.value)
+        .listen('.DrawerPoints', (e) => {
+            const playerIndex = players.value.findIndex(player => player.uuid === e.userId);
+            if (playerIndex !== -1) {
+                players.value[playerIndex].points += e.points;
+            }
         });
 }
 

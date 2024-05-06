@@ -16,6 +16,7 @@ use App\Events\SendWord;
 use App\Events\BarStatus;
 use App\Events\RoundFinished;
 use App\Events\CorrectWord;
+use App\Events\DrawerPoints;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
@@ -184,6 +185,22 @@ class GameController extends Controller
         $points = round($orderPoints * (1 - $reduction));
 
         broadcast(new CorrectWord($code, $userId, $points, $guessOrder));
+
+        return response()->json([
+            'UserId: ' => $userId
+        ]);
+    }
+
+    // Calcula la puntuación del usuario que dibuja
+    public function drawerPoints(Request $request)
+    {
+        $code = $request->code;
+        $userId = $request->userId;
+        $correctPlayers = $request->correctPlayers;
+        $players = $request->players;
+        $points = 100;
+
+        broadcast(new DrawerPoints($code, $userId, $points));
 
         return response()->json([
             'UserId: ' => $userId

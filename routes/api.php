@@ -80,6 +80,7 @@ Route::post('word', [GameController::class, 'broadcastWord']);
 Route::post('bar-status', [GameController::class, 'broadcastBarStatus']);
 Route::post('round-finished', [GameController::class, 'broadcastRoundFinished']);
 Route::post('correct-word', [GameController::class, 'correctWord']);
+Route::post('drawer-points', [GameController::class, 'drawerPoints']);
 
 // Chat controller
 Route::post('messages', [ChatsController::class, 'sendMessage']);
