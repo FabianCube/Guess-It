@@ -148,7 +148,8 @@ import Friends from './views/home/components/Friends.vue';
 import AccountHistory from './views/home/components/AccountHistory.vue';
 import AccountStats from './views/home/components/AccountStats.vue';
 import AccountSettings from './views/home/components/AccountSettings.vue';
-
+import AdminAccountHistory from './views/home/components/admin/AdminAccountHistory.vue';
+import AdminAccountPlayers from './views/home/components/admin/AdminAccountPlayers.vue';
 
 
 const app = createApp({
@@ -217,6 +218,8 @@ app.component('invite-friends', FriendsList);
 app.component('account-history', AccountHistory);
 app.component('account-stats', AccountStats);
 app.component('account-settings', AccountSettings);
+app.component('admin-history', AdminAccountHistory);
+app.component('admin-players', AdminAccountPlayers);
 
 /**PRIMEVUE */
 app.use(PrimeVue, { ripple: true });

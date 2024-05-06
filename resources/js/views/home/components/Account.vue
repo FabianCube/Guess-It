@@ -20,7 +20,7 @@
                 </div>
             </div>
             <div class="info-container">
-                <div class="tabs">
+                <div v-if="user.admin_rights == 0" class="tabs">
                     <div @click="changeFocusTab($event.target)" class="tab active">
                         <p>HISTORIAL</p>
                         <img src="/storage/icons/history-icon.svg" alt="">
@@ -34,9 +34,29 @@
                         <img src="/storage/icons/settings-icon.svg" alt="">
                     </div>
                 </div>
-                <div class="content-tab">
+                <div v-else class="tabs">
+                    <div @click="changeFocusTab($event.target)" class="tab active">
+                        <p>JUGADORES</p>
+                        <img src="/storage/icons/history-icon.svg" alt="">
+                    </div>
+                    <div @click="changeFocusTab($event.target)" class="tab">
+                        <p>PARTIDAS</p>
+                        <img src="/storage/icons/stats-icon.svg" alt="">
+                    </div>
+                    <div @click="changeFocusTab($event.target)" class="tab">
+                        <p>AJUSTES</p>
+                        <img src="/storage/icons/settings-icon.svg" alt="">
+                    </div>
+                </div>
+
+                <div v-if="user.admin_rights == 0" class="content-tab">
                     <account-history :historyData="historyData" v-if="activeTab == 0" :user="user"/>
                     <account-stats :historyData="historyData" v-else-if="activeTab == 1" :user="user"/>
+                    <account-settings v-else-if="activeTab == 2" :user="user"/>
+                </div>
+                <div v-else class="content-tab">
+                    <admin-history v-if="activeTab == 0" />
+                    <admin-players v-else-if="activeTab == 1" />
                     <account-settings v-else-if="activeTab == 2" :user="user"/>
                 </div>
             </div>
