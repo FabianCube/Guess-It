@@ -36,4 +36,9 @@ class History extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public static function getAllGames()
+    {
+        return self::all();
+    }
 }

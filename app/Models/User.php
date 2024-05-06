@@ -24,7 +24,8 @@ class User extends Authenticatable
         'email',
         'level',
         'password',
-        'avatar_id'
+        'avatar_id',
+        'admin_rights'
     ];
 
     /**
@@ -54,5 +55,10 @@ class User extends Authenticatable
     public static function getUserById($id)
     {
         return self::find($id);
+    }
+
+    public static function getAllUsers()
+    {
+        return self::all();
     }
 }

@@ -63,6 +63,7 @@ class UserController extends Controller
         $user->level = 1;
         $user->password = Hash::make($request->password);
         $user->avatar_id = $request->avatar_id;
+        $user->admin_rights = 0;
 
         if ($user->save()) {
             // if ($role) {

@@ -21,7 +21,7 @@ import { ref, onMounted, defineProps, onBeforeMount } from 'vue';
 const props = defineProps([ 'user', 'historyData' ]);
 
 onMounted(() => {
-    // getHistory();
+    getHistory();
 })
 
 const getHistory = async () => {
