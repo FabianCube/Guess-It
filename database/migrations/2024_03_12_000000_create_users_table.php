@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('password')->nullable();
             $table->unsignedBigInteger('avatar_id');
             $table->foreign('avatar_id')->references('id')->on('avatars');
+            $table->integer('admin_rights')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

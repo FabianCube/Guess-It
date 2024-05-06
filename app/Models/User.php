@@ -24,7 +24,8 @@ class User extends Authenticatable
         'email',
         'level',
         'password',
-        'avatar_id'
+        'avatar_id',
+        'admin_rights'
     ];
 
     /**

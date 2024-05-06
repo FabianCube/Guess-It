@@ -17,14 +17,24 @@ class CreateUsersSeeder extends Seeder
             'nickname' => 'Davinci69',
             'email' => 'davinci@demo.com',
             'password' => bcrypt('12345678'),
-            'avatar_id' => '1'
+            'avatar_id' => '1',
+            'admin_rights' => '0'
         ]);
 
         User::create([
             'nickname' => 'SuperDrawer2000',
             'email' => 'superdrawer2000@demo.com',
             'password' => bcrypt('12345678'),
-            'avatar_id' => '2'
+            'avatar_id' => '2',
+            'admin_rights' => '0'
+        ]);
+
+        User::create([
+            'nickname' => 'admin',
+            'email' => 'admin@demo.com',
+            'password' => bcrypt('12345678'),
+            'avatar_id' => '3',
+            'admin_rights' => '1'
         ]);
     }
 }
