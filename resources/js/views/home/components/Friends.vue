@@ -1,26 +1,26 @@
 <template>
-    <div class="d-flex flex-column justify-content-between align-items-start popup-friends p-3 mb-2">
+    <div class="d-flex flex-column justify-content-between align-items-start popup-friends p-5 mb-2">
         <div class="w-100 mb-3">
-            <h3>Añadir amigo</h3>
+            <h3>AÑADIR AMIGO</h3>
             <form @submit.prevent="sendFriendRequest" class="d-flex flex-column w-100">
                 <input type="email" class="mail-input p-1 mb-3" v-model="friendEmail" placeholder="Email del amigo"
                     required>
-                <button type="submit" class="btn-send">Enviar Solicitud</button>
+                <button type="submit" class="btn-send">ENVIAR SOLICITUD</button>
             </form>
         </div>
         <div class="w-100 mb-3">
-            <h3>Peticiones de amistad</h3>
+            <h3>PETICIONES DE AMISTAD</h3>
             <div v-for="request in friendRequests" :key="request.id"
                 class="d-flex flex-column align-items-center request">
                 <p class="mb-2">{{ request.sender.nickname }}</p>
                 <div class="w-100 d-flex justify-content-around">
-                    <button class="btn-accept" @click="acceptRequest(request.id)">Aceptar</button>
-                    <button class="btn-deny" @click="rejectRequest(request.id)">Rechazar</button>
+                    <button class="btn-accept" @click="acceptRequest(request.id)">ACEPTAR</button>
+                    <button class="btn-deny" @click="rejectRequest(request.id)">RECHAZAR</button>
                 </div>
             </div>
         </div>
         <div class="w-100">
-            <h3>Lista de amigos</h3>
+            <h3>LISTA DE AMIGOS</h3>
             <div v-for="friend in friendsList" :key="friend.id" class="d-flex align-items-center mb-2 friend">
                 <img :src="`/storage/avatars/avatar${friend.avatar_id}.jpg`" alt="avatar" class="avatar">
                 <p class="mb-0 ms-3">{{ friend.nickname }}</p>
@@ -101,7 +101,7 @@ const rejectRequest = async (requestId) => {
 .popup-friends {
     font-family: "Lilita One", sans-serif;
     width: 100%;
-    max-height: 35vh;
+    height: 50vh;
     background-color: white;
     border-radius: 20px;
     transform-origin: bottom;
