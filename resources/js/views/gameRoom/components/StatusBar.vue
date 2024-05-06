@@ -44,7 +44,7 @@ import { watch, ref, onMounted, computed, defineEmits } from 'vue';
 import axios from 'axios';
 
 const props = defineProps(['timeRound', 'difficulty', 'currentPlayer', 'playingWord', 'startRound', 'user', 'roomCode']);
-const emits = defineEmits(['wordselected', 'endOfRound']);
+const emits = defineEmits(['wordselected', 'endOfRound', 'roundTimeLeft']);
 const words = ([]);
 const difficulty = ref('');
 
@@ -100,9 +100,12 @@ const startRoundTimer = () => {
     const intervalId = setInterval(() => {
         if (roundTimeLeft.value > 0) {
             roundTimeLeft.value--;
+            emits('roundTimeLeft', {
+                roundTimeLeft: roundTimeLeft.value
+            });
         } else {
             clearInterval(intervalId);
-            if(props.currentPlayer.uuid == props.user.uuid){
+            if (props.currentPlayer.uuid == props.user.uuid) {
                 emits('endOfRound');
             }
             roundTimeLeft.value = props.timeRound;
@@ -189,6 +192,9 @@ const listenBarStatus = () => {
     window.Echo.channel('room-' + props.roomCode)
         .listen('.BarStatus', (e) => {
             roundTimeLeft.value = e.time;
+            emits('roundTimeLeft', {
+                roundTimeLeft: roundTimeLeft.value
+            });
         });
 }
 

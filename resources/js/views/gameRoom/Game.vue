@@ -30,7 +30,7 @@
                         <!-- COMPONENTE STATUS BAR -->
                         <status-bar :playingWord="playingWord" :timeRound="timeRound" :difficulty="difficulty"
                             :currentPlayer="currentPlayer" :user="user" :startRound="startRound"
-                            @endOfRound="handleEndOfRound" :roomCode="roomCode" />
+                            @endOfRound="handleEndOfRound" @roundTimeLeft="handleTimeLeft" :roomCode="roomCode" />
                         <!-- COMPONENTE CANVAS -->
                         <canvas-component :user="user" :new-canvas="newCanvas" @canvasupdate="sendCanvas"
                             :isDrawingEnabled="isDrawingEnabled"></canvas-component>
@@ -82,6 +82,8 @@ const roundFinished = ref(false);
 const currentRound = ref(1);
 const isDrawingEnabled = ref(false);
 const isChatEnabled = ref(true);
+const roundTimeLeft = ref();
+const guessOrder = ref(1);
 
 const playingWord = ref('');
 const words = ([]);
@@ -102,6 +104,10 @@ const addMessage = (newMessage) => {
         console.error("Error: ", error);
     });
 
+    console.log(timeRound.value);
+    console.log(roundTimeLeft.value);
+    console.log(timeRound.value - roundTimeLeft.value);
+
     // Si las palabras coinciden se suman los puntos
     if (compareWords(playingWord.value, newMessage.message)) {
         console.log("[Game.vue]:newMessage.user.uuid -> " + newMessage.user.uuid);
@@ -109,7 +115,9 @@ const addMessage = (newMessage) => {
         axios.post('/api/correct-word', {
             code: roomCode.value,
             players: players.value,
-            userId: newMessage.user.uuid
+            userId: newMessage.user.uuid,
+            elapsedTime: timeRound.value - roundTimeLeft.value,
+            guessOrder: guessOrder.value
         }).then(response => {
             console.log(response.data.status);
         }).catch(error => {
@@ -162,6 +170,12 @@ const handleTimerUpdate = (timeLeft) => {
     }
 };
 
+// Cuándo la cuenta atrás llega a 0 deshabilitamos el componente del timer
+const handleTimeLeft = (time) => {
+    roundTimeLeft.value = time.roundTimeLeft;
+    console.log(roundTimeLeft.value);
+};
+
 // Cuándo acaba el tiempo de la ronda 
 const handleEndOfRound = () => {
     roundFinished.value = true;
@@ -185,6 +199,7 @@ watch(roundFinished, (newValue) => {
         roundFinished.value = false;
         timer.value = true;
         startRound.value = false;
+        guessOrder.value = 1;
         userAcces();
         if (currentPlayer.value.uuid == user.value.uuid) {
             setPlayingWord();
@@ -314,6 +329,7 @@ const listenCorrectWord = () => {
             if (playerIndex !== -1) {
                 players.value[playerIndex].points += e.points;
             }
+            guessOrder.value++;
         });
 }
 
