@@ -70,8 +70,8 @@ class GameController extends Controller
             } else {
                 $history->anonymous_user_id = $player['uuid'];
             }
-            $history->user_points = 0; 
-            $history->user_position = $index; 
+            $history->user_points = 0;
+            $history->user_position = $index;
             $history->save();
 
             // A cada jugador le asignamos el mismo color que tenía en create-room
@@ -80,7 +80,7 @@ class GameController extends Controller
                 'nickname' => $player['nickname'],
                 'avatar' => $player['avatar'],
                 'color' => $colors[$index % count($colors)],
-                'position' => $index+1,
+                'position' => $index + 1,
                 'points' => 0
             ];
         }
@@ -95,7 +95,7 @@ class GameController extends Controller
         ];
 
         // Notificar a todos los jugadores en la sala
-        broadcast(new GameStart($code,$gameData));
+        broadcast(new GameStart($code, $gameData));
 
         // Devolvemos todos los datos de la partida y sus jugadores
         return response()->json([
@@ -127,11 +127,12 @@ class GameController extends Controller
         Log::info("GameController ==> broadcastWord: ", ['word' => $word]);
 
         return response()->json([
-            'word'=> $word
+            'word' => $word
         ]);
     }
 
-    public function broadcastBarStatus(Request $request){
+    public function broadcastBarStatus(Request $request)
+    {
 
         $code = $request->code;
         $time = $request->time;
@@ -139,11 +140,12 @@ class GameController extends Controller
         broadcast(new BarStatus($code, $time))->toOthers();
 
         return response()->json([
-            'time'=> $time
+            'time' => $time
         ]);
     }
 
-    public function broadcastRoundFinished(Request $request){
+    public function broadcastRoundFinished(Request $request)
+    {
 
         $code = $request->code;
         $finished = $request->finished;
@@ -151,21 +153,34 @@ class GameController extends Controller
         broadcast(new RoundFinished($code, $finished))->toOthers();
 
         return response()->json([
-            'finished'=> $finished
+            'finished' => $finished
         ]);
     }
 
     // Calcula la puntuación a sumar al usuario
-    public function correctWord(Request $request){
+    public function correctWord(Request $request)
+    {
 
         $code = $request->code;
         $userId = $request->userId;
         $points = 50;
 
+        // Puntos base por ser el primero, segundo, etc.
+        // $basePoints = [100, 75, 50, 25, 10]; // Puntos para el primero, segundo, tercero, etc.
+
+        // Factor de reducción de puntos por tiempo
+        // $timeFactor = 0.05; // Reduce los puntos en un 5% por cada 10 segundos transcurridos
+
+        // Calcula los puntos base según el orden de acierto
+        // $points = $order - 1 < count($basePoints) ? $basePoints[$order - 1] : 0;
+
+        // Aplica la reducción por tiempo
+        // $points -= (int) ($elapsedTime / 10) * $timeFactor * $points;
+
         broadcast(new CorrectWord($code, $userId, $points));
 
         return response()->json([
-            'UserId: '=> $userId
+            'UserId: ' => $userId
         ]);
     }
 
@@ -174,7 +189,7 @@ class GameController extends Controller
     // {
     //     $code = $request->roomCode;
 
-        
+
 
     //     return response()->json(['mensaje' => 'Redirigiendo jugadores']);
     // }

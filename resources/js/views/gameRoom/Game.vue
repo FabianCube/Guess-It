@@ -314,9 +314,6 @@ const listenCorrectWord = () => {
             if (playerIndex !== -1) {
                 players.value[playerIndex].points += e.points;
             }
-            console.log("Puntos actualizados para el usuario:", e.userId);
-            console.log("Puntos actualizados para el usuario:", e.points);
-            console.log("Puntos actualizados para el usuario:", e.code);
         });
 }
 
