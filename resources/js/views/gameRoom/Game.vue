@@ -59,7 +59,7 @@
 
 <script setup>
 import axios from 'axios';
-import { onBeforeMount, onMounted, ref, computed, watch, nextTick } from 'vue';
+import { onBeforeMount, onMounted, onUnmounted , ref, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import useAuth from '@/composables/auth';
 
