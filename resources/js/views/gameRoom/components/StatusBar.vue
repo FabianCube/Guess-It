@@ -75,6 +75,8 @@ watch(() => props.startRound, (newValue) => {
         if (props.currentPlayer.uuid == props.user.uuid) {
             startRoundTimer();
         }
+    }else{
+        roundTimeLeft.value = props.timeRound;
     }
 });
 
@@ -84,6 +86,8 @@ watch(() => props.playingWord, (word) => {
 
     encryptWord(currentWord.value);
 });
+
+
 
 onMounted(async () => {
     roundTimeLeft.value = props.timeRound;
@@ -98,7 +102,7 @@ onMounted(async () => {
 // 
 const startRoundTimer = () => {
     const intervalId = setInterval(() => {
-        if (roundTimeLeft.value > 0) {
+        if (roundTimeLeft.value > 0 && props.startRound) {
             roundTimeLeft.value--;
             emits('roundTimeLeft', {
                 roundTimeLeft: roundTimeLeft.value
@@ -119,8 +123,6 @@ const startRoundTimer = () => {
         }).catch(error => {
             console.error("Error al unirse a la sala: ", error);
         });
-
-
     }, 1000);
 };
 
