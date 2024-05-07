@@ -159,8 +159,8 @@ onBeforeMount(async () => {
 
     // Obtenemos el id del usuario si está autenticado
     if (isLoggedIn()) {
-        const userId = await axios.get(`/api/get-user`);
-        userRegistered.value = userId.data.uuid;
+        const userId = await axios.get(`/api/user`);
+        userRegistered.value = userId.data.data.id;
     }
 
     // Esperamos 3 segundos después de ejecutar getOwner para que se muestre la animación de carga

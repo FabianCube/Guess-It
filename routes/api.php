@@ -40,6 +40,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::get('category-list', [CategoryController::class, 'getList']);
     Route::get('/user', [ProfileController::class, 'user']);
     Route::put('/user', [ProfileController::class, 'update']);
+    
 
     Route::get('abilities', function(Request $request) {
         return $request->user()->roles()->with('permissions')
@@ -72,7 +73,6 @@ Route::post('leave-room/{code}', [RoomController::class, 'leaveRoom']);
 Route::post('invite-user', [RoomController::class, 'inviteUser']);
 
 // Game controller
-Route::get('get-user', [GameController::class, 'getUserData']);
 Route::post('start-game/{code}', [GameController::class, 'startGame']);
 Route::post('redirect-game', [GameController::class, 'redirectGame']);
 Route::get('get-word/{difficulty}', [GameController::class, 'getWord']);

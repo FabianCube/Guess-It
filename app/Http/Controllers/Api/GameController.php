@@ -23,23 +23,7 @@ use Illuminate\Http\Request;
 
 class GameController extends Controller
 {
-    public function getUserData()
-    {
-        $user = Auth::user();
-
-        $nickname = $user->nickname;
-        $avatar = "/storage/avatars/" . Avatar::findOrFail($user->avatar_id)->image;
-        $uuid = $user->id;
-
-        $userData = [
-            'nickname' => $nickname,
-            'avatar' => $avatar,
-            'uuid' => $uuid
-        ];
-
-        return $userData;
-    }
-
+    
     // Método para crear las tablas para la partida con la configuración y jugadores
     public function startGame(Request $request)
     {
