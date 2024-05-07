@@ -18,7 +18,7 @@
                 <button class="btn modify">
                     <img src="/storage/icons/edit.svg" alt="">
                 </button>
-                <button class="btn delete">
+                <button class="btn delete" @click="deleteUser(user.id)">
                     <img src="/storage/icons/trash.svg" alt="">
                 </button>
             </td>
@@ -29,10 +29,9 @@
 
 <script setup>
 import axios from 'axios';
-import { ref, onMounted, defineProps, onBeforeMount } from 'vue';
+import { ref, onMounted, defineProps, onBeforeMount, watch } from 'vue';
 
 const props = defineProps([ 'user', 'historyData' ]);
-
 const users = ref({});
 
 onMounted(() => {
@@ -46,13 +45,24 @@ const getAllPlayers = async () => {
             users.value = response.data;
         })
 }
+
+const deleteUser = (id) => {
+    axios.delete(`/api/delete-user/${id}`);
+    console.log('Delete user');
+    refresh();
+}
+
+const refresh = () => {
+    getAllPlayers();
+}
+
 </script>
 
 <style scoped>
 table
 {
     width: 100%;
-    height: 100%;
+    height: auto;
     overflow-y: scroll;
 }
 
