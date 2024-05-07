@@ -30,7 +30,7 @@
                         <!-- COMPONENTE STATUS BAR -->
                         <status-bar :playingWord="playingWord" :timeRound="timeRound" :difficulty="difficulty"
                             :currentPlayer="currentPlayer" :user="user" :startRound="startRound"
-                            @endOfRound="handleEndOfRound" @roundTimeLeft="handleTimeLeft" :roomCode="roomCode" />
+                            @endOfRound="handleEndOfRound" @roundTimeLeft="handleTimeLeft" :roomCode="roomCode" :roundFinished="roundFinished"/>
                         <!-- COMPONENTE CANVAS -->
                         <canvas-component :user="user" :new-canvas="newCanvas" @canvasupdate="sendCanvas"
                             :isDrawingEnabled="isDrawingEnabled"></canvas-component>
@@ -178,8 +178,6 @@ const handleTimeLeft = (time) => {
 
 // Cuándo acaba el tiempo de la ronda 
 const handleEndOfRound = async () => {
-    roundFinished.value = true;
-
     await axios.post('/api/drawer-points', {
         code: roomCode.value,
         userId: currentPlayer.value.uuid,
@@ -190,6 +188,8 @@ const handleEndOfRound = async () => {
     }).catch(error => {
         console.error("Error al unirse a la sala: ", error);
     }); 
+
+    roundFinished.value = true;
 
     await axios.post('/api/round-finished', {
         code: roomCode.value,
@@ -342,7 +342,15 @@ const listenCorrectWord = () => {
             if (playerIndex !== -1) {
                 players.value[playerIndex].points += e.points;
             }
+
+            if(players.value[playerIndex].uuid == user.value.uuid){
+                isChatEnabled.value = false;
+            }
             guessOrder.value++;
+
+            if(guessOrder.value == players.value.length && currentPlayer.value.uuid == user.value.uuid){
+                handleEndOfRound();
+            }
         });
 }
 
@@ -361,11 +369,6 @@ const getUserData = async () => {
 
     if (isLoggedIn()) {
         console.log("[INFO]: Entrando como usuario registrado.");
-
-        // const userData = await axios.get('/getUserData');
-        // user.value = userData.data;
-
-        // console.log(userData.response);
 
         await axios.get('/api/user')
         .then(response => {
