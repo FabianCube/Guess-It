@@ -94,8 +94,6 @@ onMounted(async () => {
     console.log("dificultad: " + props.difficulty)
     console.log("[StatusBar.vue]:playingWord: " + props.playingWord)
 
-    // console.log("CurrentPlayer == " + props.currentPlayer + " AND user == " + props.user)
-    // listenBarStatus();
     listenEncryptedWord();
 })
 
@@ -127,7 +125,7 @@ watch(() => roundTimeLeft.value, () => {
 
 
 const letterRevealer = () => {
-    let actualWord = currentWordEncrypted.value;
+    let actualWord = countVisibleLetters(currentWordEncrypted.value);
     let index = 0;
     let time = props.timeRound;
     let size = wordLenght.value;
@@ -154,7 +152,7 @@ const letterRevealer = () => {
         currentInterval.value++;
     }
 
-    if (actualWord != currentWordEncrypted.value) {
+    if (actualWord !== countVisibleLetters(currentWordEncrypted.value)) {
         axios.post('/api/encrypted-word', {
             code: props.roomCode,
             encryptedWord: currentWordEncrypted.value
@@ -193,21 +191,16 @@ const encryptWord = (word) => {
     console.log(currentWordEncrypted.value[0]);
 }
 
-const listenBarStatus = () => {
-    window.Echo.channel('room-' + props.roomCode)
-        .listen('.BarStatus', (e) => {
-            roundTimeLeft.value = e.time;
-            emits('roundTimeLeft', {
-                roundTimeLeft: roundTimeLeft.value
-            });
-        });
-}
-
 const listenEncryptedWord = () => {
     window.Echo.channel('room-' + props.roomCode)
         .listen('.EncryptedWord', (e) => {
             currentWordEncrypted.value = e.encryptedWord;
         });
+}
+
+// Filtra y cuenta los elementos con `visibility` igual a 1
+function countVisibleLetters(wordArray) {  
+    return wordArray.filter(letterObj => letterObj.visibility === 1).length;
 }
 
 </script>
