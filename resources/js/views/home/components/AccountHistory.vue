@@ -5,7 +5,7 @@
             <td>POSICIÓN</td>
             <td>PUNTUACIÓN</td>
         </tr>
-        <tr v-for="game in props.historyData">
+        <tr v-for="game in games">
             <td>{{ game.created_at }}</td>
             <td>{{ game.user_position }}</td>
             <td>{{ game.user_points }}</td>
@@ -16,22 +16,27 @@
 
 <script setup>
 import axios from 'axios';
-import { ref, onMounted, defineProps, onBeforeMount } from 'vue';
+import { ref, onMounted, defineProps, onBeforeMount, watch } from 'vue';
 
 const props = defineProps([ 'user', 'historyData' ]);
+const games = ref({});
 
-onMounted(() => {
-    getHistory();
+watch(() => props.historyData, () => {
+    games.value = props.historyData;
 })
 
-const getHistory = async () => {
+// onMounted(() => {
+//     console.log(props.historyData.game_id);
+// })
 
-    await axios.get(`/api/account-history/${props.user.id}`)
-        .then(response => {
-            props.historyData = response.data;
-            console.log(response.data[0].id);
-        })
-}
+// const getHistory = async () => {
+
+//     await axios.get(`/api/account-history/${props.user.id}`)
+//         .then(response => {
+//             props.historyData = response.data;
+//             console.log(response.data[0].id);
+//         })
+// }
 
 </script>
 

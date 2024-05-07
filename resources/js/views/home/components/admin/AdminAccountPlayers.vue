@@ -97,14 +97,10 @@ const proceedDeleteUser = (id) => {
     throwSuccessMessage('USUARIO ELIMINADO');
 }
 
-const refresh = () => {
-    getAllPlayers();
-}
-
 const startEdit = (id) => {
     editingUserId.value = id;
     const userToEdit = users.value.find(user => user.id === id);
-    editedUser.value = { ...userToEdit };// ... para copiar todos los resultados
+    editedUser.value = { ...userToEdit };// ... para copiar todos los valores
 }
 
 const cancelEdit = () => {
@@ -115,8 +111,13 @@ const saveChanges = async (id) => {
     await axios.put(`/api/update-user/${id}`, editedUser.value);
     cancelEdit();
     refresh();
-    throwSuccessMessage('Cambios guardados');
+    throwSuccessMessage('CAMBIOS GUARDADOS');
 }
+
+const refresh = () => {
+    getAllPlayers();
+}
+
 </script>
 
 <style scoped>

@@ -53,16 +53,17 @@
                 <!-- ========== -->
 
                 <!-- COMPONENTS -->
-                <div v-if="user.admin_rights == 0" class="content-tab">
-                    <account-history :historyData="historyData" v-if="activeTab == 0" :user="user" />
-                    <account-stats :historyData="historyData" v-else-if="activeTab == 1" :user="user" />
-                    <account-settings v-else-if="activeTab == 2" :user="user" />
-                </div>
-                <div v-else class="content-tab">
+                <div v-if="user.admin_rights == 1" class="content-tab">
                     <admin-players v-if="activeTab == 0" />
                     <admin-history v-else-if="activeTab == 1" />
                     <account-settings v-else-if="activeTab == 2" :user="user" />
                 </div>
+                <div v-else class="content-tab">
+                    <account-history v-if="activeTab == 0" :historyData="historyData" :user="user" />
+                    <account-stats :historyData="historyData" v-else-if="activeTab == 1" :user="user" />
+                    <account-settings v-else-if="activeTab == 2" :user="user" />
+                </div>
+                
                 <!-- ======== -->
             </div>
         </div>
@@ -83,7 +84,7 @@ const historyData = ref({});
 
 onMounted(() => {
     if (isLoggedIn()) {
-        // getUser();
+        getUser();
         getHistory();
     }
 })
@@ -94,7 +95,7 @@ watch(() => isLoggedIn(), () => {
 
 const getUser = async () => {
 
-    return axios.get('/api/user')
+    axios.get('/api/user')
         .then(response => {
             console.log(response.data.data);
             user.value = response.data.data;
@@ -107,7 +108,7 @@ const getHistory = async () => {
     await axios.get(`/api/account-history/${user.value.id}`)
         .then(response => {
             historyData.value = response.data;
-            console.log(response.data[0].id);
+            console.log("HISTORY_DATA == " + response.data[0].user_id);
         })
 }
 
