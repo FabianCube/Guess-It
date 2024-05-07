@@ -38,4 +38,11 @@ class AccountController extends Controller
 
         return response()->json($games);
     }
+
+    public function deleteUser(Request $request)
+    {
+        User::deleteUser($request->id);
+
+        Log::info("AccountController ===== ", ['id to delete ----------> ' => $request->id]);
+    }
 }

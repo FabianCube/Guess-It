@@ -196,9 +196,10 @@ const toggleAccount = () => {
 {
     background-color: white;
     width: 100%;
-    height: 87%;
+    height: 240px;
     border-radius: 0 23px 23px;
     padding: 10px 30px 5px 30px;
+    overflow-y: scroll;
 }
 
 .tabs

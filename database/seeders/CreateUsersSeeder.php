@@ -68,6 +68,41 @@ class CreateUsersSeeder extends Seeder
             'avatar_id' => '2',
             'admin_rights' => '0'
         ]);
+        User::create([
+            'nickname' => 'OOOP02',
+            'email' => 'ooops02@demo.com',
+            'password' => bcrypt('12345678'),
+            'avatar_id' => '2',
+            'admin_rights' => '0'
+        ]);
+        User::create([
+            'nickname' => 'OOOP03',
+            'email' => 'ooops03@demo.com',
+            'password' => bcrypt('12345678'),
+            'avatar_id' => '2',
+            'admin_rights' => '0'
+        ]);
+        User::create([
+            'nickname' => 'OOOP04',
+            'email' => 'ooops04@demo.com',
+            'password' => bcrypt('12345678'),
+            'avatar_id' => '2',
+            'admin_rights' => '0'
+        ]);
+        User::create([
+            'nickname' => 'OOOP05',
+            'email' => 'ooops05@demo.com',
+            'password' => bcrypt('12345678'),
+            'avatar_id' => '2',
+            'admin_rights' => '0'
+        ]);
+        User::create([
+            'nickname' => 'OOOP06',
+            'email' => 'ooops06@demo.com',
+            'password' => bcrypt('12345678'),
+            'avatar_id' => '2',
+            'admin_rights' => '0'
+        ]);
 
         User::create([
             'nickname' => 'admin',
