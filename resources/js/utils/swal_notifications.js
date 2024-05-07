@@ -73,7 +73,6 @@ export default function sweetAlertNotifications() {
         swal({
             icon: 'info',
             title: $message,
-            text: "¿Deseas unirte a la partida?",
             showCancelButton: true,
             confirmButtonText: 'Aceptar',
             cancelButtonText: 'Rechazar',
