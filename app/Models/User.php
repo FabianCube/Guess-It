@@ -69,4 +69,9 @@ class User extends Authenticatable
 
         Log::info("USER >>>> ", ['USER_ID: ' => $id]);
     }
+
+    public static function updateUser($id)
+    {
+        User::update();
+    }
 }

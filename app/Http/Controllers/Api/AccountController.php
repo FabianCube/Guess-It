@@ -18,13 +18,13 @@ class AccountController extends Controller
 
         Log::info("AccountController ===== ", ['history' => $userHistory, 'user_id' => $user->id]);
 
-        return response()->json($userHistory); 
+        return response()->json($userHistory);
     }
 
     public function getAllUsers()
     {
         $users = User::getAllUsers();
-        
+
         Log::info("AccountController ===== ", ['users' => $users]);
 
         return response()->json($users);
@@ -44,5 +44,20 @@ class AccountController extends Controller
         User::deleteUser($request->id);
 
         Log::info("AccountController ===== ", ['id to delete ----------> ' => $request->id]);
+    }
+    
+    public function updateUser(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        
+        $user->nickname = $request->input('nickname');
+        $user->level = $request->input('level');
+        $user->email = $request->input('email');
+        $user->avatar_id = $request->input('avatar_id');
+        
+        $user->save();
+        
+        Log::info("AccountController ===== ", ['updateUser ----------> ' => $user]);
+        return response()->json(['message' => 'update user done']);
     }
 }

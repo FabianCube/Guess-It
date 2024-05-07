@@ -54,14 +54,14 @@
 
                 <!-- COMPONENTS -->
                 <div v-if="user.admin_rights == 0" class="content-tab">
-                    <account-history :historyData="historyData" v-if="activeTab == 0" :user="user"/>
-                    <account-stats :historyData="historyData" v-else-if="activeTab == 1" :user="user"/>
-                    <account-settings v-else-if="activeTab == 2" :user="user"/>
+                    <account-history :historyData="historyData" v-if="activeTab == 0" :user="user" />
+                    <account-stats :historyData="historyData" v-else-if="activeTab == 1" :user="user" />
+                    <account-settings v-else-if="activeTab == 2" :user="user" />
                 </div>
                 <div v-else class="content-tab">
                     <admin-players v-if="activeTab == 0" />
                     <admin-history v-else-if="activeTab == 1" />
-                    <account-settings v-else-if="activeTab == 2" :user="user"/>
+                    <account-settings v-else-if="activeTab == 2" :user="user" />
                 </div>
                 <!-- ======== -->
             </div>
@@ -74,7 +74,7 @@ import { ref, defineProps, defineEmits, onMounted, watch } from 'vue';
 import useAuth from '@/composables/auth';
 import axios from 'axios';
 
-const emits = defineEmits([ 'close-account' ]);
+const emits = defineEmits(['close-account']);
 const { isLoggedIn, logout } = useAuth();
 const user = ref({});
 const avatar = ref();
@@ -82,8 +82,7 @@ const activeTab = ref(0); // index 0-2 (history, stats, settings)
 const historyData = ref({});
 
 onMounted(() => {
-    if(isLoggedIn())
-    {
+    if (isLoggedIn()) {
         // getUser();
         getHistory();
     }
@@ -94,7 +93,7 @@ watch(() => isLoggedIn(), () => {
 });
 
 const getUser = async () => {
-    
+
     return axios.get('/api/user')
         .then(response => {
             console.log(response.data.data);
@@ -118,12 +117,10 @@ const changeFocusTab = (element) => {
         el.classList.remove('active');
     });
 
-    if(element.classList.contains('tab'))
-    {
+    if (element.classList.contains('tab')) {
         element.classList.add('active');
     }
-    else
-    {
+    else {
         element.parentElement.classList.add('active');
     }
 
@@ -136,8 +133,7 @@ const activeTabIndex = () => {
     let activeIndex = -1;
 
     tabs.forEach((tab, index) => {
-        if (tab.classList.contains('active')) 
-        {
+        if (tab.classList.contains('active')) {
             activeIndex = index;
             return;
         }
@@ -192,8 +188,7 @@ const toggleAccount = () => {
     padding: 13px;
 }
 
-.content-tab
-{
+.content-tab {
     background-color: white;
     width: 100%;
     height: 240px;
@@ -202,16 +197,14 @@ const toggleAccount = () => {
     overflow-y: scroll;
 }
 
-.tabs
-{
+.tabs {
     display: flex;
     flex-flow: row;
     margin: 0;
     padding: 0;
 }
 
-.tab
-{
+.tab {
     height: 35px;
     width: 150px;
     background-color: #CDCDCD;
@@ -226,36 +219,31 @@ const toggleAccount = () => {
     transition: all .1s;
 }
 
-.tab>p
-{
-    user-select: none; /* Para que no se pueda seleccionar el texto */
+.tab>p {
+    user-select: none;
+    /* Para que no se pueda seleccionar el texto */
     transition: all .1s;
 }
 
-.tab:hover p
-{
+.tab:hover p {
     font-size: 16px;
 }
 
-.tab>p
-{
+.tab>p {
     margin: 0;
 }
 
-.active
-{
+.active {
     background-color: #fff;
     color: black;
     width: 200px;
 }
 
-.container-info
-{
+.container-info {
     padding-bottom: 8px;
 }
 
-.user-container
-{
+.user-container {
     width: 400px;
     height: auto;
     background-color: #fff;
@@ -267,54 +255,94 @@ const toggleAccount = () => {
     align-items: center;
 }
 
-.info-user>h3{
+.info-user>h3 {
     font-size: 20px;
     color: #3E3E3E;
     margin: 5px;
 }
 
-.avatar-image
-{
+.avatar-image {
     width: 100px;
     height: 100px;
     overflow: hidden;
     border-radius: 50px;
 }
 
-.avatar-image>img
-{
+.avatar-image>img {
     width: 100%;
     height: auto;
 }
 
-.btn-logout
-{
+.btn-logout {
     border: none;
     border-radius: 6px;
-    width: 100px!important;
-    height: 30px!important;
-    font-size: 14px!important;
-    line-height: 30px!important;
+    width: 100px !important;
+    height: 30px !important;
+    font-size: 14px !important;
+    line-height: 30px !important;
     margin: 0;
 
     background-color: #df1a1a;
     box-shadow: 0 5px #861713;
 }
 
-@keyframes rainbow 
-{
-    0% { color: red; }
-    14% { color: orange; }
-    28% { color: yellow; }
-    42% { color: green; }
-    57% { color: blue; }
-    71% { color: indigo; }
-    85% { color: violet; }
-    100% { color: red; }
+@keyframes rainbow {
+    0% {
+        color: red;
+    }
+
+    14% {
+        color: orange;
+    }
+
+    28% {
+        color: yellow;
+    }
+
+    42% {
+        color: green;
+    }
+
+    57% {
+        color: blue;
+    }
+
+    71% {
+        color: indigo;
+    }
+
+    85% {
+        color: violet;
+    }
+
+    100% {
+        color: red;
+    }
 }
 
 .rainbow-text {
     animation: rainbow 6s infinite;
 }
 
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #73409a;
+    border-radius: 6px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #FCB078;
+    border-radius: 6px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #e69a64;
+}
 </style>
