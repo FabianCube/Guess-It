@@ -362,10 +362,20 @@ const getUserData = async () => {
     if (isLoggedIn()) {
         console.log("[INFO]: Entrando como usuario registrado.");
 
-        const userData = await axios.get('/getUserData');
-        user.value = userData.data;
+        // const userData = await axios.get('/getUserData');
+        // user.value = userData.data;
 
-        console.log(userData.nickname);
+        // console.log(userData.response);
+
+        await axios.get('/api/user')
+        .then(response => {
+            console.log(response.data.data);
+            user.value = response.data.data;
+            user.value.avatar = "/storage/avatars/avatar" + response.data.data.avatar_id + ".jpg";
+            user.value.uuid = user.value.id
+        })
+
+        console.log(user.value);
     }
     else {
         console.log("[INFO]: Entrando como usuario anónimo.");

@@ -89,9 +89,9 @@ onMounted(async () => {
     movingBackground();
 
     if (isLoggedIn()) {
-        const userId = await axios.get(`/api/get-user`);
+        const userId = await axios.get(`/api/user`);
 
-        UserPrivateChannel = window.Echo.private(`user.${userId.data.uuid}`);
+        UserPrivateChannel = window.Echo.private(`user.${userId.data.data.id}`);
 
         UserPrivateChannel
             .listen('.FriendRequest', (event) => {
@@ -102,7 +102,7 @@ onMounted(async () => {
             .listen('.GameInvitation', (event) => {
                 roomCode.value = event.roomCode;
                 throwInviteMessage(
-                    'Te han invitado a una partida! ¿Aceptas unirte?',
+                    'Te han invitado! ¿Unirte a partida?',
                     async () => {
                         await enterRoom();
                         await localStorage.setItem('Sala', roomCode.value);
@@ -187,8 +187,11 @@ const enterAnonymous = (code) => {
 
 const createRoom = async () => {
     try {
-        const userId = await axios.get(`/api/get-user`);
-        userRegistered.value = userId.data.uuid;
+        await axios.get('/api/user')
+        .then(response => {
+            console.log(response.data.data);
+            userRegistered.value = response.data.data.id;
+        })
 
         console.log(userRegistered.value);
 
