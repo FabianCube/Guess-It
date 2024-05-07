@@ -1,6 +1,6 @@
 <template>
     <div id="background-game"></div>
-    <countdown-timer v-if="timer" @update-timer="handleTimerUpdate" />
+    <countdown-timer v-if="timer" @update-timer="handleTimerUpdate" :startTimer="startTimer" />
     <div class="min-h-screen sm:items-center py-4 main-content">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
@@ -59,7 +59,7 @@
 
 <script setup>
 import axios from 'axios';
-import { onBeforeMount, onMounted, onUnmounted , ref, computed, watch } from 'vue';
+import { onBeforeMount, onMounted, onUnmounted, ref, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import useAuth from '@/composables/auth';
 
@@ -86,6 +86,7 @@ const isChatEnabled = ref(true);
 const roundTimeLeft = ref();
 const guessOrder = ref(1);
 const gameFinished = ref(false);
+const startTimer = ref(false);
 
 const playingWord = ref('');
 const words = ([]);
@@ -169,6 +170,7 @@ const handleTimerUpdate = (timeLeft) => {
     if (timeLeft.timeLeft == 0) {
         timer.value = false;
         startRound.value = true;
+        startTimer.value = false;
     }
 };
 
@@ -286,12 +288,15 @@ onMounted(async () => {
     console.log("[Game.vue]:currentPlayer.value.uuid -> " + currentPlayer.value.uuid);
     console.log("[Game.vue]:user.value.uuid -> " + user.value.uuid);
 
+    beginStartTimer();
+
     listenEventMessageSent();
     listenEventCanvasUpdate();
     listenEventSendWord();
     listenRoundFinished();
     listenCorrectWord();
     listenDrawerpoints();
+    listenStartTimer();
 
     movingBackground();
 
@@ -378,6 +383,27 @@ const listenDrawerpoints = () => {
                 players.value[playerIndex].points += e.points;
             }
         });
+}
+
+const listenStartTimer = () => {
+    window.Echo.channel('room-' + roomCode.value)
+        .listen('.StartTimer', (e) => {
+            startTimer.value = true;
+        });
+}
+
+const beginStartTimer = () => {
+    if (currentPlayer.value.uuid == user.value.uuid) {
+        setTimeout(() => {
+            axios.post('/api/start-timer', {
+                code: roomCode.value
+            }).then(response => {
+                console.log(response.data);
+            }).catch(error => {
+                console.error("Error: ", error);
+            });
+        }, 5000);
+    }
 }
 
 const getUserData = async () => {

@@ -81,6 +81,7 @@ Route::post('bar-status', [GameController::class, 'broadcastBarStatus']);
 Route::post('round-finished', [GameController::class, 'broadcastRoundFinished']);
 Route::post('correct-word', [GameController::class, 'correctWord']);
 Route::post('drawer-points', [GameController::class, 'drawerPoints']);
+Route::post('start-timer', [GameController::class, 'startTimer']);
 
 // Chat controller
 Route::post('messages', [ChatsController::class, 'sendMessage']);

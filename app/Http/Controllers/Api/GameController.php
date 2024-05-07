@@ -17,6 +17,7 @@ use App\Events\BarStatus;
 use App\Events\RoundFinished;
 use App\Events\CorrectWord;
 use App\Events\DrawerPoints;
+use App\Events\StartTimer;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
@@ -188,6 +189,18 @@ class GameController extends Controller
 
         return response()->json([
             'UserId: ' => $userId
+        ]);
+    }
+
+    // Empieza la cuenta atrás antes de empezar una ronda
+    public function startTimer(Request $request)
+    {
+        $code = $request->code;
+
+        broadcast(new StartTimer($code));
+
+        return response()->json([
+            'Room: ' => $code
         ]);
     }
 }

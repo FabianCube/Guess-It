@@ -1,12 +1,13 @@
 <template>
-    <div class="countdown">
+    <div v-if="props.startTimer" class="countdown">
         <img :src="images[currentImage]" :key="timeLeft" />
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted , defineEmits , watch } from 'vue';
+import { ref, onUnmounted , defineEmits , defineProps , watch } from 'vue';
 
+const props = defineProps(['startTimer']);
 const emits = defineEmits(['update-timer']);
 
 const timeLeft = ref(4);
@@ -17,6 +18,12 @@ const images = [
     '/storage/a_jugar.svg'
 ];
 const currentImage = ref(0);
+
+watch(() => props.startTimer, (newValue) => {
+    if (newValue) {
+        startCountdown();
+    }
+});
 
 watch([timeLeft], () => {
     emits('update-timer', {
@@ -40,9 +47,6 @@ function startCountdown() {
     });
 }
 
-onMounted(() => {
-    startCountdown();
-});
 
 </script>
 
