@@ -1,35 +1,40 @@
 <template>
-    <table>
-        <tr class="first-row">
-            <th>ID</th>
-            <th>NICKNAME</th>
-            <th>LEVEL</th>
-            <th>EMAIL</th>
-            <th>AVATAR ID</th>
-            <th>MODIFY</th>
-        </tr>
-        <tr v-for="user in users">
-            <td>{{ user.id }}</td>
-            <td>{{ user.nickname }}</td>
-            <td>{{ user.level }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.avatar_id }}</td>
-            <td class="modify-cel">
-                <button class="btn modify">
-                    <img src="/storage/icons/edit.svg" alt="">
-                </button>
-                <button class="btn delete" @click="deleteUser(user.id)">
-                    <img src="/storage/icons/trash.svg" alt="">
-                </button>
-            </td>
-
-        </tr>
-    </table>
+    <div id="container-players">
+        <table>
+            <tr class="first-row">
+                <th>ID</th>
+                <th>NICKNAME</th>
+                <th>LEVEL</th>
+                <th>EMAIL</th>
+                <th>AVATAR ID</th>
+                <th>MODIFY</th>
+            </tr>
+            <tr v-for="user in users">
+                <td>{{ user.id }}</td>
+                <td>{{ user.nickname }}</td>
+                <td>{{ user.level }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.avatar_id }}</td>
+                <td class="modify-cel">
+                    <button class="btn modify">
+                        <img src="/storage/icons/edit.svg" alt="">
+                    </button>
+                    <button class="btn delete" @click="deleteUser(user.id)">
+                        <img src="/storage/icons/trash.svg" alt="">
+                    </button>
+                </td>
+    
+            </tr>
+        </table>
+    </div>
+    
 </template>
 
 <script setup>
 import axios from 'axios';
 import { ref, onMounted, defineProps, onBeforeMount, watch } from 'vue';
+import sweetAlertNotifications from '@/utils/swal_notifications';
+const { throwInfoMessage, throwSuccessMessage, throwInviteMessage } = sweetAlertNotifications();
 
 const props = defineProps([ 'user', 'historyData' ]);
 const users = ref({});
@@ -47,9 +52,17 @@ const getAllPlayers = async () => {
 }
 
 const deleteUser = (id) => {
+    throwInviteMessage(
+        '¿Eliminar usuario?',
+        () => proceedDeleteUser(id),
+        () => console.log('Cancelado.')
+    );
+}
+
+const proceedDeleteUser = (id) => {
     axios.delete(`/api/delete-user/${id}`);
-    console.log('Delete user');
     refresh();
+    throwSuccessMessage('USUARIO ELIMINADO');
 }
 
 const refresh = () => {
@@ -59,11 +72,16 @@ const refresh = () => {
 </script>
 
 <style scoped>
+
+#container-players
+{
+    width: 100%;
+}
+
 table
 {
     width: 100%;
-    height: auto;
-    overflow-y: scroll;
+    height: 100%;
 }
 
 .first-row
