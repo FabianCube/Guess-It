@@ -30,7 +30,8 @@
                         <!-- COMPONENTE STATUS BAR -->
                         <status-bar :playingWord="playingWord" :timeRound="timeRound" :difficulty="difficulty"
                             :currentPlayer="currentPlayer" :user="user" :startRound="startRound"
-                            @endOfRound="handleEndOfRound" @roundTimeLeft="handleTimeLeft" :roomCode="roomCode" :roundFinished="roundFinished"/>
+                            @endOfRound="handleEndOfRound" @roundTimeLeft="handleTimeLeft" :roomCode="roomCode"
+                            :roundFinished="roundFinished" />
                         <!-- COMPONENTE CANVAS -->
                         <canvas-component :user="user" :new-canvas="newCanvas" @canvasupdate="sendCanvas"
                             :isDrawingEnabled="isDrawingEnabled"></canvas-component>
@@ -84,6 +85,7 @@ const isDrawingEnabled = ref(false);
 const isChatEnabled = ref(true);
 const roundTimeLeft = ref();
 const guessOrder = ref(1);
+const gameFinished = ref(false);
 
 const playingWord = ref('');
 const words = ([]);
@@ -181,13 +183,13 @@ const handleEndOfRound = async () => {
     await axios.post('/api/drawer-points', {
         code: roomCode.value,
         userId: currentPlayer.value.uuid,
-        correctPlayers: guessOrder.value -1,
+        correctPlayers: guessOrder.value - 1,
         players: players.value.length - 1
     }).then(response => {
         console.log(response.data);
     }).catch(error => {
         console.error("Error al unirse a la sala: ", error);
-    }); 
+    });
 
     roundFinished.value = true;
 
@@ -208,25 +210,34 @@ watch(roundFinished, (newValue) => {
     if (newValue) {
         console.log('Siguiente jugador');
         moveToNextPlayer();
-        roundFinished.value = false;
-        timer.value = true;
-        startRound.value = false;
-        guessOrder.value = 1;
-        userAcces();
-        if (currentPlayer.value.uuid == user.value.uuid) {
-            setPlayingWord();
+        if (!gameFinished.value) {
+            roundFinished.value = false;
+            timer.value = true;
+            startRound.value = false;
+            guessOrder.value = 1;
+            userAcces();
+            if (currentPlayer.value.uuid == user.value.uuid) {
+                setPlayingWord();
+            }
+        } else {
+            router.push({ name: 'home' });
         }
     }
 });
 
-// Al acabar la ronda pasa a dibujar el siguiente jugador
+// Al acabar la ronda pasa a dibujar el siguiente jugador, si es la última ronda termina el juego
 const moveToNextPlayer = () => {
-    if (currentPlayerIndex.value < players.value.length - 1) {
-        currentPlayerIndex.value++;
+    if (currentRound.value + 1 > rounds.value && currentPlayerIndex.value == players.value.length - 1) {
+        gameFinished.value = true;
     } else {
-        currentRound.value++;
-        currentPlayerIndex.value = 0;
+        if (currentPlayerIndex.value < players.value.length - 1) {
+            currentPlayerIndex.value++;
+        } else {
+            currentRound.value++;
+            currentPlayerIndex.value = 0;
+        }
     }
+
     console.log("[Game.vue]:currentPlayerIndex.value -> " + currentPlayerIndex.value);
     console.log("[Game.vue]:currentPlayer.value -> " + currentPlayer.value);
 };
@@ -287,6 +298,10 @@ onMounted(async () => {
     console.log("User: " + user.value.nickname);
 });
 
+onUnmounted(() => {
+    window.Echo.leave('room-' + roomCode.value);
+});
+
 const listenEventMessageSent = () => {
     console.log("[Game.vue]:listenEventMessageSent: Entrado!");
 
@@ -343,12 +358,12 @@ const listenCorrectWord = () => {
                 players.value[playerIndex].points += e.points;
             }
 
-            if(players.value[playerIndex].uuid == user.value.uuid){
+            if (players.value[playerIndex].uuid == user.value.uuid) {
                 isChatEnabled.value = false;
             }
             guessOrder.value++;
 
-            if(guessOrder.value == players.value.length && currentPlayer.value.uuid == user.value.uuid){
+            if (guessOrder.value == players.value.length && currentPlayer.value.uuid == user.value.uuid) {
                 handleEndOfRound();
             }
         });
@@ -371,12 +386,12 @@ const getUserData = async () => {
         console.log("[INFO]: Entrando como usuario registrado.");
 
         await axios.get('/api/user')
-        .then(response => {
-            console.log(response.data.data);
-            user.value = response.data.data;
-            user.value.avatar = "/storage/avatars/avatar" + response.data.data.avatar_id + ".jpg";
-            user.value.uuid = user.value.id
-        })
+            .then(response => {
+                console.log(response.data.data);
+                user.value = response.data.data;
+                user.value.avatar = "/storage/avatars/avatar" + response.data.data.avatar_id + ".jpg";
+                user.value.uuid = user.value.id
+            })
 
         console.log(user.value);
     }
