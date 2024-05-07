@@ -177,7 +177,6 @@ const handleTimerUpdate = (timeLeft) => {
 // Cuándo la cuenta atrás llega a 0 deshabilitamos el componente del timer
 const handleTimeLeft = (time) => {
     roundTimeLeft.value = time.roundTimeLeft;
-    console.log(roundTimeLeft.value);
 };
 
 // Cuándo acaba el tiempo de la ronda 
@@ -216,6 +215,7 @@ watch(roundFinished, (newValue) => {
             roundFinished.value = false;
             timer.value = true;
             startRound.value = false;
+            beginStartTimer();
             guessOrder.value = 1;
             userAcces();
             if (currentPlayer.value.uuid == user.value.uuid) {

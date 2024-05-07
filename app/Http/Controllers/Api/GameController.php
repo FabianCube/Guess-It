@@ -18,6 +18,7 @@ use App\Events\RoundFinished;
 use App\Events\CorrectWord;
 use App\Events\DrawerPoints;
 use App\Events\StartTimer;
+use App\Events\EncryptedWord;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
@@ -117,19 +118,6 @@ class GameController extends Controller
         ]);
     }
 
-    public function broadcastBarStatus(Request $request)
-    {
-
-        $code = $request->code;
-        $time = $request->time;
-
-        broadcast(new BarStatus($code, $time))->toOthers();
-
-        return response()->json([
-            'time' => $time
-        ]);
-    }
-
     public function broadcastRoundFinished(Request $request)
     {
 
@@ -201,6 +189,19 @@ class GameController extends Controller
 
         return response()->json([
             'Room: ' => $code
+        ]);
+    }
+
+    // Empieza la cuenta atrás antes de empezar una ronda
+    public function encryptedWord(Request $request)
+    {
+        $code = $request->code;
+        $encryptedWord = $request->encryptedWord;
+
+        broadcast(new EncryptedWord($code,$encryptedWord))->toOthers();
+
+        return response()->json([
+            'EncryptedWord: ' => $encryptedWord
         ]);
     }
 }

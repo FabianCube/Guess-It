@@ -72,10 +72,9 @@ watch(() => props.startRound, (newValue) => {
             console.log("New round: Reset done. usedIndex.length -> [" + usedIndex.value + "]");
         }
 
-        if (props.currentPlayer.uuid == props.user.uuid) {
-            startRoundTimer();
-        }
-    }else{
+        startRoundTimer();
+    
+    } else {
         roundTimeLeft.value = props.timeRound;
     }
 });
@@ -96,7 +95,8 @@ onMounted(async () => {
     console.log("[StatusBar.vue]:playingWord: " + props.playingWord)
 
     // console.log("CurrentPlayer == " + props.currentPlayer + " AND user == " + props.user)
-    listenBarStatus();
+    // listenBarStatus();
+    listenEncryptedWord();
 })
 
 // 
@@ -115,31 +115,23 @@ const startRoundTimer = () => {
             roundTimeLeft.value = props.timeRound;
         }
 
-        axios.post('/api/bar-status', {
-            code: props.roomCode,
-            time: roundTimeLeft.value
-        }).then(response => {
-            console.log(response.data.mensaje);
-        }).catch(error => {
-            console.error("Error al unirse a la sala: ", error);
-        });
     }, 1000);
 };
 
 watch(() => roundTimeLeft.value, () => {
 
-    letterRevealer();
+    if (props.currentPlayer.uuid == props.user.uuid) {
+        letterRevealer();
+    }
 })
 
 
 const letterRevealer = () => {
+    let actualWord = currentWordEncrypted.value;
     let index = 0;
     let time = props.timeRound;
     let size = wordLenght.value;
     let interval = Math.trunc(time / size);
-
-    // console.log("INTERVAL = " + interval + "s");
-    // console.log("CURRENT_INTERVAL = " + currentInterval.value + "s");
 
     let antiFrezexdd = 0;
 
@@ -160,6 +152,17 @@ const letterRevealer = () => {
     }
     else {
         currentInterval.value++;
+    }
+
+    if (actualWord != currentWordEncrypted.value) {
+        axios.post('/api/encrypted-word', {
+            code: props.roomCode,
+            encryptedWord: currentWordEncrypted.value
+        }).then(response => {
+            console.log(response.data);
+        }).catch(error => {
+            console.error("Error al unirse a la sala: ", error);
+        });
     }
 }
 
@@ -197,6 +200,13 @@ const listenBarStatus = () => {
             emits('roundTimeLeft', {
                 roundTimeLeft: roundTimeLeft.value
             });
+        });
+}
+
+const listenEncryptedWord = () => {
+    window.Echo.channel('room-' + props.roomCode)
+        .listen('.EncryptedWord', (e) => {
+            currentWordEncrypted.value = e.encryptedWord;
         });
 }
 
