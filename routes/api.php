@@ -98,3 +98,4 @@ Route::get('/account-history/{id}', [AccountController::class, 'getUserHistory']
 Route::get('/admin-history', [AccountController::class, 'getAllGames']);
 Route::get('/admin-players', [AccountController::class, 'getAllUsers']);
 Route::delete('/delete-user/{id}', [AccountController::class, 'deleteUser']);
+Route::put('/update-user/{id}', [AccountController::class, 'updateUser']);
