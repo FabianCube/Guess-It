@@ -124,7 +124,7 @@ class GameController extends Controller
         $code = $request->code;
         $finished = $request->finished;
 
-        broadcast(new RoundFinished($code, $finished))->toOthers();
+        broadcast(new RoundFinished($code, $finished));
 
         return response()->json([
             'finished' => $finished

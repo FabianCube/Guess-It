@@ -58,11 +58,20 @@ const wordLenght = ref(0);
 const currentInterval = ref(0);
 const usedIndex = ref([]);
 
-const reset = () => {
-    // currentInterval.value = 0;
-    // wordLenght.value = 0;
-    usedIndex.value = [];
-}
+
+/* MOUNTING */
+
+onMounted(async () => {
+    roundTimeLeft.value = props.timeRound;
+
+    console.log("dificultad: " + props.difficulty)
+    console.log("[StatusBar.vue]:playingWord: " + props.playingWord)
+
+    listenEncryptedWord();
+})
+
+/* WATCHERS */
+
 
 watch(() => props.startRound, (newValue) => {
     if (newValue == true) {
@@ -86,19 +95,31 @@ watch(() => props.playingWord, (word) => {
     encryptWord(currentWord.value);
 });
 
+watch(() => roundTimeLeft.value, () => {
 
-
-onMounted(async () => {
-    roundTimeLeft.value = props.timeRound;
-
-    console.log("dificultad: " + props.difficulty)
-    console.log("[StatusBar.vue]:playingWord: " + props.playingWord)
-
-    listenEncryptedWord();
+if (props.currentPlayer.uuid == props.user.uuid) {
+    letterRevealer();
+}
 })
+
+/* LISTENERS */
+
+const listenEncryptedWord = () => {
+    window.Echo.channel('room-' + props.roomCode)
+        .listen('.EncryptedWord', (e) => {
+            currentWordEncrypted.value = e.encryptedWord;
+        });
+}
+
+/* FUNCTIONS */
+
+const reset = () => {
+    usedIndex.value = [];
+}
 
 // 
 const startRoundTimer = () => {
+
     const intervalId = setInterval(() => {
         if (roundTimeLeft.value > 0 && props.startRound) {
             roundTimeLeft.value--;
@@ -108,6 +129,7 @@ const startRoundTimer = () => {
         } else {
             clearInterval(intervalId);
             if (props.currentPlayer.uuid == props.user.uuid) {
+                console.log("[StatusBar.vue]:Emit de fin de ronda");
                 emits('endOfRound');
             }
             roundTimeLeft.value = props.timeRound;
@@ -115,13 +137,6 @@ const startRoundTimer = () => {
 
     }, 1000);
 };
-
-watch(() => roundTimeLeft.value, () => {
-
-    if (props.currentPlayer.uuid == props.user.uuid) {
-        letterRevealer();
-    }
-})
 
 
 const letterRevealer = () => {
@@ -189,13 +204,6 @@ const encryptWord = (word) => {
 
     currentWordEncrypted.value = wordSplitted;
     console.log(currentWordEncrypted.value[0]);
-}
-
-const listenEncryptedWord = () => {
-    window.Echo.channel('room-' + props.roomCode)
-        .listen('.EncryptedWord', (e) => {
-            currentWordEncrypted.value = e.encryptedWord;
-        });
 }
 
 // Filtra y cuenta los elementos con `visibility` igual a 1

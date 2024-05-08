@@ -34,7 +34,7 @@
                             :roundFinished="roundFinished" />
                         <!-- COMPONENTE CANVAS -->
                         <canvas-component :user="user" :new-canvas="newCanvas" @canvasupdate="sendCanvas"
-                            :isDrawingEnabled="isDrawingEnabled"></canvas-component>
+                            :isDrawingEnabled="isDrawingEnabled" :clearCanvas="clearCanvas"></canvas-component>
                     </div>
                 </div>
 
@@ -87,162 +87,13 @@ const roundTimeLeft = ref();
 const guessOrder = ref(1);
 const gameFinished = ref(false);
 const startTimer = ref(false);
+const clearCanvas = ref(false);
+const roundInProgress = ref(false);
 
 const playingWord = ref('');
 const words = ([]);
 
-const addMessage = (newMessage) => {
-    messages.value.push(newMessage);
-
-    console.log("[Game.vue]:addMessage:user.nickname -> " + newMessage.user.nickname)
-    console.log("[Game.vue]:addMessage:message -> " + newMessage.message)
-
-    axios.post('/api/messages', {
-        user: newMessage.user,
-        message: newMessage.message,
-        code: roomCode.value
-    }).then(response => {
-        console.log(response.data.status);
-    }).catch(error => {
-        console.error("Error: ", error);
-    });
-
-    console.log(timeRound.value);
-    console.log(roundTimeLeft.value);
-    console.log(timeRound.value - roundTimeLeft.value);
-
-    // Si las palabras coinciden se suman los puntos
-    if (compareWords(playingWord.value, newMessage.message)) {
-        console.log("[Game.vue]:newMessage.user.uuid -> " + newMessage.user.uuid);
-
-        axios.post('/api/correct-word', {
-            code: roomCode.value,
-            players: players.value,
-            userId: newMessage.user.uuid,
-            elapsedTime: timeRound.value - roundTimeLeft.value,
-            guessOrder: guessOrder.value
-        }).then(response => {
-            console.log(response.data.status);
-        }).catch(error => {
-            console.error("Error: ", error);
-        });
-    }
-
-    console.log("[Game.vue]:addMessage:messages{} -> " + messages.value);
-}
-
-const sendCanvas = (canvas) => {
-
-    console.log("[Game.vue]:sendCanvas:user.nickname -> " + canvas.user.nickname)
-    console.log("[Game.vue]:sendCanvas:canvas -> " + canvas.canvas)
-
-    axios.post('/api/canvas', {
-        user: canvas.user,
-        canvas: canvas.canvas,
-        code: roomCode.value
-    }).then(response => {
-        console.log(response.data);
-    }).catch(error => {
-        console.error("Error sdanslndajndkjans", error);
-    });
-}
-
-const setPlayingWord = async () => {
-
-    playingWord.value = await getPlayingWord();
-    console.log("[Game.vue]:setPlayingWord:word -> " + playingWord.value)
-
-    await axios.post('/api/word', {
-        code: roomCode.value,
-        word: playingWord.value
-    }).then(response => {
-        console.log(response.data);
-    }).catch(error => {
-        console.error("Error en la petición axios de la palabra", error);
-    });
-
-}
-
-// Cuándo la cuenta atrás llega a 0 deshabilitamos el componente del timer
-const handleTimerUpdate = (timeLeft) => {
-    console.log(timer.value);
-
-    if (timeLeft.timeLeft == 0) {
-        timer.value = false;
-        startRound.value = true;
-        startTimer.value = false;
-    }
-};
-
-// Cuándo la cuenta atrás llega a 0 deshabilitamos el componente del timer
-const handleTimeLeft = (time) => {
-    roundTimeLeft.value = time.roundTimeLeft;
-};
-
-// Cuándo acaba el tiempo de la ronda 
-const handleEndOfRound = async () => {
-    await axios.post('/api/drawer-points', {
-        code: roomCode.value,
-        userId: currentPlayer.value.uuid,
-        correctPlayers: guessOrder.value - 1,
-        players: players.value.length - 1
-    }).then(response => {
-        console.log(response.data);
-    }).catch(error => {
-        console.error("Error al unirse a la sala: ", error);
-    });
-
-    roundFinished.value = true;
-
-    await axios.post('/api/round-finished', {
-        code: roomCode.value,
-        finished: true
-    }).then(response => {
-        console.log(response.data);
-    }).catch(error => {
-        console.error("Error al unirse a la sala: ", error);
-    });
-
-    console.log('Fin de ronda');
-};
-
-// Observa cuándo termina la ronda
-watch(roundFinished, (newValue) => {
-    if (newValue) {
-        console.log('Siguiente jugador');
-        moveToNextPlayer();
-        if (!gameFinished.value) {
-            roundFinished.value = false;
-            timer.value = true;
-            startRound.value = false;
-            beginStartTimer();
-            guessOrder.value = 1;
-            userAcces();
-            if (currentPlayer.value.uuid == user.value.uuid) {
-                setPlayingWord();
-            }
-        } else {
-            router.push({ name: 'home' });
-        }
-    }
-});
-
-// Al acabar la ronda pasa a dibujar el siguiente jugador, si es la última ronda termina el juego
-const moveToNextPlayer = () => {
-    if (currentRound.value + 1 > rounds.value && currentPlayerIndex.value == players.value.length - 1) {
-        gameFinished.value = true;
-    } else {
-        if (currentPlayerIndex.value < players.value.length - 1) {
-            currentPlayerIndex.value++;
-        } else {
-            currentRound.value++;
-            currentPlayerIndex.value = 0;
-        }
-    }
-
-    console.log("[Game.vue]:currentPlayerIndex.value -> " + currentPlayerIndex.value);
-    console.log("[Game.vue]:currentPlayer.value -> " + currentPlayer.value);
-};
+/* MOUNTING */
 
 onBeforeMount(async () => {
     // if (localStorage.getItem('Partida') != route.params.code) {
@@ -307,14 +158,39 @@ onUnmounted(() => {
     window.Echo.leave('room-' + roomCode.value);
 });
 
-const listenEventMessageSent = () => {
-    console.log("[Game.vue]:listenEventMessageSent: Entrado!");
+/* WATCHERS */
 
+// Observa cuándo termina la ronda
+watch(roundFinished, (newValue) => {
+    if (newValue) {
+        console.log(roundInProgress.value);
+        console.log('Siguiente jugador');
+        moveToNextPlayer();
+        if (!gameFinished.value) {
+            // clearCanvas.value = true;  
+            roundFinished.value = false;
+            timer.value = true;
+            startRound.value = false;
+            // clearCanvas.value = false;
+            beginStartTimer();
+            guessOrder.value = 1;
+            userAcces();
+            if (currentPlayer.value.uuid == user.value.uuid) {
+                setPlayingWord();
+            }
+        } else {
+            router.push({ name: 'home' });
+        }
+    }
+});
+
+/* LISTENERS */
+
+const listenEventMessageSent = () => {
     window.Echo.channel('room-' + roomCode.value)
         .listen('.MessageSent', (e) => {
             console.log("[Game.vue]:listenEventMessageSent:.MessageSent -> " + e.message);
 
-            // messages.value.push(e);
             messages.value.push({
                 message: e.message,
                 user: e.user
@@ -323,8 +199,6 @@ const listenEventMessageSent = () => {
 }
 
 const listenEventCanvasUpdate = () => {
-    console.log("[Game.vue]:listenEventCanvasUpdate: Entrado!");
-
     window.Echo.channel('room-' + roomCode.value)
         .listen('.CanvasUpdate', (e) => {
             console.log("[Game.vue]:listenEventCanvasUpdate:.CanvasUpdate -> " + e.canvas);
@@ -334,10 +208,6 @@ const listenEventCanvasUpdate = () => {
 }
 
 const listenEventSendWord = () => {
-    console.log("[Game.vue]:listenEventSendWord: Entrado!");
-
-    console.log(roomCode.value);
-
     window.Echo.channel('room-' + roomCode.value)
         .listen('.SendWord', (e) => {
             console.log("[Game.vue]:listenEventSendWord:.SendWord -> " + e.word);
@@ -350,6 +220,7 @@ const listenRoundFinished = () => {
     window.Echo.channel('room-' + roomCode.value)
         .listen('.RoundFinished', (e) => {
             roundFinished.value = e.finished;
+            roundInProgress.value = false;
             console.log("Ronda terminada");
         });
 }
@@ -359,6 +230,7 @@ const listenCorrectWord = () => {
     window.Echo.channel('room-' + roomCode.value)
         .listen('.CorrectWord', (e) => {
             const playerIndex = players.value.findIndex(player => player.uuid === e.userId);
+
             if (playerIndex !== -1) {
                 players.value[playerIndex].points += e.points;
             }
@@ -366,9 +238,16 @@ const listenCorrectWord = () => {
             if (players.value[playerIndex].uuid == user.value.uuid) {
                 isChatEnabled.value = false;
             }
+
             guessOrder.value++;
 
+            console.log(guessOrder.value);
+            console.log(players.value.length);
+
+            console.log(roundInProgress.value);
+
             if (guessOrder.value == players.value.length && currentPlayer.value.uuid == user.value.uuid) {
+                console.log("[Game.vue]:Fin de ronda, todos los jugadores han adivinado la palabra")
                 handleEndOfRound();
             }
         });
@@ -392,6 +271,149 @@ const listenStartTimer = () => {
         });
 }
 
+/* HANDLERS */
+
+// Cuándo la cuenta atrás llega a 0 deshabilitamos el componente del timer
+const handleTimerUpdate = (timeLeft) => {
+    console.log(timer.value);
+
+    console.log(roundInProgress.value);
+
+    if (timeLeft.timeLeft == 0) {
+        timer.value = false;
+        startRound.value = true;
+        startTimer.value = false;
+        roundInProgress.value = true;
+    }
+};
+
+// Cuándo la cuenta atrás llega a 0 deshabilitamos el componente del timer
+const handleTimeLeft = (time) => {
+    roundTimeLeft.value = time.roundTimeLeft;
+};
+
+// Cuándo acaba el tiempo de la ronda 
+const handleEndOfRound = async () => {
+    console.log(roundInProgress.value);
+    if (roundInProgress.value) {
+        
+        console.log("Gestionando fin de ronda");
+
+        await axios.post('/api/drawer-points', {
+            code: roomCode.value,
+            userId: currentPlayer.value.uuid,
+            correctPlayers: guessOrder.value - 1,
+            players: players.value.length - 1
+        }).then(response => {
+            console.log(response.data);
+        }).catch(error => {
+            console.error("Error al unirse a la sala: ", error);
+        });
+
+        await axios.post('/api/round-finished', {
+            code: roomCode.value,
+            finished: true
+        }).then(response => {
+            console.log(response.data);
+        }).catch(error => {
+            console.error("Error al unirse a la sala: ", error);
+        });
+
+        console.log(roundInProgress.value);
+    }
+
+};
+
+/* FUNCTIONS */
+
+const addMessage = (newMessage) => {
+    messages.value.push(newMessage);
+
+    console.log("[Game.vue]:addMessage:user.nickname -> " + newMessage.user.nickname)
+    console.log("[Game.vue]:addMessage:message -> " + newMessage.message)
+
+    axios.post('/api/messages', {
+        user: newMessage.user,
+        message: newMessage.message,
+        code: roomCode.value
+    }).then(response => {
+        console.log(response.data);
+    }).catch(error => {
+        console.error("Error: ", error);
+    });
+
+    // Si las palabras coinciden se suman los puntos
+    if (compareWords(playingWord.value, newMessage.message)) {
+        axios.post('/api/correct-word', {
+            code: roomCode.value,
+            players: players.value,
+            userId: newMessage.user.uuid,
+            elapsedTime: timeRound.value - roundTimeLeft.value,
+            guessOrder: guessOrder.value
+        }).then(response => {
+            console.log(response.data);
+        }).catch(error => {
+            console.error("Error: ", error);
+        });
+        console.log(roundInProgress.value);
+    }
+
+    console.log("[Game.vue]:addMessage:messages{} -> " + messages.value);
+}
+
+const sendCanvas = (canvas) => {
+
+    console.log("[Game.vue]:sendCanvas:user.nickname -> " + canvas.user.nickname)
+    console.log("[Game.vue]:sendCanvas:canvas -> " + canvas.canvas)
+
+    axios.post('/api/canvas', {
+        user: canvas.user,
+        canvas: canvas.canvas,
+        code: roomCode.value
+    }).then(response => {
+        console.log(response.data);
+    }).catch(error => {
+        console.error("Error al unirse a la sala:", error);
+    });
+}
+
+const setPlayingWord = async () => {
+
+    playingWord.value = await getPlayingWord();
+    console.log("[Game.vue]:setPlayingWord:word -> " + playingWord.value)
+
+    await axios.post('/api/word', {
+        code: roomCode.value,
+        word: playingWord.value
+    }).then(response => {
+        console.log(response.data);
+    }).catch(error => {
+        console.error("Error en la petición axios de la palabra", error);
+    });
+
+}
+
+
+// Al acabar la ronda pasa a dibujar el siguiente jugador, si es la última ronda termina el juego
+const moveToNextPlayer = () => {
+    console.log(roundInProgress.value);
+
+    if (currentRound.value + 1 > rounds.value && currentPlayerIndex.value == players.value.length - 1) {
+        gameFinished.value = true;
+    } else {
+        if (currentPlayerIndex.value < players.value.length - 1) {
+            currentPlayerIndex.value++;
+        } else {
+            currentRound.value++;
+            currentPlayerIndex.value = 0;
+        }
+    }
+
+    console.log("[Game.vue]:currentPlayerIndex.value -> " + currentPlayerIndex.value);
+    console.log("[Game.vue]:currentPlayer.value -> " + currentPlayer.value);
+};
+
+// Inicia la cuenta atrás para todos los jugadores
 const beginStartTimer = () => {
     if (currentPlayer.value.uuid == user.value.uuid) {
         setTimeout(() => {
@@ -406,6 +428,7 @@ const beginStartTimer = () => {
     }
 }
 
+// Obtiene los datos del usuario
 const getUserData = async () => {
 
     if (isLoggedIn()) {
@@ -438,6 +461,7 @@ const getUserData = async () => {
     }
 }
 
+// Obtiene la palabra a jugar aleatoriamente según la dificultad
 const getPlayingWord = async () => {
 
     let category = '';
@@ -484,6 +508,7 @@ const userAcces = async () => {
     }
 }
 
+// El fondo se mueve con el movimiento del ratón
 const movingBackground = () => {
     const bg = document.getElementById('background-game');
 

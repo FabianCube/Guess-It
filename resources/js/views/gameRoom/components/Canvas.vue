@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onUpdated, nextTick, defineEmits, defineProps } from 'vue';
+import { ref, onMounted, onUpdated, nextTick, defineEmits, defineProps, watch } from 'vue';
 
 const isDrawing = ref(false);
 const canvas = ref(null);
@@ -13,10 +13,17 @@ const movements = ref([]);
 const keepLastColor = ref('');
 const currentTool = ref('draw');
 
-const props = defineProps(['user', 'newCanvas', 'isDrawingEnabled']);
+const props = defineProps(['user', 'newCanvas', 'isDrawingEnabled', 'clearCanvas']);
 const emits = defineEmits(['canvasupdate']);
 
 console.log(props.isDrawingEnabled);
+
+// watch(() => props.clearCanvas, (clear) => {
+//     console.log("Limpiar canvas")
+//     if (clear) {
+//         clearArea();
+//     }
+// });
 
 onMounted(() => {
     init();
