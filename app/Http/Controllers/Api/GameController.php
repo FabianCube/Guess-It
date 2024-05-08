@@ -25,7 +25,7 @@ use Illuminate\Http\Request;
 
 class GameController extends Controller
 {
-    
+
     // Método para crear las tablas para la partida con la configuración y jugadores
     public function startGame(Request $request)
     {
@@ -169,14 +169,23 @@ class GameController extends Controller
     {
         $code = $request->code;
         $userId = $request->userId;
-        $correctPlayers = $request->correctPlayers;
-        $players = $request->players;
-        $points = 100;
+        $correctPlayers = (int) $request->correctPlayers;
+        $totalPlayers = (int) $request->players;
+
+        // Define los puntos base para el jugador que dibuja
+        $basePoints = 100;
+
+        // Calcula el porcentaje de jugadores que han adivinado
+        $guessRatio = $totalPlayers > 0 ? ($correctPlayers / $totalPlayers) : 0;
+
+        // Se calculan los puntos multiplicando la puntuación base por el porcentaje de jugadores que han acertado
+        $points = round($basePoints * $guessRatio);
 
         broadcast(new DrawerPoints($code, $userId, $points));
 
         return response()->json([
-            'UserId: ' => $userId
+            'UserId: ' => $userId,
+            'points' => $points
         ]);
     }
 
@@ -198,7 +207,7 @@ class GameController extends Controller
         $code = $request->code;
         $encryptedWord = $request->encryptedWord;
 
-        broadcast(new EncryptedWord($code,$encryptedWord))->toOthers();
+        broadcast(new EncryptedWord($code, $encryptedWord))->toOthers();
 
         return response()->json([
             'EncryptedWord: ' => $encryptedWord
