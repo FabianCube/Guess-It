@@ -33,8 +33,8 @@
                             @endOfRound="handleEndOfRound" @roundTimeLeft="handleTimeLeft" :roomCode="roomCode"
                             :roundFinished="roundFinished" />
                         <!-- COMPONENTE CANVAS -->
-                        <canvas-component :user="user" :new-canvas="newCanvas" @canvasupdate="sendCanvas"
-                            :isDrawingEnabled="isDrawingEnabled" :clearCanvas="clearCanvas"></canvas-component>
+                        <canvas-component :user="user" :newCanvas="newCanvas" @canvasupdate="sendCanvas"
+                            :isDrawingEnabled="isDrawingEnabled" :roomCode="roomCode"></canvas-component>
                     </div>
                 </div>
 
@@ -87,7 +87,6 @@ const roundTimeLeft = ref();
 const guessOrder = ref(1);
 const gameFinished = ref(false);
 const startTimer = ref(false);
-const clearCanvas = ref(false);
 const roundInProgress = ref(false);
 
 const playingWord = ref('');
@@ -163,15 +162,12 @@ onUnmounted(() => {
 // Observa cuándo termina la ronda
 watch(roundFinished, (newValue) => {
     if (newValue) {
-        console.log(roundInProgress.value);
         console.log('Siguiente jugador');
         moveToNextPlayer();
         if (!gameFinished.value) {
-            // clearCanvas.value = true;  
             roundFinished.value = false;
             timer.value = true;
             startRound.value = false;
-            // clearCanvas.value = false;
             beginStartTimer();
             guessOrder.value = 1;
             userAcces();
@@ -179,7 +175,7 @@ watch(roundFinished, (newValue) => {
                 setPlayingWord();
             }
         } else {
-            router.push({ name: 'home' });
+            // router.push({ name: 'home' });
         }
     }
 });
@@ -201,9 +197,20 @@ const listenEventMessageSent = () => {
 const listenEventCanvasUpdate = () => {
     window.Echo.channel('room-' + roomCode.value)
         .listen('.CanvasUpdate', (e) => {
-            console.log("[Game.vue]:listenEventCanvasUpdate:.CanvasUpdate -> " + e.canvas);
-
-            newCanvas.value = e.canvas;
+            
+            if (e.canvas == "clear") {
+                console.log(e.canvas);
+                axios.post('/api/clean-canvas', {
+                    code: roomCode.value
+                }).then(response => {
+                    console.log(response.data);
+                }).catch(error => {
+                    console.error("Error al unirse al canal: ", error);
+                });
+            } else {
+                
+                newCanvas.value = e.canvas;
+            }
         });
 }
 
@@ -244,10 +251,8 @@ const listenCorrectWord = () => {
             console.log(guessOrder.value);
             console.log(players.value.length);
 
-            console.log(roundInProgress.value);
-
             if (guessOrder.value == players.value.length && currentPlayer.value.uuid == user.value.uuid) {
-                console.log("[Game.vue]:Fin de ronda, todos los jugadores han adivinado la palabra")
+                console.log("[Game.vue]:Fin de ronda, todos los jugadores han adivinado la palabra");
                 handleEndOfRound();
             }
         });
@@ -277,8 +282,6 @@ const listenStartTimer = () => {
 const handleTimerUpdate = (timeLeft) => {
     console.log(timer.value);
 
-    console.log(roundInProgress.value);
-
     if (timeLeft.timeLeft == 0) {
         timer.value = false;
         startRound.value = true;
@@ -294,9 +297,8 @@ const handleTimeLeft = (time) => {
 
 // Cuándo acaba el tiempo de la ronda 
 const handleEndOfRound = async () => {
-    console.log(roundInProgress.value);
     if (roundInProgress.value) {
-        
+
         console.log("Gestionando fin de ronda");
 
         await axios.post('/api/drawer-points', {
@@ -318,8 +320,6 @@ const handleEndOfRound = async () => {
         }).catch(error => {
             console.error("Error al unirse a la sala: ", error);
         });
-
-        console.log(roundInProgress.value);
     }
 
 };
@@ -362,10 +362,6 @@ const addMessage = (newMessage) => {
 }
 
 const sendCanvas = (canvas) => {
-
-    console.log("[Game.vue]:sendCanvas:user.nickname -> " + canvas.user.nickname)
-    console.log("[Game.vue]:sendCanvas:canvas -> " + canvas.canvas)
-
     axios.post('/api/canvas', {
         user: canvas.user,
         canvas: canvas.canvas,

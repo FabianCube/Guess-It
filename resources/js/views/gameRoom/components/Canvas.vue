@@ -13,42 +13,53 @@ const movements = ref([]);
 const keepLastColor = ref('');
 const currentTool = ref('draw');
 
-const props = defineProps(['user', 'newCanvas', 'isDrawingEnabled', 'clearCanvas']);
+const props = defineProps(['user', 'newCanvas', 'isDrawingEnabled', 'roomCode']);
 const emits = defineEmits(['canvasupdate']);
 
 console.log(props.isDrawingEnabled);
 
-// watch(() => props.clearCanvas, (clear) => {
-//     console.log("Limpiar canvas")
-//     if (clear) {
-//         clearArea();
-//     }
-// });
 
 onMounted(() => {
     init();
     window.addEventListener('resize', adjustCanvas);
     adjustCanvas();
+
+    listenRoundFinished();
+    listenCleanCanvas();
+
 });
 
-onUpdated(() => {
-    nextTick(() => {
-        if (props.newCanvas) {
-            if (props.newCanvas == "clear") {
-                clearArea();
-            }
-            else {
-                let positions = JSON.parse(props.newCanvas);
-
-                positions.forEach((movement, index) => {
-                    setTimeout(() => {
-                        drawLine(ctx.value, movement.x, movement.y, movement.offsetX, movement.offsetY, movement.lineColor, movement.lineWidth);
-                    }, index * 5);
-                })
-            }
-        }
-    });
+watch(() => props.newCanvas, (canvas) => {
+    console.log(canvas);
+    if (canvas == "clear") {
+        clearArea();
+    }
+    else {
+        let positions = JSON.parse(canvas);
+        // console.log(canvas);
+        positions.forEach((movement, index) => {
+            setTimeout(() => {
+                drawLine(ctx.value, movement.x, movement.y, movement.offsetX, movement.offsetY, movement.lineColor, movement.lineWidth);
+            }, index * 5);
+        })
+    }
 });
+
+const listenRoundFinished = () => {
+    window.Echo.channel('room-' + props.roomCode)
+        .listen('.RoundFinished', (e) => {
+            clearArea();
+        });
+}
+
+//  ¡¡¡¡NO SE ESTÁ APLICANDO!!!!
+const listenCleanCanvas = () => {
+    window.Echo.channel('room-' + props.roomCode)
+        .listen('.CleanCanvas', (e) => {
+            clearArea();
+        });
+}
+
 
 const init = () => {
     canvas.value = document.getElementById('can');
@@ -91,7 +102,10 @@ const init = () => {
 
         clear.addEventListener('click', (e) => {
             clearArea();
-            sendCanvas("clear");
+            emits("canvasupdate", {
+                user: props.user,
+                canvas: "clear"
+            });
         });
     }
 };
@@ -100,7 +114,7 @@ const init = () => {
 const sendCanvas = (params) => {
     emits("canvasupdate", {
         user: props.user,
-        canvas: params,
+        canvas: params
     });
     console.log("[Canvas.vue]:sendCanvas: Canvas sent!");
 }
@@ -110,7 +124,7 @@ const getParams = () => {
 
     const params = JSON.stringify(movements.value);
 
-    console.log(params);
+    // console.log(params);
     sendCanvas(params);
 };
 
@@ -189,6 +203,7 @@ const changeTool = (tool) => {
 <template>
     <!-- CANVAS COMPONENT -->
     <canvas ref="canvas" id="can"></canvas>
+    <!--  -->
     <div v-if="isDrawingEnabled">
         <div class="controls">
 
@@ -224,7 +239,7 @@ const changeTool = (tool) => {
         <button @click="clearArea" id="clearArea">Clear Area</button>
     </div>
     <div v-else class="overlay"></div>
-
+    <!--  -->
     <!-- END CANVAS COMPONENT -->
 </template>
 

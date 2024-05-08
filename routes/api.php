@@ -86,6 +86,7 @@ Route::post('encrypted-word', [GameController::class, 'encryptedWord']);
 // Chat controller
 Route::post('messages', [ChatsController::class, 'sendMessage']);
 Route::post('canvas', [ChatsController::class, 'sendCanvas']);
+Route::post('clean-canvas', [ChatsController::class, 'cleanCanvas']);
 
 // Friendship controller
 Route::post('/friends/accept/{requestId}', [FriendshipController::class, 'accept']);

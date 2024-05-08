@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Message;
 use Illuminate\Support\Facades\Auth;
 use App\Events\MessageSent;
+use App\Events\CleanCanvas;
 use Illuminate\Support\Facades\Log;
 
 class ChatsController extends Controller
@@ -19,15 +20,6 @@ class ChatsController extends Controller
 
     public function sendMessage(Request $request)
     {
-        // $user = Auth::user();
-        // $user = $request->user;
-        // $message = $user->messages()->create([
-        //     'message' => $request->input('message')
-        // ]);
-
-        // broadcast(new MessageSent($user, $message))->toOthers();
-
-        // return ['status' => 'Message Sent!'];
 
         $code = $request->input('code');
         $userData = $request->input('user');
@@ -61,9 +53,18 @@ class ChatsController extends Controller
         $canvas = $request->input('canvas');
 
         broadcast(new CanvasUpdate($user, $canvas, $code))->toOthers();
-        // broadcast(new CanvasUpdate($canvas))->toOthers();
 
         Log::info("ChatsController ===== canvas ===== ", ['canvas' => $canvas, 'user' => $user]);
         return ['status' => 'Canvas Sent!'];
     }
+
+    public function cleanCanvas(Request $request)
+    {
+        $code = $request->input('code');
+
+        broadcast(new CleanCanvas($code))->toOthers();
+
+        return ['status' => 'Canvas clean!'];
+    }
+
 }
