@@ -44,7 +44,7 @@ window.Echo = new Echo({
     broadcaster: 'pusher',
     key: import.meta.env.VITE_PUSHER_APP_KEY,
     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER ?? 'mt1',
-    wsHost: window.location.hostname,
+    wsHost: '192.168.19.196',
     wsPort: 6001,
     forceTLS: false,
     disableStatus: true
