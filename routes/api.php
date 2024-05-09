@@ -71,6 +71,8 @@ Route::get('/room/owner/{code}', [RoomController::class, 'getOwner']);
 Route::get('find-room/{code}', [RoomController::class, 'findRoom']);
 Route::post('leave-room/{code}', [RoomController::class, 'leaveRoom']);
 Route::post('invite-user', [RoomController::class, 'inviteUser']);
+Route::post('create-cache', [RoomController::class, 'createCache']);
+Route::post('delete-cache', [RoomController::class, 'deleteCache']);
 
 // Game controller
 Route::post('start-game/{code}', [GameController::class, 'startGame']);

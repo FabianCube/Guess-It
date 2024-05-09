@@ -9,13 +9,11 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
-class RoomUpdate implements ShouldBroadcast
+class GetCache implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    
     public $code;
     public $roomData;
 
@@ -35,11 +33,11 @@ class RoomUpdate implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('room-' . $this->code);
+        return new Channel('cache');
     }
 
     public function broadcastAs()
     {
-        return 'RoomUpdate';
+        return 'GetCache';
     }
 }

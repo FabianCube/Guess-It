@@ -12,6 +12,8 @@ use Illuminate\Support\Str;
 use App\Models\Avatar;
 use App\Events\RoomUpdate;
 use App\Events\RoomOwnerLeft;
+use App\Events\GetCache;
+use App\Events\DeleteCache;
 use App\Events\GameInvitationSent;
 
 class RoomController extends Controller
@@ -28,6 +30,8 @@ class RoomController extends Controller
             'players' => []
         ];
         Cache::put('room_' . $code, $room, now()->addMinutes(120));
+
+        broadcast(new GetCache($code, $room))->toOthers();
 
         return response()->json(['code' => $code]);
     }
@@ -62,6 +66,7 @@ class RoomController extends Controller
             Cache::put('room_' . $code, $room, now()->addMinutes(120));
 
             // Dispara el evento con los datos de la sala
+            broadcast(new GetCache($code, $room))->toOthers();
             broadcast(new RoomUpdate($code, $room))->toOthers();
 
             return response()->json(['mensaje' => 'Jugador añadido a la sala']);
@@ -141,6 +146,7 @@ class RoomController extends Controller
             Cache::forget('room_' . $code);
 
             // Dispara el evento con el mensaje de que un usuario ha salido
+            broadcast(new DeleteCache($code))->toOthers();
             broadcast(new RoomOwnerLeft($code));
 
             return response()->json(['mensaje' => 'Sala cerrada y caché eliminada'], 200);
@@ -154,7 +160,8 @@ class RoomController extends Controller
             Cache::put('room_' . $code, $room, now()->addMinutes(120));
 
             // Dispara el evento con los datos de la sala
-            broadcast(new RoomUpdate($code,$room))->toOthers();
+            broadcast(new GetCache($code, $room))->toOthers();
+            broadcast(new RoomUpdate($code, $room))->toOthers();
 
             return response()->json(['mensaje' => 'Jugador eliminado de la sala'], 200);
         }
@@ -172,10 +179,23 @@ class RoomController extends Controller
     }
 
     // Actualiza la caché
-    public function updateCache(Request $request)
+    public function createCache(Request $request)
     {
-        
+        $code = $request->code;
+        $roomData = $request->roomData;
+
+        Cache::put('room_' . $code, $roomData, now()->addMinutes(120));
 
         return response()->json(['message' => 'Cache updated']);
+    }
+
+    // Elimina de la caché la sala vacía si aún no se ha entrado
+    public function deleteCache(Request $request)
+    {
+        $code = $request->code;
+
+        Cache::forget('room_' . $code);
+
+        return response()->json(['message' => 'Cache deleted']);
     }
 }

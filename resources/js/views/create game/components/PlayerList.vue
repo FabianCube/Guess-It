@@ -43,10 +43,12 @@ const codigoSala = ref();
 
 const route = useRoute();
 
+/* MOUNTING */
 
 // Una vez montado el componente escuchamos el canal "room-channel" para actualizar la lista de jugadores
 // si alguien entra o sale de la sala
 onMounted(() => {
+    escucharNuevaCache();
     escucharActualizacionesDeSala();
 });
 
@@ -59,7 +61,10 @@ onBeforeMount(() => {
 // Cuando se desmonta el componente dejamos de escuchar el canal
 onUnmounted(() => {
     window.Echo.leave(`room-${codigoSala.value}`);
+    window.Echo.leave('cache');
 });
+
+/* FUNCTIONS */
 
 // Obtenemos de la API la lista de jugadores
 const cargarJugadores = async () => {
@@ -73,15 +78,34 @@ const cargarJugadores = async () => {
     }
 };
 
+const crearCache = async (roomData) => {
+    await axios.post('/api/create-cache', {
+        code: codigoSala.value,
+        roomData: roomData,
+    }).then(response => {
+        console.log(response.data);
+    }).catch(error => {
+        console.error("Error al crear cache: ", error);
+    });
+}
+
+/* LISTENERS */
+
 // Escuchamos el canal "room-channel" y si entra o sale un jugador actualizamos la lista de jugadores
 const escucharActualizacionesDeSala = () => {
     window.Echo.channel(`room-${codigoSala.value}`)
         .listen('.RoomUpdate', (e) => {
-            
             console.log("Actualización de sala recibida:", e);
             cargarJugadores();
         });
 };
+
+const escucharNuevaCache = () => {
+    window.Echo.channel('cache')
+        .listen('.GetCache', (e) => {
+            crearCache(e.roomData);
+        });
+}
 </script>
 
 <style scoped>

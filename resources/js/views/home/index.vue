@@ -82,9 +82,14 @@ const playSound = (soundFile) => {
 
 let UserPrivateChannel;
 
+/* MOUNTING */
+
 onMounted(async () => {
 
     logged.value = isLoggedIn();
+
+    listenNewCache();
+    listenDeleteCache();
 
     movingBackground();
 
@@ -120,11 +125,31 @@ onUnmounted(() => {
         UserPrivateChannel.stopListening('.FriendRequest');
         UserPrivateChannel.stopListening('.GameInvitation');
     }
+
+    window.Echo.leave('cache');
 });
 
 document.addEventListener('loggin-done', () => {
     toggleLogin();
 })
+
+/* LISTENERS */
+
+const listenNewCache = () => {
+    window.Echo.channel('cache')
+        .listen('.GetCache', (e) => {
+            createCache(e.code,e.roomData);
+        });
+}
+
+const listenDeleteCache = () => {
+    window.Echo.channel('cache')
+        .listen('.DeleteCache', (e) => {
+            deleteCache(e.code);
+        });
+}
+
+/* HANDLERS */
 
 // Abrir cerrar popup de login
 function toggleLogin() {
@@ -185,6 +210,8 @@ const enterAnonymous = (code) => {
     passedRoomCode.value = code;
 }
 
+/* FUNCTIONS */
+
 const createRoom = async () => {
     try {
         await axios.get('/api/user')
@@ -240,6 +267,29 @@ const movingBackground = () => {
         bg.style.transform = `translate(${bgX}px, ${bgY}px) translateZ(0)`;
     });
 }
+
+const createCache = async (code,roomData) => {
+    await axios.post('/api/create-cache', {
+        code: code,
+        roomData: roomData
+    }).then(response => {
+        console.log(response.data);
+    }).catch(error => {
+        console.error("Error al crear cache: ", error);
+    });
+}
+
+const deleteCache = async (code) => {
+    await axios.post('/api/delete-cache', {
+        code: code
+    }).then(response => {
+        console.log(response.data);
+    }).catch(error => {
+        console.error("Error al crear cache: ", error);
+    });
+}
+
+
 
 </script>
 
