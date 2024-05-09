@@ -15,16 +15,17 @@ class RoomUpdate implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $roomData;
+    
     public $code;
+    public $roomData;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($roomData , $code)
-    {
-        $this->roomData = $roomData;
+    public function __construct($code, $roomData)
+    {  
         $this->code = $code;
+        $this->roomData = $roomData;
         Log::info("Evento RoomUpdate disparado", ['roomData' => $roomData]);
     }
 

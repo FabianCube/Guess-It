@@ -62,7 +62,7 @@ class RoomController extends Controller
             Cache::put('room_' . $code, $room, now()->addMinutes(120));
 
             // Dispara el evento con los datos de la sala
-            broadcast(new RoomUpdate("New user added", $code))->toOthers();
+            broadcast(new RoomUpdate($code, $room))->toOthers();
 
             return response()->json(['mensaje' => 'Jugador añadido a la sala']);
         } else {
@@ -154,7 +154,7 @@ class RoomController extends Controller
             Cache::put('room_' . $code, $room, now()->addMinutes(120));
 
             // Dispara el evento con los datos de la sala
-            broadcast(new RoomUpdate("User exits room", $code))->toOthers();
+            broadcast(new RoomUpdate($code,$room))->toOthers();
 
             return response()->json(['mensaje' => 'Jugador eliminado de la sala'], 200);
         }
@@ -169,5 +169,13 @@ class RoomController extends Controller
         event(new GameInvitationSent($invitedUserId, $roomCode));
 
         return response()->json(['message' => 'Invitation sent successfully']);
+    }
+
+    // Actualiza la caché
+    public function updateCache(Request $request)
+    {
+        
+
+        return response()->json(['message' => 'Cache updated']);
     }
 }

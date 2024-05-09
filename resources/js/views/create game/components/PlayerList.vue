@@ -77,6 +77,7 @@ const cargarJugadores = async () => {
 const escucharActualizacionesDeSala = () => {
     window.Echo.channel(`room-${codigoSala.value}`)
         .listen('.RoomUpdate', (e) => {
+            
             console.log("Actualización de sala recibida:", e);
             cargarJugadores();
         });
