@@ -127,6 +127,8 @@ onBeforeMount(async () => {
     // localStorage.removeItem('Partida');
     await userAcces();
 
+    await getUserColor();
+
     // it is generating a word everytime page refresh
     if (currentPlayer.value.uuid == user.value.uuid) {
         await setPlayingWord();
@@ -245,6 +247,12 @@ const listenCorrectWord = () => {
             if (players.value[playerIndex].uuid == user.value.uuid) {
                 isChatEnabled.value = false;
             }
+
+            messages.value.push({
+                message: "HA ACERTADO!",
+                user: players.value[playerIndex],
+                points: e.points
+            });
 
             guessOrder.value++;
 
@@ -387,6 +395,14 @@ const setPlayingWord = async () => {
         console.error("Error en la petición axios de la palabra", error);
     });
 
+}
+
+
+// Asigna el color al jugador
+const getUserColor = async () => {
+    const playerIndex = players.value.findIndex(player => player.uuid === user.value.uuid);
+
+    user.value.color = players.value[playerIndex].color;
 }
 
 

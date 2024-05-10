@@ -44,7 +44,7 @@ window.Pusher = Pusher;
 //     broadcaster: 'pusher',
 //     key: import.meta.env.VITE_PUSHER_APP_KEY,
 //     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER ?? 'mt1',
-//     wsHost: '192.168.19.196',
+//     wsHost: '192.168.22.31',
 //     wsPort: 6001,
 //     forceTLS: false,
 //     disableStatus: true
