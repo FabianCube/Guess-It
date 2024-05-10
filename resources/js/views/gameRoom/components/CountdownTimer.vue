@@ -25,6 +25,12 @@ watch(() => props.startTimer, (newValue) => {
     }
 });
 
+const playSound = (soundPath) => {
+    const audio = new Audio(soundPath);
+    audio.volume = 0.1;
+    audio.play();
+};
+
 watch([timeLeft], () => {
     emits('update-timer', {
         timeLeft: timeLeft.value
@@ -37,17 +43,18 @@ function startCountdown() {
         if (timeLeft.value > 0) {
             timeLeft.value--;
             currentImage.value++;
+            if(timeLeft.value == 1){
+                playSound('/storage/sounds/inicio_ronda.mp3');
+            }
         } else {
             clearInterval(intervalId);
         }
     }, 1000);
-
-    onUnmounted(() => {
-        clearInterval(intervalId);
-    });
 }
 
-
+// onUnmounted(() => {
+    //     clearInterval(intervalId);
+    // });
 </script>
 
 <style scoped>

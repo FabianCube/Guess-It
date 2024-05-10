@@ -176,12 +176,14 @@ function toggleAnonymous() {
 
 }
 
+// Abrir cerrar popup de cuenta de usuario
 function toggleAccount() {
     let account = document.querySelector('.account');
     let isOpen = account.classList.contains('active');
     isOpen ? account.classList.remove('active') : account.classList.add('active');
 }
 
+// Abrir cerrar popup de registro
 function toggleRegister() {
     toggleLogin();
     let register = document.querySelector('.register');
@@ -205,6 +207,7 @@ function toggleFriendsList() {
     }
 }
 
+
 const enterAnonymous = (code) => {
     let anonymous = document.querySelector('.anonymous');
     let isOpen = anonymous.classList.contains('active');
@@ -214,6 +217,7 @@ const enterAnonymous = (code) => {
 
 /* FUNCTIONS */
 
+// Crea e inserta al jugador en la sala
 const createRoom = async () => {
     try {
         await axios.get('/api/user')
@@ -237,6 +241,7 @@ const createRoom = async () => {
     }
 };
 
+// Inserta al jugador en la sala
 const enterRoom = () => {
     axios.post('/api/enter-room', {
         code: roomCode.value
@@ -270,6 +275,7 @@ const movingBackground = () => {
     });
 }
 
+// Guarda en la caché las salas abiertas
 const createCache = async (code,roomData) => {
     await axios.post('/api/create-cache', {
         code: code,
@@ -281,6 +287,7 @@ const createCache = async (code,roomData) => {
     });
 }
 
+// Elimina de la caché la salas cerradas
 const deleteCache = async (code) => {
     await axios.post('/api/delete-cache', {
         code: code

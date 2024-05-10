@@ -135,6 +135,7 @@ import Canvas from './views/gameRoom/components/Canvas.vue';
 import StatusBar from './views/gameRoom/components/StatusBar.vue';
 import InfoPlayers from './views/gameRoom/components/InfoPlayers.vue';
 import CountdownTimer from './views/gameRoom/components/CountdownTimer.vue';
+// import RoundEnd from './views/gameRoom/components/RoundEnd.vue';
 
 // Components for Home
 import LoginPopUp from './views/home/components/Login.vue';
@@ -220,6 +221,7 @@ app.component('account-stats', AccountStats);
 app.component('account-settings', AccountSettings);
 app.component('admin-history', AdminAccountHistory);
 app.component('admin-players', AdminAccountPlayers);
+// app.component('round-end', RoundEnd);
 
 /**PRIMEVUE */
 app.use(PrimeVue, { ripple: true });

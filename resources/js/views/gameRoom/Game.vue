@@ -1,6 +1,7 @@
 <template>
     <div id="background-game"></div>
     <countdown-timer v-if="timer" @update-timer="handleTimerUpdate" :startTimer="startTimer" />
+    <round-end :roundEnd="roundEnd" :players="players" :playedWord="playingWord" />
     <div class="min-h-screen sm:items-center py-4 main-content">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
@@ -62,6 +63,7 @@ import axios from 'axios';
 import { onBeforeMount, onMounted, onUnmounted, ref, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import useAuth from '@/composables/auth';
+import RoundEnd from '@/views/gameRoom/components/RoundEnd.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -88,6 +90,7 @@ const guessOrder = ref(1);
 const gameFinished = ref(false);
 const startTimer = ref(false);
 const roundInProgress = ref(false);
+const roundEnd = ref(false);
 
 const playingWord = ref('');
 const words = ([]);
@@ -167,15 +170,19 @@ watch(roundFinished, (newValue) => {
         console.log('Siguiente jugador');
         moveToNextPlayer();
         if (!gameFinished.value) {
-            roundFinished.value = false;
-            timer.value = true;
-            startRound.value = false;
-            beginStartTimer();
-            guessOrder.value = 1;
-            userAcces();
-            if (currentPlayer.value.uuid == user.value.uuid) {
-                setPlayingWord();
-            }
+            roundEnd.value = true;
+            setTimeout(() => {
+                roundEnd.value = false;
+                roundFinished.value = false;
+                timer.value = true;
+                startRound.value = false;
+                beginStartTimer();
+                guessOrder.value = 1;
+                userAcces();
+                if (currentPlayer.value.uuid == user.value.uuid) {
+                    setPlayingWord();
+                }
+            }, 10000);
         } else {
             // router.push({ name: 'home' });
         }
@@ -199,7 +206,7 @@ const listenEventMessageSent = () => {
 const listenEventCanvasUpdate = () => {
     window.Echo.channel('room-' + roomCode.value)
         .listen('.CanvasUpdate', (e) => {
-            
+
             if (e.canvas == "clear") {
                 console.log(e.canvas);
                 axios.post('/api/clean-canvas', {
@@ -210,7 +217,7 @@ const listenEventCanvasUpdate = () => {
                     console.error("Error al unirse al canal: ", error);
                 });
             } else {
-                
+
                 newCanvas.value = e.canvas;
             }
         });
@@ -335,20 +342,6 @@ const handleEndOfRound = async () => {
 /* FUNCTIONS */
 
 const addMessage = (newMessage) => {
-    messages.value.push(newMessage);
-
-    console.log("[Game.vue]:addMessage:user.nickname -> " + newMessage.user.nickname)
-    console.log("[Game.vue]:addMessage:message -> " + newMessage.message)
-
-    axios.post('/api/messages', {
-        user: newMessage.user,
-        message: newMessage.message,
-        code: roomCode.value
-    }).then(response => {
-        console.log(response.data);
-    }).catch(error => {
-        console.error("Error: ", error);
-    });
 
     // Si las palabras coinciden se suman los puntos
     if (compareWords(playingWord.value, newMessage.message)) {
@@ -364,6 +357,21 @@ const addMessage = (newMessage) => {
             console.error("Error: ", error);
         });
         console.log(roundInProgress.value);
+    } else {
+        messages.value.push(newMessage);
+
+        console.log("[Game.vue]:addMessage:user.nickname -> " + newMessage.user.nickname)
+        console.log("[Game.vue]:addMessage:message -> " + newMessage.message)
+
+        axios.post('/api/messages', {
+            user: newMessage.user,
+            message: newMessage.message,
+            code: roomCode.value
+        }).then(response => {
+            console.log(response.data);
+        }).catch(error => {
+            console.error("Error: ", error);
+        });
     }
 
     console.log("[Game.vue]:addMessage:messages{} -> " + messages.value);
@@ -436,7 +444,7 @@ const beginStartTimer = () => {
             }).catch(error => {
                 console.error("Error: ", error);
             });
-        }, 5000);
+        }, 3000);
     }
 }
 
