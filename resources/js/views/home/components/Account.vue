@@ -167,6 +167,17 @@ const toggleAccount = () => {
     font-family: 'Lilita One', sans-serif;
 }
 
+@media (max-width: 820px)
+{
+    .popup-account
+    {
+        width: 90vw;
+        border-radius: 15px;
+        padding: 0;
+        
+    }
+}
+
 .btn-login {
     width: 100%;
     height: 65px;
