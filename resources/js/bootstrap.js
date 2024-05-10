@@ -40,6 +40,8 @@ import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 window.Pusher = Pusher;
 
+// CONFIGURATION FOR MULTIPLAYER
+
 // window.Echo = new Echo({
 //     broadcaster: 'pusher',
 //     key: import.meta.env.VITE_PUSHER_APP_KEY,
@@ -49,6 +51,8 @@ window.Pusher = Pusher;
 //     forceTLS: false,
 //     disableStatus: true
 // });
+
+// CONFIGURATION FOR LOCAL
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
