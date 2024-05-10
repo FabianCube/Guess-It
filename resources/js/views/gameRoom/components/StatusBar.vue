@@ -18,13 +18,16 @@
 
         <div id="word-container" style="font-size:2rem">
             <!-- CHECK IF USER IS DRAWING {SHOW WORD / DO NOT SHOW} -->
-            <div class="letters" v-if="props.currentPlayer.uuid != props.user.uuid"
+            <div class="letters" v-if="props.currentPlayer.uuid != props.user.uuid && !props.guessedWord"
                 v-for="letter in currentWordEncrypted">
                 <h2 v-if="letter.visibility == 1"> {{ letter.letter }} </h2>
                 <h2 v-else> {{ letter.character }} </h2>
             </div>
-            <div class="letters" v-else v-for="letter in currentWordEncrypted">
-                <h2> {{ letter.letter }} </h2>
+            <div class="letters" v-else-if="props.currentPlayer.uuid != props.user.uuid && props.guessedWord">
+                <h2>{{ props.playingWord }}</h2>
+            </div>
+            <div class="letters" v-else-if="props.currentPlayer.uuid == props.user.uuid ">
+                <h2> {{ props.playingWord }} </h2>
             </div>
         </div>
 
@@ -43,7 +46,7 @@
 import { watch, ref, onMounted, computed, defineEmits } from 'vue';
 import axios from 'axios';
 
-const props = defineProps(['timeRound', 'difficulty', 'currentPlayer', 'playingWord', 'startRound', 'user', 'roomCode']);
+const props = defineProps(['timeRound', 'difficulty', 'currentPlayer', 'playingWord', 'startRound', 'user', 'roomCode', 'guessedWord']);
 const emits = defineEmits(['wordselected', 'endOfRound', 'roundTimeLeft']);
 const words = ([]);
 const difficulty = ref('');
@@ -57,6 +60,7 @@ const currentWordEncrypted = ref({});
 const wordLenght = ref(0);
 const currentInterval = ref(0);
 const usedIndex = ref([]);
+
 
 
 /* MOUNTING */
@@ -82,7 +86,7 @@ watch(() => props.startRound, (newValue) => {
         }
 
         startRoundTimer();
-    
+
     } else {
         roundTimeLeft.value = props.timeRound;
     }
@@ -97,9 +101,9 @@ watch(() => props.playingWord, (word) => {
 
 watch(() => roundTimeLeft.value, () => {
 
-if (props.currentPlayer.uuid == props.user.uuid) {
-    letterRevealer();
-}
+    if (props.currentPlayer.uuid == props.user.uuid) {
+        letterRevealer();
+    }
 })
 
 /* LISTENERS */
@@ -207,7 +211,7 @@ const encryptWord = (word) => {
 }
 
 // Filtra y cuenta los elementos con `visibility` igual a 1
-function countVisibleLetters(wordArray) {  
+function countVisibleLetters(wordArray) {
     return wordArray.filter(letterObj => letterObj.visibility === 1).length;
 }
 

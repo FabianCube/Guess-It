@@ -53,7 +53,7 @@ const changeStatus = (newStatus, duration) => {
 
 const playSound = (soundPath) => {
     const audio = new Audio(soundPath);
-    audio.volume = 0.1;
+    audio.volume = 0.05;
     audio.play();
 };
 

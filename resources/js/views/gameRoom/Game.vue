@@ -32,7 +32,7 @@
                         <status-bar :playingWord="playingWord" :timeRound="timeRound" :difficulty="difficulty"
                             :currentPlayer="currentPlayer" :user="user" :startRound="startRound"
                             @endOfRound="handleEndOfRound" @roundTimeLeft="handleTimeLeft" :roomCode="roomCode"
-                            :roundFinished="roundFinished" />
+                            :roundFinished="roundFinished" :guessedWord="guessedWord"/>
                         <!-- COMPONENTE CANVAS -->
                         <canvas-component :user="user" :newCanvas="newCanvas" @canvasupdate="sendCanvas"
                             :isDrawingEnabled="isDrawingEnabled" :roomCode="roomCode"></canvas-component>
@@ -91,6 +91,7 @@ const gameFinished = ref(false);
 const startTimer = ref(false);
 const roundInProgress = ref(false);
 const roundEnd = ref(false);
+const guessedWord = ref(false);
 
 const playingWord = ref('');
 const words = ([]);
@@ -168,10 +169,12 @@ onUnmounted(() => {
 watch(roundFinished, (newValue) => {
     if (newValue) {
         console.log('Siguiente jugador');
-        moveToNextPlayer();
+        
         if (!gameFinished.value) {
             roundEnd.value = true;
             setTimeout(() => {
+                moveToNextPlayer();
+                guessedWord.value = false;
                 roundEnd.value = false;
                 roundFinished.value = false;
                 timer.value = true;
@@ -252,6 +255,7 @@ const listenCorrectWord = () => {
             }
 
             if (players.value[playerIndex].uuid == user.value.uuid) {
+                guessedWord.value = true;
                 isChatEnabled.value = false;
             }
 
