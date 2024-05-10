@@ -24,15 +24,15 @@
                 <!-- TABS -->
                 <div v-if="user.admin_rights == 0" class="tabs">
                     <div @click="changeFocusTab($event.target)" class="tab active">
-                        <p>HISTORIAL</p>
+                        <p class="title-tab">HISTORIAL</p>
                         <img src="/storage/icons/history-icon.svg" alt="">
                     </div>
                     <div @click="changeFocusTab($event.target)" class="tab">
-                        <p>ESTADÍSTICAS</p>
+                        <p class="title-tab">ESTADÍSTICAS</p>
                         <img src="/storage/icons/stats-icon.svg" alt="">
                     </div>
                     <div @click="changeFocusTab($event.target)" class="tab">
-                        <p>AJUSTES</p>
+                        <p class="title-tab">AJUSTES</p>
                         <img src="/storage/icons/settings-icon.svg" alt="">
                     </div>
                 </div>
@@ -172,9 +172,18 @@ const toggleAccount = () => {
     .popup-account
     {
         width: 90vw;
-        border-radius: 15px;
+        border-radius: 16px;
         padding: 0;
-        
+    }
+
+    .title-tab
+    {
+        font-size: 0.7rem;
+    }
+
+    .tab:hover p 
+    {
+        font-size: 0.7rem;
     }
 }
 

@@ -1,6 +1,6 @@
 <template>
     <div class="card border-0 shadow-sm popup-login">
-        <div class="w-100">
+        <div class="w-100 p-2">
             <button @click="toggleEnterGame()" id="closeLogin">
                 <img src="/storage/icons/arrow-left.svg" alt="">
             </button>
@@ -126,6 +126,27 @@ const enterRoom = () => {
     justify-content: center;
     align-items: center;
     font-family: 'Lilita One', sans-serif;
+}
+
+@media (max-width: 820px)
+{
+    .popup-login
+    {
+        width: 90vw;
+        border-radius: 15px;
+        padding: 0;
+    }
+
+    .card-body
+    {
+        width: 80%!important;
+        padding: 60px 30px 30px 30px!important;
+    }
+
+    .card-body>h1
+    {
+        font-size: 2rem;
+    }
 }
 
 .btn-login {
