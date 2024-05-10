@@ -3,8 +3,11 @@
     <countdown-timer v-if="timer" @update-timer="handleTimerUpdate" :startTimer="startTimer" />
     <round-end :roundEnd="roundEnd" :players="players" :playedWord="playingWord" />
     <div class="min-h-screen sm:items-center py-4 main-content">
+        
         <div class="container">
+            
             <div class="d-flex justify-content-between align-items-center">
+                
                 <router-link to="/" class="btn-smll-default">
                     <img src="/storage/icons/home-05.svg" alt="">
                 </router-link>
@@ -17,8 +20,8 @@
             </div>
 
             <!-- CANVAS & CHAT -->
-            <div class="container flex flex-row p-0 mt-5 justify-content-between">
-
+            <div class="container flex flex-row p-0 mt-5 justify-content-between block">
+                <div id="overlay" v-if="showOverlay"></div>
                 <!-- PLAYER INFO -->
                 <div class="col-1 p-0 info-jugador">
                     <!-- COMPONENTE INFO JUGADOR -->
@@ -32,7 +35,7 @@
                         <status-bar :playingWord="playingWord" :timeRound="timeRound" :difficulty="difficulty"
                             :currentPlayer="currentPlayer" :user="user" :startRound="startRound"
                             @endOfRound="handleEndOfRound" @roundTimeLeft="handleTimeLeft" :roomCode="roomCode"
-                            :roundFinished="roundFinished" :guessedWord="guessedWord"/>
+                            :roundFinished="roundFinished" :guessedWord="guessedWord" />
                         <!-- COMPONENTE CANVAS -->
                         <canvas-component :user="user" :newCanvas="newCanvas" @canvasupdate="sendCanvas"
                             :isDrawingEnabled="isDrawingEnabled" :roomCode="roomCode"></canvas-component>
@@ -92,6 +95,7 @@ const startTimer = ref(false);
 const roundInProgress = ref(false);
 const roundEnd = ref(false);
 const guessedWord = ref(false);
+const showOverlay = ref(true);
 
 const playingWord = ref('');
 const words = ([]);
@@ -169,7 +173,7 @@ onUnmounted(() => {
 watch(roundFinished, (newValue) => {
     if (newValue) {
         console.log('Siguiente jugador');
-        
+        showOverlay.value = true;
         if (!gameFinished.value) {
             roundEnd.value = true;
             setTimeout(() => {
@@ -306,6 +310,7 @@ const handleTimerUpdate = (timeLeft) => {
         startRound.value = true;
         startTimer.value = false;
         roundInProgress.value = true;
+        showOverlay.value = false;
     }
 };
 
@@ -439,6 +444,7 @@ const moveToNextPlayer = () => {
 
 // Inicia la cuenta atrás para todos los jugadores
 const beginStartTimer = () => {
+    
     if (currentPlayer.value.uuid == user.value.uuid) {
         setTimeout(() => {
             axios.post('/api/start-timer', {
@@ -569,6 +575,21 @@ const compareWords = (playingWord, userWord) => {
 </script>
 
 <style>
+#overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10; 
+}
+
+.block{
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
 .canvas-container {
     height: 100%;
     width: 100%;
