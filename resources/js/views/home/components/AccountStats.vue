@@ -108,6 +108,21 @@ h3
     width: 250px;
 }
 
+@media (max-width: 820px)
+{
+    .stats>h3
+    {
+        text-align: right;
+        width: 50px;
+        font-size: .7rem;
+    }
+
+    .head-stat>h3
+    {
+        font-size: .7rem;
+    }
+}
+
 .stats:nth-child(1)
 {
     background-color: #FD6F5A;
