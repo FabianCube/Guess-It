@@ -40,15 +40,19 @@ import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 window.Pusher = Pusher;
 
+// CONFIGURATION FOR MULTIPLAYER
+
 // window.Echo = new Echo({
 //     broadcaster: 'pusher',
 //     key: import.meta.env.VITE_PUSHER_APP_KEY,
 //     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER ?? 'mt1',
-//     wsHost: '192.168.19.196',
+//     wsHost: '192.168.22.31',
 //     wsPort: 6001,
 //     forceTLS: false,
 //     disableStatus: true
 // });
+
+// CONFIGURATION FOR LOCAL
 
 window.Echo = new Echo({
     broadcaster: 'pusher',

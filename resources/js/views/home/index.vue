@@ -20,16 +20,18 @@
         <enter-game @close-enterGame="toggleEnterGame" @open-anonymous="enterAnonymous" />
     </div>
     <div id="background"></div>
-    <div class="relative flex items-top justify-center min-h-screen sm:items-center py-4 sm:pt-0">
-        <div class="w-100 flex flex-row justify-between py-5">
-            <div class="col-4 flex flex-column justify-content-end align-items-start ps-buttons">
-                <button @mouseover="() => playSound('/storage/sounds/bubble.mp3')" class="btn-smll-default mb-5"
-                    style="border: none;"><img src="/storage/icons/info-circle.svg" alt=""></button>
-                <button class="btn-smll-default" style="border: none;"><img src="/storage/icons/volume-on.svg"
-                        alt=""></button>
+    <div id="total-container" class="relative flex items-top justify-center min-h-screen sm:items-center py-4 sm:pt-0">
+        <div class="row col-12 flex justify-between py-5 p-5 p-md-0">
+            <div class="order-xs-2 order-lg-1 col-xs-12 col-sm-12 col-md-4 d-flex flex-md-column justify-content-sm-between justify-content-end align-items-start pl-sm-0 pl-8">
+                <button @mouseover="() => playSound('/storage/sounds/bubble.mp3')" class="btn-smll-default mb-5" style="border: none;">
+                    <img src="/storage/icons/info-circle.svg" alt="">
+                </button>
+                <button class="btn-smll-default" style="border: none;">
+                    <img src="/storage/icons/volume-on.svg" alt="">
+                </button>
             </div>
 
-            <div class="col-4 flex justify-center align-items-center flex-column pt-8">
+            <div class="order-xs-1 order-lg-2 col-xs-12 col-sm-12 col-md-4 flex justify-center align-items-center flex-column md:pt-8">
                 <img id="logo" src="/storage/guess-it-logo.svg" class="shake-img"></img>
 
                 <button @click="toggleAnonymous()" to="/create-game" class="btn-default">CREAR PARTIDA</button>
@@ -37,7 +39,7 @@
 
             </div>
 
-            <div class="col-4 flex flex-column justify-content-between align-items-end pe-buttons">
+            <div class="order-xs-3 order-lg-3 col-xs-12 col-sm-12 col-md-4 d-flex flex-md-column justify-content-between align-items-end pe-buttons">
                 <button v-if="logged" @click="toggleAccount()" class="btn-smll-default flex justify-content-center">
                     <div class="avatar-image">
                         <img src="/storage/avatars/avatar1.jpg" alt="">
@@ -295,7 +297,7 @@ const deleteCache = async (code) => {
 
 <style scoped>
 #logo {
-    width: 570px;
+    width: 100%;;
     height: auto;
 }
 
@@ -425,4 +427,15 @@ const deleteCache = async (code) => {
     width: 100%;
     height: auto;
 }
+
+.btn-default
+{
+    width: 100%;
+}
+
+
+
+
+
+
 </style>
