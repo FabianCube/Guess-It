@@ -5,9 +5,7 @@
     <div v-if="!gameFinished" class="min-h-screen sm:items-center py-4 main-content">
 
         <div class="container">
-
-            <div class="d-flex justify-content-between align-items-center">
-
+            <div class="col-12 d-flex justify-content-between align-items-center">
                 <router-link 
                     @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')" 
                     to="/" class="btn-smll-default">
@@ -16,24 +14,30 @@
 
                 <img id="logo" src="/storage/guess-it-logo.svg" class="logo"></img>
 
-                <button 
+                <button v-if="isMusicMuted"
                     @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')" 
-                    @click="playHovers('/storage/sounds/hover3.mp3')" 
+                    @click="muteAllSounds(), playHovers('/storage/sounds/hover3.mp3')" 
+                    class="btn-smll-default">
+                    <img src="/storage/icons/volume-off.svg" alt="">
+                </button>
+                <button v-else
+                    @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')" 
+                    @click="muteAllSounds(), playHovers('/storage/sounds/hover3.mp3')" 
                     class="btn-smll-default">
                     <img src="/storage/icons/volume-on.svg" alt="">
                 </button>
             </div>
 
             <!-- CANVAS & CHAT -->
-            <div class="container flex flex-row p-0 mt-5 justify-content-between block">
+            <div class="row d-flex flex-xs-column flex-sm-column flex-md-row flex-lg-row p-0 mt-5 justify-content-between ">
                 <div id="overlay" v-if="showOverlay"></div>
                 <!-- PLAYER INFO -->
-                <div class="col-1 p-0 info-jugador">
+                <div class="order-2 order-sm-2 order-lg-1 col-4 col-sm-4 col-lg-1 p-0 info-jugador">
                     <!-- COMPONENTE INFO JUGADOR -->
                     <info-players :players="players" :user="user" />
                 </div>
 
-                <div class="col-8 p-0" style="height: 622.5px; width: 830px;">
+                <div class="order-1 order-sm-1 order-lg-2 col-12 col-sm-12 col-lg-8 p-0" style="height: 622.5px; width: 830px;">
                     <!-- CANVAS -->
                     <div style="width: 100%; height: 100%;border-radius: 12px; position: relative;">
                         <!-- COMPONENTE STATUS BAR -->
@@ -43,12 +47,12 @@
                             :roundFinished="roundFinished" :guessedWord="guessedWord" />
                         <!-- COMPONENTE CANVAS -->
                         <canvas-component :user="user" :newCanvas="newCanvas" @canvasupdate="sendCanvas"
-                             :isDrawingEnabled="isDrawingEnabled" :roundInProgress="roundInProgress"
+                            :isDrawingEnabled="isDrawingEnabled" :roundInProgress="roundInProgress"
                             :roomCode="roomCode"></canvas-component>
                     </div>
                 </div>
 
-                <div class="col-3 flex flex-row chat-container">
+                <div class="order-3 order-sm-3 order-lg-3 col-4 col-sm-4 col-lg-3 d-flex flex-row chat-container">
                     <!-- CHAT -->
                     <div class="p-3 chat flex flex-column justify-content-between">
                         <!-- COMPONENTE CHAT  -->
@@ -111,6 +115,8 @@ const playingWord = ref('');
 const words = ([]);
 
 const hovers = ref(null);
+const backgroundMusic = ref(null);
+const isMusicMuted = ref(false);
 
 const playHovers = (soundFile) => {
     hovers.value = new Audio(soundFile);
@@ -152,11 +158,32 @@ onBeforeMount(async () => {
     }
 })
 
+const playBackgroundMusic = () => {
+    backgroundMusic.value = new Audio('/storage/sounds/game-music.mp3');
+    backgroundMusic.value.volume = 0.2;
+    backgroundMusic.value.loop = true;
+    backgroundMusic.value.play();
+}
+
+const muteAllSounds = () => {
+    if(backgroundMusic.value.paused)
+    {
+        backgroundMusic.value.play();
+        isMusicMuted.value = false;
+    }
+    else
+    {
+        backgroundMusic.value.pause();
+        isMusicMuted.value = true;
+    }
+}
+
 onMounted(async () => {
     console.log("[Game.vue]:currentPlayerIndex.value -> " + currentPlayerIndex.value);
     console.log("[Game.vue]:currentPlayer.value.uuid -> " + currentPlayer.value.uuid);
     console.log("[Game.vue]:user.value.uuid -> " + user.value.uuid);
 
+    playBackgroundMusic();
     beginStartTimer();
 
     listenEventMessageSent();
@@ -173,6 +200,7 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
+    backgroundMusic.value.pause();
     window.Echo.leave('room-' + roomCode.value);
 });
 
@@ -616,4 +644,9 @@ const playSound = (soundPath) => {
 
 <style>
 @import 'style/game.css';
+
+@media (max-width: 820px)
+{
+
+}
 </style>
