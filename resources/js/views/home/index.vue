@@ -28,7 +28,8 @@
                 </button> -->
                 <button 
                     @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')" 
-                    @click="muteAllSounds(), playHovers('/storage/sounds/hover2.mp3')" class="btn-smll-default" style="border: none;">
+                    @click="muteAllSounds(), playHovers('/storage/sounds/hover2.mp3')" 
+                    class="btn-smll-default" style="border: none;">
                         <img v-if="isMusicMuted" src="/storage/icons/volume-off.svg" alt="">
                         <img v-else src="/storage/icons/volume-on.svg" alt="">
                 </button>
@@ -40,25 +41,30 @@
                 <button 
                     @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')" 
                     @click="toggleAnonymous(), playHovers('/storage/sounds/hover2.mp3')" 
-                    to="/create-game" class="btn-default">CREAR PARTIDA</button>
+                    to="/create-game" class="btn-default">
+                    CREAR PARTIDA
+                </button>
                 <button 
                     @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')"  
                     @click="toggleEnterGame(), playHovers('/storage/sounds/hover2.mp3')" 
-                    class="btn-default">UNIRSE A PARTIDA</button>
-
+                    class="btn-default">
+                    UNIRSE A PARTIDA
+                </button>
             </div>
 
             <div class="order-xs-3 order-lg-3 col-xs-12 col-sm-12 col-md-4 d-flex flex-md-column justify-content-between align-items-end pe-buttons">
                 <button v-if="logged" @click="toggleAccount()" class="btn-smll-default flex justify-content-center">
                     <div 
                         @click="playHovers('/storage/sounds/hover2.mp3')" 
-                        @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')" class="avatar-image">
+                        @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')" 
+                        class="avatar-image">
                             <img src="/storage/avatars/avatar1.jpg" alt="">
                     </div>
                 </button>
                 <button 
                     @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')"  
-                    v-else @click="toggleLogin(), playHovers('/storage/sounds/hover2.mp3')" class="btn-smll-default flex justify-content-center">
+                    v-else @click="toggleLogin(), playHovers('/storage/sounds/hover2.mp3')" 
+                    class="btn-smll-default flex justify-content-center">
                     <img src="/storage/icons/account.svg" alt="">
                 </button>
 
@@ -66,7 +72,8 @@
                     <friends v-if="friendsList" />
                     <button 
                         @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')"  
-                        @click="toggleFriendsList(), playHovers('/storage/sounds/hover2.mp3')" class="btn-smll-default btn-friends" style="border: none">
+                        @click="toggleFriendsList(), playHovers('/storage/sounds/hover2.mp3')" 
+                        class="btn-smll-default btn-friends" style="border: none">
                         <img src="/storage/icons/friends.svg" alt="">
                     </button>
                 </div>
