@@ -425,7 +425,5 @@ const changeTool = (tool) => {
     right: 0;
     bottom: 0;
     z-index: 10;
-    /* Asegurarse de que esté por encima del canvas */
-    cursor: not-allowed;
 }
 </style>

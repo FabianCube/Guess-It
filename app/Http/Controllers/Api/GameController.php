@@ -142,17 +142,17 @@ class GameController extends Controller
         // Puntos base por ser el primero, segundo, etc.
         $basePoints = [100, 75, 50, 25, 10];
 
-        // Reduce los puntos en un 5% por cada 10 segundos transcurridos
-        $timeFactor = 0.05;
+        // Reduce los puntos en un 0.5% por cada segundo transcurrido
+        $timeFactor = 0.005;
 
         // Calcula los puntos base según el orden de acierto
         $orderPoints = $basePoints[$guessOrder - 1];
 
         // Reducción de puntos según el tiempo que ha pasado
-        $decrement = floor($elapsedTime / 10);
+        // $decrement = floor($elapsedTime / 10);
 
         // Reducción total en porcentaje
-        $reduction = $decrement * $timeFactor;
+        $reduction = $elapsedTime * $timeFactor;
 
         // Calcular los puntos finales
         $points = round($orderPoints * (1 - $reduction));

@@ -176,13 +176,13 @@ watch(roundFinished, (newValue) => {
         showOverlay.value = true;
         if (!gameFinished.value) {
             roundEnd.value = true;
+            startRound.value = false;
             setTimeout(() => {
                 moveToNextPlayer();
                 guessedWord.value = false;
                 roundEnd.value = false;
                 roundFinished.value = false;
                 timer.value = true;
-                startRound.value = false;
                 beginStartTimer();
                 guessOrder.value = 1;
                 userAcces();
