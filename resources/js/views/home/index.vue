@@ -26,8 +26,9 @@
                 <button class="btn-smll-default mb-5" style="border: none;">
                     <img src="/storage/icons/info-circle.svg" alt="">
                 </button>
-                <button class="btn-smll-default" style="border: none;">
-                    <img src="/storage/icons/volume-on.svg" alt="">
+                <button @click="muteAllSounds()" class="btn-smll-default" style="border: none;">
+                    <img v-if="isMusicMuted" src="/storage/icons/volume-off.svg" alt="">
+                    <img v-else src="/storage/icons/volume-on.svg" alt="">
                 </button>
             </div>
 
@@ -35,12 +36,12 @@
                 <img id="logo" src="/storage/guess-it-logo.svg" class="shake-img"></img>
 
                 <button 
-                    @mouseenter="() => playSound('/storage/sounds/hover1.mp3')" 
-                    @click="toggleAnonymous(), playSound('/storage/sounds/hover2.mp3')" 
+                    @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')" 
+                    @click="toggleAnonymous(), playHovers('/storage/sounds/hover2.mp3')" 
                     to="/create-game" class="btn-default">CREAR PARTIDA</button>
                 <button 
-                    @mouseenter="() => playSound('/storage/sounds/hover1.mp3')"  
-                    @click="toggleEnterGame(), playSound('/storage/sounds/hover2.mp3')" 
+                    @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')"  
+                    @click="toggleEnterGame(), playHovers('/storage/sounds/hover2.mp3')" 
                     class="btn-default">UNIRSE A PARTIDA</button>
 
             </div>
@@ -81,11 +82,33 @@ const userRegistered = ref();
 const router = useRouter();
 const friendsList = ref(false);
 const user = ref();
+const hovers = ref(null);
+const backgroundMusic = ref(null);
+const isMusicMuted = ref(true);
 
 
-const playSound = (soundFile) => {
-    const audio = new Audio(soundFile);
-    audio.play();
+const playHovers = (soundFile) => {
+    hovers.value = new Audio(soundFile);
+    hovers.value.play();
+}
+
+const playBackgroundMusic = () => {
+    backgroundMusic.value = new Audio('/storage/sounds/background-music.mp3');
+    backgroundMusic.value.loop();
+    backgroundMusic.value.play();
+}
+
+const muteAllSounds = () => {
+    if(backgroundMusic.value.paused)
+    {
+        backgroundMusic.value.play();
+        isMusicMuted.value = false;
+    }
+    else
+    {
+        backgroundMusic.value.pause();
+        isMusicMuted.value = true;
+    }
 }
 
 let UserPrivateChannel;
@@ -93,6 +116,8 @@ let UserPrivateChannel;
 /* MOUNTING */
 
 onMounted(async () => {
+    backgroundMusic.value = null;
+    playBackgroundMusic();
 
     logged.value = isLoggedIn();
 
@@ -134,6 +159,7 @@ onUnmounted(() => {
         UserPrivateChannel.stopListening('.GameInvitation');
     }
 
+    backgroundMusic.value.pause();
     window.Echo.leave('cache');
 });
 
