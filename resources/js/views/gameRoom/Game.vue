@@ -99,6 +99,7 @@ const roundEnd = ref(false);
 const guessedWord = ref(false);
 const showOverlay = ref(true);
 const lastRound = ref(false);
+const gameId = ref();
 
 const playingWord = ref('');
 const words = ([]);
@@ -117,16 +118,7 @@ onBeforeMount(async () => {
     timeRound.value = gameData.value.time_per_round;
     rounds.value = gameData.value.rounds;
     difficulty.value = gameData.value.difficulty;
-
-
-    console.log("INFO DE PLAYER ==> "
-        + " Nickame: " + players.value[0].nickname
-        + " Color: " + players.value[0].color
-        + " Points: " + players.value[0].points
-        + " Position: " + players.value[0].position);
-
-    console.log(gameData.value);
-    console.log(players.value);
+    gameId.value = gameData.value.game_id;
 
     roomCode.value = route.params.code;
 
@@ -180,6 +172,10 @@ watch(roundFinished, (newValue) => {
             roundEnd.value = true; 
             setTimeout(() => {
                 gameFinished.value = true;
+                if (currentPlayer.value.uuid == user.value.uuid) {
+                    console.log("Guardando partida");
+                    updateGame();
+                }
             }, 2500);
         } else {
             console.log('Siguiente jugador');
@@ -578,6 +574,34 @@ const compareWords = (playingWord, userWord) => {
 
     // Comparamos las cadenas normalizadas
     return normalizedStr1.localeCompare(normalizedStr2, undefined, { sensitivity: 'base' }) === 0;
+}
+
+const updateGame = async () => {
+    console.log(updatePlayerPositions(players.value));
+    console.log(gameId.value);
+  try {
+    
+    const response = await axios.post(`/api/update-game/${gameId.value}`, { players: updatePlayerPositions(players.value) });
+    console.log('Respuesta del servidor:', response.data);
+  } catch (error) {
+    console.error('Error al actualizar la partida:', error.response);
+  }
+};
+
+// Reorganiza el array de jugadores según sus puntos y les asigna una posición
+function updatePlayerPositions(players) {
+  
+  let playersCopy = [...players];
+
+  // Se ordenan los jugadores por puntos de forma ascendente
+  playersCopy.sort((a, b) => b.points - a.points);
+
+  // Se asigna la posición según el índice
+  playersCopy.forEach((player, index) => {
+    player.position = index + 1;
+  });
+
+  return playersCopy;
 }
 
 </script>

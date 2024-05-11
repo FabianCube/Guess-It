@@ -95,6 +95,42 @@ class GameController extends Controller
         ]);
     }
 
+    // Método para crear las tablas para la partida con la configuración y jugadores
+    public function updateGame(Request $request)
+    {
+        $gameId = $request->game_id; 
+        $players = $request->players; 
+
+        // Buscar la partida por ID
+        $game = Game::find($gameId);
+        if (!$game) {
+            return response()->json(['mensaje' => 'Partida no encontrada'], 404);
+        }
+
+        // Recorrer cada jugador proporcionado y actualizar su historial
+        foreach ($players as $player) {
+            $history = History::where('game_id', $gameId)->where(function ($query) use ($player) {
+                $query->where('user_id', $player['uuid'])->orWhere('anonymous_user_id', $player['uuid']);
+            })->first();
+
+            if ($history) {
+                $history->user_points = $player['points'];
+                $history->user_position = $player['position'];
+                $history->save();
+            } else {
+                // En caso de que no se encuentre un historial para el jugador, se podría manejar un error o crear un nuevo registro
+                return response()->json(['mensaje' => 'Jugador no encontrado en esta partida'], 404);
+            }
+        }
+
+        // Devolver la confirmación de la actualización
+        return response()->json([
+            'mensaje' => 'Partida actualizada',
+            'game_id' => $game->id,
+            'players' => $players
+        ]);
+    }
+
     public function getWord(Request $request)
     {
         $difficulty = $request->difficulty;
