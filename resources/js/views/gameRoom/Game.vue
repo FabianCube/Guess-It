@@ -29,15 +29,15 @@
             </div>
 
             <!-- CANVAS & CHAT -->
-            <div class="row d-flex flex-xs-column flex-sm-column flex-md-row flex-lg-row p-0 mt-5 justify-content-between ">
+            <div class="row d-flex flex-xs-column flex-sm-column flex-md-row flex-lg-row p-0 mt-5 justify-content-between content-game">
                 <div id="overlay" v-if="showOverlay"></div>
                 <!-- PLAYER INFO -->
-                <div class="order-2 order-sm-2 order-lg-1 col-4 col-sm-4 col-lg-1 p-0 info-jugador">
+                <div class="order-3 order-sm-2 order-lg-1 col-xs-3 col-md-1 p-0 info-jugador">
                     <!-- COMPONENTE INFO JUGADOR -->
                     <info-players :players="players" :user="user" />
                 </div>
 
-                <div class="order-1 order-sm-1 order-lg-2 col-12 col-sm-12 col-lg-8 p-0" style="height: 622.5px; width: 830px;">
+                <div class="order-1 order-sm-1 order-lg-2 col-xs-12 col-md-8 p-0 canvas-content" style="height: 622.5px; width: 830px;">
                     <!-- CANVAS -->
                     <div style="width: 100%; height: 100%;border-radius: 12px; position: relative;">
                         <!-- COMPONENTE STATUS BAR -->
@@ -52,7 +52,7 @@
                     </div>
                 </div>
 
-                <div class="order-3 order-sm-3 order-lg-3 col-4 col-sm-4 col-lg-3 d-flex flex-row chat-container">
+                <div class="order-2 order-sm-3 order-lg-3 col-xs-4 col-md-3 d-flex flex-row chat-container">
                     <!-- CHAT -->
                     <div class="p-3 chat flex flex-column justify-content-between">
                         <!-- COMPONENTE CHAT  -->
@@ -66,6 +66,7 @@
                         </div>
                     </div>
                 </div>
+                
             </div>
         </div>
     </div>
@@ -645,8 +646,26 @@ const playSound = (soundPath) => {
 <style>
 @import 'style/game.css';
 
-@media (max-width: 820px)
-{
 
+
+@media (max-width: 720px)
+{
+    .content-game
+    {
+        padding: 20px!important;
+    }
+
+    .canvas-content
+    {
+        height: 420px!important;
+        margin-bottom: 20px!important;
+    }
+
+    .chat-container
+    {
+        /* padding-left: 20px!important; */
+        max-height: 700px!important;
+        margin-bottom: 20px;
+    }
 }
 </style>
