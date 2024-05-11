@@ -11,9 +11,23 @@
             @invited="handleInvitation" />
         <div class="container py-4">
             <div class="d-flex justify-content-between align-items-center">
-                <router-link to="/" class="btn-smll-default"><img src="/storage/icons/home-05.svg" alt=""></router-link>
+                <router-link 
+                    @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')" 
+                    to="/" class="btn-smll-default">
+                    <img src="/storage/icons/home-05.svg" alt="">
+                </router-link>
                 <img id="logo" src="/storage/guess-it-logo.svg" class="logo"></img>
-                <button class="btn-smll-default"><img src="/storage/icons/volume-on.svg" alt=""></button>
+                <button 
+                    v-if="isMusicMuted" 
+                    @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')" 
+                    @click="muteAllSounds(), playHovers('/storage/sounds/hover3.mp3')" 
+                    class="btn-smll-default"><img src="/storage/icons/volume-off.svg" alt=""></button>
+                
+                <button 
+                    v-else 
+                    @click="muteAllSounds(), playHovers('/storage/sounds/hover3.mp3')" 
+                    @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')" 
+                    class="btn-smll-default"><img src="/storage/icons/volume-on.svg" alt=""></button>
             </div>
             <div class="flex mt-5">
                 <div class="col-4 ">
@@ -21,9 +35,13 @@
                         <div class="h-100 d-flex flex-column justify-content-between p-5">
                             <h2 class="mb-3 players-font">JUGADORES</h2>
                             <PlayerList class="mb-3" @update-players="handlePlayers" />
-                            <div class="d-flex justify-content-center btn-invite" @click="showFriendsList = true">
-                                <div class="d-flex align-items-center">
-                                    <h3 id="invitar-amigos" class="mb-0 me-3 ">INVITAR AMIGOS</h3>
+                            <div 
+                                @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')" 
+                                class="d-flex justify-content-center btn-invite" 
+                                @click="showFriendsList = true, playHovers('/storage/sounds/hover3.mp3')">
+
+                                <div  class="d-flex align-items-center">
+                                    <h3  id="invitar-amigos" class="mb-0 me-3 ">INVITAR AMIGOS</h3>
                                     <img src="../../../../storage/app/public/icons/user-plus-01.svg">
                                 </div>
                             </div>
@@ -46,7 +64,7 @@
                                 class="copiar" @click="copiarCodigo">
                         </div>
                         <div class="d-flex justify-content-end">
-                            <button v-if="options" @click="startGame" :disabled="!startButtonEnabled"
+                            <button @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')" v-if="options" @click="startGame(), playHovers('/storage/sounds/hover3.mp3')" :disabled="!startButtonEnabled"
                                 :class="{ 'btn-disabled': !startButtonEnabled }"
                                 class="d-flex align-items-center btn-play">
                                 <h1 class="mb-2 me-3 play-font">INICIAR</h1>
@@ -76,6 +94,36 @@ const { isLoggedIn } = useAuth();
 const roomCode = ref();
 const route = useRoute();
 const router = useRouter();
+const hovers = ref(null);
+const backgroundMusic = ref(null);
+const isMusicMuted = ref(false);
+
+
+const playHovers = (soundFile) => {
+    hovers.value = new Audio(soundFile);
+    hovers.value.volume = 0.5;
+    hovers.value.play();
+}
+
+const playBackgroundMusic = () => {
+    backgroundMusic.value = new Audio('/storage/sounds/create-game-background.mp3');
+    backgroundMusic.value.volume = 0.2;
+    backgroundMusic.value.loop = true;
+    backgroundMusic.value.play();
+}
+
+const muteAllSounds = () => {
+    if(backgroundMusic.value.paused)
+    {
+        backgroundMusic.value.play();
+        isMusicMuted.value = false;
+    }
+    else
+    {
+        backgroundMusic.value.pause();
+        isMusicMuted.value = true;
+    }
+}
 
 // Variable con el id del creador de partida
 const owner = ref();
@@ -182,7 +230,8 @@ onBeforeMount(async () => {
 });
 
 onMounted(() => {
-    
+    backgroundMusic.value = null;
+    playBackgroundMusic();
 
     loadFriends();
 
@@ -207,6 +256,7 @@ onBeforeUnmount(() => {
     const formData = new FormData();
     formData.append("uuid", storedUserData.uuid);
 
+    backgroundMusic.value.pause();
     navigator.sendBeacon(`/api/leave-room/${roomCode.value}`, formData);
 });
 

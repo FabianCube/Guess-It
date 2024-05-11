@@ -2,7 +2,7 @@
     <div class="modal">
         <div class="p-4 modal-content">
             <div class="w-100">
-                <button @click="closeModal" id="closeInvitation">
+                <button @click="closeModal(), playHovers('/storage/sounds/click-back.mp3')" id="closeInvitation">
                     <img src="/storage/icons/arrow-left.svg" alt="">
                 </button>
             </div>
@@ -24,6 +24,7 @@
 
 <script setup>
 import { ref, defineProps, defineEmits } from 'vue';
+const hovers = ref(null);
 
 const props = defineProps({
     friends: Array,
@@ -32,6 +33,11 @@ const props = defineProps({
 
 const emits = defineEmits(['close', 'invited']);
 
+const playHovers = (soundFile) => {
+    hovers.value = new Audio(soundFile);
+    hovers.value.volume = 0.5;
+    hovers.value.play();
+}
 
 const closeModal = () => {
     emits('close');
