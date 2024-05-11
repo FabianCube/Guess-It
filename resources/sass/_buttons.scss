@@ -43,6 +43,11 @@
     transition: all 0.3s ease;
 }
 
+.btn-smll-default:hover {
+    background-color: #f9b687;
+    animation: bounce 0.2s;
+}
+
 .btn-smll-default:active {
     background-color: #FCB078; 
     box-shadow: 0 5px #F27820; 

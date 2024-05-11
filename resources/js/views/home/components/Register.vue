@@ -2,7 +2,7 @@
 <template>
     <div class="card border-0 shadow-sm popup-login">
         <div class="w-100 p-2">
-            <button @click="toggleRegister()" id="closeLogin">
+            <button @click="toggleRegister(), playHovers('/storage/sounds/click-back.mp3')" id="closeLogin">
                 <img src="/storage/icons/arrow-left.svg" alt="">
             </button>
         </div>
@@ -70,8 +70,10 @@
 
                     <!-- Buttons -->
                     <div class="flex items-center justify-end mt-4">
-                        <button class="btn btn-primary" :class="{ 'opacity-25': processing }" :disabled="processing">
-                            {{ $t('register') }}
+                        <button 
+                            @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')"  
+                            class="btn-default btn-register" :disabled="processing">
+                            REGISTRARSE
                         </button>
                     </div>
                 </div>
@@ -93,6 +95,12 @@ const baseAvatar = '/storage/avatars/';
 const router = useRouter();
 const avatarImage = ref();
 let avatarId = ref(1);
+const hovers = ref(null);
+
+const playHovers = (soundFile) => {
+    hovers.value = new Audio(soundFile);
+    hovers.value.play();
+}
 
 // Asigno el avatar_id para usarlo en registerForm (input)
 

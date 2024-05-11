@@ -2,7 +2,7 @@
 <template>
     <div class="card border-0 shadow-sm popup-login">
         <div class="w-100 pt-2">
-            <button @click="toggleLogin()" id="closeLogin">
+            <button @click="toggleLogin(), playHovers('/storage/sounds/click-back.mp3')" id="closeLogin">
                 <img src="/storage/icons/arrow-left.svg" alt="">
             </button>
         </div>
@@ -50,7 +50,10 @@
 
                     <!-- Buttons -->
                     <div class="flex align-items-center justify-end flex-column mt-4">
-                        <button class="btn-default btn-login" :class="{ 'opacity-25': processing }" :disabled="processing">
+                        <button 
+                            @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')" 
+                            @click="playHovers('/storage/sounds/hover2.mp3')" 
+                            class="btn-default btn-login" :class="{ 'opacity-25': processing }" :disabled="processing">
                             ENTRAR!
                         </button>
                         <p class="m-0">O</p>
@@ -59,7 +62,10 @@
                 </div>
                 
             </form>
-            <button @click="toggleRegister()" class="btn-default btn-register mb-5">
+            <button 
+                @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')" 
+                @click="toggleRegister(), playHovers('/storage/sounds/hover2.mp3')" 
+                class="btn-default btn-register mb-5">
                 CREAR CUENTA!
             </button>
         </div>
@@ -69,12 +75,18 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue';
+import { defineProps, defineEmits, ref } from 'vue';
 import useAuth from '@/composables/auth';
 
 // emits para mandar al padre (index.vue) el emit de que se ha ejecutado una funcion.
 const emits = defineEmits(['close-popup', 'open-register']);
 const { loginForm, validationErrors, processing, submitLogin } = useAuth();
+const hovers = ref(null);
+
+const playHovers = (soundFile) => {
+    hovers.value = new Audio(soundFile);
+    hovers.value.play();
+}
 
 // funcion para abrir y cerrar el pop up de login
 function toggleLogin() {

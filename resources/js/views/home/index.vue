@@ -23,11 +23,15 @@
     <div id="total-container" class="relative flex items-top justify-center min-h-screen sm:items-center py-4 sm:pt-0">
         <div class="row col-12 flex justify-between py-5 p-5 p-md-0">
             <div class="order-xs-2 order-lg-1 col-xs-12 col-sm-12 col-md-4 d-flex flex-md-column justify-content-sm-between justify-content-end align-items-start pl-sm-0 pl-8">
-                <button class="btn-smll-default mb-5" style="border: none;">
+                <!-- <button class="btn-smll-default mb-5" style="border: none;">
                     <img src="/storage/icons/info-circle.svg" alt="">
-                </button>
-                <button class="btn-smll-default" style="border: none;">
-                    <img src="/storage/icons/volume-on.svg" alt="">
+                </button> -->
+                <button 
+                    @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')" 
+                    @click="muteAllSounds(), playHovers('/storage/sounds/hover2.mp3')" 
+                    class="btn-smll-default" style="border: none;">
+                        <img v-if="isMusicMuted" src="/storage/icons/volume-off.svg" alt="">
+                        <img v-else src="/storage/icons/volume-on.svg" alt="">
                 </button>
             </div>
 
@@ -35,29 +39,41 @@
                 <img id="logo" src="/storage/guess-it-logo.svg" class="shake-img"></img>
 
                 <button 
-                    @mouseenter="() => playSound('/storage/sounds/hover1.mp3')" 
-                    @click="toggleAnonymous(), playSound('/storage/sounds/hover2.mp3')" 
-                    to="/create-game" class="btn-default">CREAR PARTIDA</button>
+                    @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')" 
+                    @click="toggleAnonymous(), playHovers('/storage/sounds/hover2.mp3')" 
+                    to="/create-game" class="btn-default">
+                    CREAR PARTIDA
+                </button>
                 <button 
-                    @mouseenter="() => playSound('/storage/sounds/hover1.mp3')"  
-                    @click="toggleEnterGame(), playSound('/storage/sounds/hover2.mp3')" 
-                    class="btn-default">UNIRSE A PARTIDA</button>
-
+                    @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')"  
+                    @click="toggleEnterGame(), playHovers('/storage/sounds/hover2.mp3')" 
+                    class="btn-default">
+                    UNIRSE A PARTIDA
+                </button>
             </div>
 
             <div class="order-xs-3 order-lg-3 col-xs-12 col-sm-12 col-md-4 d-flex flex-md-column justify-content-between align-items-end pe-buttons">
                 <button v-if="logged" @click="toggleAccount()" class="btn-smll-default flex justify-content-center">
-                    <div class="avatar-image">
-                        <img src="/storage/avatars/avatar1.jpg" alt="">
+                    <div 
+                        @click="playHovers('/storage/sounds/hover2.mp3')" 
+                        @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')" 
+                        class="avatar-image">
+                            <img src="/storage/avatars/avatar1.jpg" alt="">
                     </div>
                 </button>
-                <button v-else @click="toggleLogin()" class="btn-smll-default flex justify-content-center">
+                <button 
+                    @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')"  
+                    v-else @click="toggleLogin(), playHovers('/storage/sounds/hover2.mp3')" 
+                    class="btn-smll-default flex justify-content-center">
                     <img src="/storage/icons/account.svg" alt="">
                 </button>
 
                 <div class="d-flex flex-column justify-content-end">
                     <friends v-if="friendsList" />
-                    <button @click="toggleFriendsList" class="btn-smll-default btn-friends" style="border: none">
+                    <button 
+                        @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')"  
+                        @click="toggleFriendsList(), playHovers('/storage/sounds/hover2.mp3')" 
+                        class="btn-smll-default btn-friends" style="border: none">
                         <img src="/storage/icons/friends.svg" alt="">
                     </button>
                 </div>
@@ -81,11 +97,33 @@ const userRegistered = ref();
 const router = useRouter();
 const friendsList = ref(false);
 const user = ref();
+const hovers = ref(null);
+const backgroundMusic = ref(null);
+const isMusicMuted = ref(true);
 
 
-const playSound = (soundFile) => {
-    const audio = new Audio(soundFile);
-    audio.play();
+const playHovers = (soundFile) => {
+    hovers.value = new Audio(soundFile);
+    hovers.value.play();
+}
+
+const playBackgroundMusic = () => {
+    backgroundMusic.value = new Audio('/storage/sounds/background-music.mp3');
+    backgroundMusic.value.loop();
+    backgroundMusic.value.play();
+}
+
+const muteAllSounds = () => {
+    if(backgroundMusic.value.paused)
+    {
+        backgroundMusic.value.play();
+        isMusicMuted.value = false;
+    }
+    else
+    {
+        backgroundMusic.value.pause();
+        isMusicMuted.value = true;
+    }
 }
 
 let UserPrivateChannel;
@@ -93,6 +131,8 @@ let UserPrivateChannel;
 /* MOUNTING */
 
 onMounted(async () => {
+    backgroundMusic.value = null;
+    playBackgroundMusic();
 
     logged.value = isLoggedIn();
 
@@ -134,6 +174,7 @@ onUnmounted(() => {
         UserPrivateChannel.stopListening('.GameInvitation');
     }
 
+    backgroundMusic.value.pause();
     window.Echo.leave('cache');
 });
 

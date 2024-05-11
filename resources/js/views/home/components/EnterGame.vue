@@ -18,7 +18,9 @@
 
                     <!-- Buttons -->
                     <div class="flex items-center justify-end mt-4">
-                        <button @click="findRoom()" class="btn-default btn-login">
+                        <button
+                            @mouseenter="() => playSound('/storage/sounds/hover1.mp3')"  
+                            @click="findRoom(), playSound('/storage/sounds/hover3.mp3')" class="btn-default btn-login">
                             PREPARADO!
                         </button>
                     </div>
@@ -40,6 +42,11 @@ import sweetAlertNotifications from '@/utils/swal_notifications';
 const { throwErrorMessage } = sweetAlertNotifications();
 
 const emits = defineEmits(['close-enterGame', 'open-anonymous']);
+
+const playSound = (soundFile) => {
+    const audio = new Audio(soundFile);
+    audio.play();
+}
 
 function toggleEnterGame() {
     emits('close-enterGame');
