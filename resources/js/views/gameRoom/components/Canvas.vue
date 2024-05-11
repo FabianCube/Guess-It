@@ -13,7 +13,7 @@ const movements = ref([]);
 const keepLastColor = ref('');
 const currentTool = ref('draw');
 
-const props = defineProps(['user', 'newCanvas', 'isDrawingEnabled', 'roomCode']);
+const props = defineProps(['user', 'newCanvas', 'isDrawingEnabled', 'roomCode' , 'roundInProgress']);
 const emits = defineEmits(['canvasupdate']);
 
 console.log(props.isDrawingEnabled);
@@ -29,6 +29,7 @@ onMounted(() => {
 
 });
 
+// Si cambia el canvas lo reconstruimos
 watch(() => props.newCanvas, (canvas) => {
     console.log(canvas);
     if (canvas == "clear") {
@@ -36,7 +37,7 @@ watch(() => props.newCanvas, (canvas) => {
     }
     else {
         let positions = JSON.parse(canvas);
-        // console.log(canvas);
+
         positions.forEach((movement, index) => {
             setTimeout(() => {
                 drawLine(ctx.value, movement.x, movement.y, movement.offsetX, movement.offsetY, movement.lineColor, movement.lineWidth);
@@ -45,6 +46,7 @@ watch(() => props.newCanvas, (canvas) => {
     }
 });
 
+// Si la ronda ha finalizado limpiamos el canvas
 const listenRoundFinished = () => {
     window.Echo.channel('room-' + props.roomCode)
         .listen('.RoundFinished', (e) => {
@@ -52,7 +54,7 @@ const listenRoundFinished = () => {
         });
 }
 
-//  ¡¡¡¡NO SE ESTÁ APLICANDO!!!!
+// Si el jugador que dibuja limpia su canvas también lo aplicamos
 const listenCleanCanvas = () => {
     window.Echo.channel('room-' + props.roomCode)
         .listen('.CleanCanvas', (e) => {
@@ -96,21 +98,20 @@ const init = () => {
             movements.value = [];
         }
     });
-
-    if (props.isDrawingEnabled) {
-        let clear = document.getElementById('clearArea');
-
-        clear.addEventListener('click', (e) => {
-            clearArea();
-            emits("canvasupdate", {
-                user: props.user,
-                canvas: "clear"
-            });
-        });
-    }
 };
 
+// Se emite envento para limpiar el canvas de los demás jugadores
+const cleanCanvas = () => {
+    axios.post('/api/clean-canvas', {
+        code: props.roomCode
+    }).then(response => {
+        console.log(response.data);
+    }).catch(error => {
+        console.error("Error al unirse al canal: ", error);
+    });
+}
 
+// Se emite a Game los nuevos datos del canvas
 const sendCanvas = (params) => {
     emits("canvasupdate", {
         user: props.user,
@@ -119,6 +120,7 @@ const sendCanvas = (params) => {
     console.log("[Canvas.vue]:sendCanvas: Canvas sent!");
 }
 
+// pasa a Json los movimienos para reconstruir el canvas
 const getParams = () => {
     console.log("[Canvas.vue]:getParams: Entrado en getParams!");
 
@@ -144,9 +146,13 @@ const drawLine = (ctx, x1, y1, x2, y2, color, stroke) => {
     ctx.stroke();
 };
 
+// Elimina el dibujo del canvas
 const clearArea = () => {
     ctx.value.setTransform(1, 0, 0, 1, 0, 0);
     ctx.value.clearRect(0, 0, ctx.value.canvas.width, ctx.value.canvas.height);
+    if(props.isDrawingEnabled && props.roundInProgress){
+        cleanCanvas();
+    }
 };
 
 const adjustCanvas = () => {
@@ -155,6 +161,7 @@ const adjustCanvas = () => {
     canvas.value.height = parseInt(style.height);
 };
 
+// Cambia el grosor del pincel
 const updateSize = (element, size) => {
     lineWidth.value = size;
 
@@ -164,6 +171,7 @@ const updateSize = (element, size) => {
     element.classList.add('active-size');
 }
 
+// Cambia el color para dibujar
 const updateColor = (element, color) => {
     if (currentTool.value === "erase") {
         changeTool("draw");
@@ -178,6 +186,7 @@ const updateColor = (element, color) => {
     element.classList.add('active-color');
 }
 
+// Cambia entre pincel y goma
 const changeTool = (tool) => {
     if (tool == "erase") {
         if (lineColor !== 'white') {

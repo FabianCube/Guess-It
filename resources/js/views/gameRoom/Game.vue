@@ -25,7 +25,7 @@
                 <!-- PLAYER INFO -->
                 <div class="col-1 p-0 info-jugador">
                     <!-- COMPONENTE INFO JUGADOR -->
-                    <info-players :players="players" :user="user"/>
+                    <info-players :players="players" :user="user" />
                 </div>
 
                 <div class="col-8 p-0" style="height: 622.5px; width: 830px;">
@@ -38,7 +38,8 @@
                             :roundFinished="roundFinished" :guessedWord="guessedWord" />
                         <!-- COMPONENTE CANVAS -->
                         <canvas-component :user="user" :newCanvas="newCanvas" @canvasupdate="sendCanvas"
-                            :isDrawingEnabled="isDrawingEnabled" :roomCode="roomCode"></canvas-component>
+                             :isDrawingEnabled="isDrawingEnabled" :roundInProgress="roundInProgress"
+                            :roomCode="roomCode"></canvas-component>
                     </div>
                 </div>
 
@@ -59,7 +60,7 @@
             </div>
         </div>
     </div>
-    <game-end v-else :players="players" :user="user"/>
+    <game-end v-else :players="players" :user="user" />
 </template>
 
 <script setup>
@@ -167,9 +168,9 @@ onUnmounted(() => {
 // Observa cuándo termina la ronda
 watch(roundFinished, (newValue) => {
     if (newValue) {
-        if (currentRound.value + 1 > rounds.value && currentPlayerIndex.value == players.value.length - 1) {      
+        if (currentRound.value + 1 > rounds.value && currentPlayerIndex.value == players.value.length - 1) {
             lastRound.value = true;
-            roundEnd.value = true; 
+            roundEnd.value = true;
             setTimeout(() => {
                 gameFinished.value = true;
                 if (currentPlayer.value.uuid == user.value.uuid) {
@@ -217,20 +218,7 @@ const listenEventMessageSent = () => {
 const listenEventCanvasUpdate = () => {
     window.Echo.channel('room-' + roomCode.value)
         .listen('.CanvasUpdate', (e) => {
-
-            if (e.canvas == "clear") {
-                console.log(e.canvas);
-                axios.post('/api/clean-canvas', {
-                    code: roomCode.value
-                }).then(response => {
-                    console.log(response.data);
-                }).catch(error => {
-                    console.error("Error al unirse al canal: ", error);
-                });
-            } else {
-
-                newCanvas.value = e.canvas;
-            }
+            newCanvas.value = e.canvas;
         });
 }
 
@@ -580,29 +568,29 @@ const compareWords = (playingWord, userWord) => {
 const updateGame = async () => {
     console.log(updatePlayerPositions(players.value));
     console.log(gameId.value);
-  try {
-    
-    const response = await axios.post(`/api/update-game/${gameId.value}`, { players: updatePlayerPositions(players.value) });
-    console.log('Respuesta del servidor:', response.data);
-  } catch (error) {
-    console.error('Error al actualizar la partida:', error.response);
-  }
+    try {
+
+        const response = await axios.post(`/api/update-game/${gameId.value}`, { players: updatePlayerPositions(players.value) });
+        console.log('Respuesta del servidor:', response.data);
+    } catch (error) {
+        console.error('Error al actualizar la partida:', error.response);
+    }
 };
 
 // Reorganiza el array de jugadores según sus puntos y les asigna una posición
 function updatePlayerPositions(players) {
-  
-  let playersCopy = [...players];
 
-  // Se ordenan los jugadores por puntos de forma ascendente
-  playersCopy.sort((a, b) => b.points - a.points);
+    let playersCopy = [...players];
 
-  // Se asigna la posición según el índice
-  playersCopy.forEach((player, index) => {
-    player.position = index + 1;
-  });
+    // Se ordenan los jugadores por puntos de forma ascendente
+    playersCopy.sort((a, b) => b.points - a.points);
 
-  return playersCopy;
+    // Se asigna la posición según el índice
+    playersCopy.forEach((player, index) => {
+        player.position = index + 1;
+    });
+
+    return playersCopy;
 }
 
 const playSound = (soundPath) => {
@@ -614,7 +602,5 @@ const playSound = (soundPath) => {
 </script>
 
 <style>
-
 @import 'style/game.css';
-
 </style>
