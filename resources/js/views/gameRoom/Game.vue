@@ -8,13 +8,18 @@
 
             <div class="d-flex justify-content-between align-items-center">
 
-                <router-link to="/" class="btn-smll-default">
+                <router-link 
+                    @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')" 
+                    to="/" class="btn-smll-default">
                     <img src="/storage/icons/home-05.svg" alt="">
                 </router-link>
 
                 <img id="logo" src="/storage/guess-it-logo.svg" class="logo"></img>
 
-                <button class="btn-smll-default">
+                <button 
+                    @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')" 
+                    @click="playHovers('/storage/sounds/hover3.mp3')" 
+                    class="btn-smll-default">
                     <img src="/storage/icons/volume-on.svg" alt="">
                 </button>
             </div>
@@ -104,6 +109,14 @@ const gameId = ref();
 
 const playingWord = ref('');
 const words = ([]);
+
+const hovers = ref(null);
+
+const playHovers = (soundFile) => {
+    hovers.value = new Audio(soundFile);
+    hovers.value.volume = 0.5;
+    hovers.value.play();
+}
 
 /* MOUNTING */
 
