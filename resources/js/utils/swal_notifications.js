@@ -14,6 +14,10 @@ export default function sweetAlertNotifications() {
     const throwSuccessMessage = ($message = '¡ÉXITO!') => {
         console.log('Sending success message...');
 
+        let backgroundMusic = new Audio('/storage/sounds/success.mp3');
+        backgroundMusic.volume = 0.5;
+        backgroundMusic.play();
+
         swal({
             icon: 'success',
             title: $message,
@@ -27,6 +31,10 @@ export default function sweetAlertNotifications() {
 
     const throwInfoMessage = ($message = 'Info') => {
         console.log('Sending info message...');
+
+        let backgroundMusic = new Audio('/storage/sounds/info.mp3');
+        backgroundMusic.volume = 0.5;
+        backgroundMusic.play();
 
         swal({
             icon: 'info',
@@ -42,6 +50,10 @@ export default function sweetAlertNotifications() {
     const throwErrorMessage = ($message = '¡ERROR!') => {
         console.log('Sending error message...');
 
+        let backgroundMusic = new Audio('/storage/sounds/error.mp3');
+        backgroundMusic.volume = 0.5;
+        backgroundMusic.play();
+
         swal({
             icon: 'error',
             title: $message,
@@ -56,6 +68,10 @@ export default function sweetAlertNotifications() {
     const throwAcceptMessage = ($message = '¿Aceptar?') => {
         console.log('Sending accept message...');
 
+        let backgroundMusic = new Audio('/storage/sounds/question.mp3');
+        backgroundMusic.volume = 0.5;
+        backgroundMusic.play();
+
         swal({
             icon: 'error',
             title: $message,
@@ -69,6 +85,10 @@ export default function sweetAlertNotifications() {
 
     const throwInviteMessage = ($message = '¿Aceptar?', onAccept, onReject) => {
         console.log('Sending invite message...');
+
+        let backgroundMusic = new Audio('/storage/sounds/question.mp3');
+        backgroundMusic.volume = 0.5;
+        backgroundMusic.play();
 
         swal({
             icon: 'info',
@@ -91,6 +111,10 @@ export default function sweetAlertNotifications() {
 
     const throwRedirectMessage = ($message = 'Ok') => {
         console.log('Sending redirect message...');
+
+        let backgroundMusic = new Audio('/storage/sounds/error.mp3');
+        backgroundMusic.volume = 0.5;
+        backgroundMusic.play();
 
         swal({
             title: 'Redireccionando...',
