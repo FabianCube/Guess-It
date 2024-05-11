@@ -64,7 +64,7 @@
             </form>
             <button 
                 @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')" 
-                @click="toggleRegister(), playHovers('/storage/sounds/hover2.mp3')" 
+                @click="toggleRegister(), playHovers('/storage/sounds/hover3.mp3')" 
                 class="btn-default btn-register mb-5">
                 CREAR CUENTA!
             </button>

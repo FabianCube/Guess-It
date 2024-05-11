@@ -28,7 +28,7 @@
                     <div class="flex items-center justify-end mt-4">
                         <button 
                             @mouseenter="() => playSound('/storage/sounds/hover1.mp3')"  
-                            @click="createRoom(), playSound('/storage/sounds/hover3.mp3')" 
+                            @click="createRoom(), playSound('/storage/sounds/hover2.mp3')" 
                             class="btn-default btn-login">
                             PREPARADO!
                         </button>
