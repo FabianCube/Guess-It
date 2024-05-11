@@ -26,7 +26,7 @@
 
                     <!-- Buttons -->
                     <div class="flex items-center justify-end mt-4">
-                        <button @click="createRoom" class="btn-default btn-login">
+                        <button @click="createRoom(), playSound('/storage/sounds/hover3.mp3')" class="btn-default btn-login">
                             PREPARADO!
                         </button>
                     </div>
@@ -46,6 +46,11 @@ import { useRouter } from 'vue-router';
 import { v4 as uuidv4 } from 'uuid';
 
 const emits = defineEmits(['close-anonymous']);
+
+const playSound = (soundFile) => {
+    const audio = new Audio(soundFile);
+    audio.play();
+}
 
 function toggleAnonymous() {
     emits('close-anonymous');

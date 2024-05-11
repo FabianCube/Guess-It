@@ -23,7 +23,7 @@
     <div id="total-container" class="relative flex items-top justify-center min-h-screen sm:items-center py-4 sm:pt-0">
         <div class="row col-12 flex justify-between py-5 p-5 p-md-0">
             <div class="order-xs-2 order-lg-1 col-xs-12 col-sm-12 col-md-4 d-flex flex-md-column justify-content-sm-between justify-content-end align-items-start pl-sm-0 pl-8">
-                <button @mouseover="() => playSound('/storage/sounds/bubble.mp3')" class="btn-smll-default mb-5" style="border: none;">
+                <button class="btn-smll-default mb-5" style="border: none;">
                     <img src="/storage/icons/info-circle.svg" alt="">
                 </button>
                 <button class="btn-smll-default" style="border: none;">
@@ -34,8 +34,14 @@
             <div class="order-xs-1 order-lg-2 col-xs-12 col-sm-12 col-md-4 flex justify-center align-items-center flex-column md:pt-8">
                 <img id="logo" src="/storage/guess-it-logo.svg" class="shake-img"></img>
 
-                <button @click="toggleAnonymous()" to="/create-game" class="btn-default">CREAR PARTIDA</button>
-                <button @click="toggleEnterGame()" class="btn-default">UNIRSE A PARTIDA</button>
+                <button 
+                    @mouseenter="() => playSound('/storage/sounds/hover1.mp3')" 
+                    @click="toggleAnonymous(), playSound('/storage/sounds/hover2.mp3')" 
+                    to="/create-game" class="btn-default">CREAR PARTIDA</button>
+                <button 
+                    @mouseenter="() => playSound('/storage/sounds/hover1.mp3')"  
+                    @click="toggleEnterGame(), playSound('/storage/sounds/hover2.mp3')" 
+                    class="btn-default">UNIRSE A PARTIDA</button>
 
             </div>
 
