@@ -1,7 +1,7 @@
 <template>
     <div class="card border-0 shadow-sm popup-login">
         <div class="w-100 p-2">
-            <button @click="toggleEnterGame()" id="closeLogin">
+            <button @click="toggleEnterGame(), playHovers('/storage/sounds/click-back.mp3')" id="closeLogin">
                 <img src="/storage/icons/arrow-left.svg" alt="">
             </button>
         </div>
@@ -19,8 +19,8 @@
                     <!-- Buttons -->
                     <div class="flex items-center justify-end mt-4">
                         <button
-                            @mouseenter="() => playSound('/storage/sounds/hover1.mp3')"  
-                            @click="findRoom(), playSound('/storage/sounds/hover3.mp3')" class="btn-default btn-login">
+                            @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')"  
+                            @click="findRoom(), playHovers('/storage/sounds/hover3.mp3')" class="btn-default btn-login">
                             PREPARADO!
                         </button>
                     </div>
@@ -42,10 +42,12 @@ import sweetAlertNotifications from '@/utils/swal_notifications';
 const { throwErrorMessage } = sweetAlertNotifications();
 
 const emits = defineEmits(['close-enterGame', 'open-anonymous']);
+const hovers = ref(null);
 
-const playSound = (soundFile) => {
-    const audio = new Audio(soundFile);
-    audio.play();
+const playHovers = (soundFile) => {
+    hovers.value = new Audio(soundFile);
+    hovers.value.volume = 0.5;
+    hovers.value.play();
 }
 
 function toggleEnterGame() {
