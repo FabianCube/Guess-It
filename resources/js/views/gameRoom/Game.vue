@@ -1,13 +1,13 @@
 <template>
     <div id="background-game"></div>
     <countdown-timer v-if="timer" @update-timer="handleTimerUpdate" :startTimer="startTimer" />
-    <round-end :roundEnd="roundEnd" :players="players" :playedWord="playingWord" />
-    <div class="min-h-screen sm:items-center py-4 main-content">
-        
+    <round-end :user="user" :roundEnd="roundEnd" :players="players" :playedWord="playingWord" :lastRound="lastRound" />
+    <div v-if="!gameFinished" class="min-h-screen sm:items-center py-4 main-content">
+
         <div class="container">
-            
+
             <div class="d-flex justify-content-between align-items-center">
-                
+
                 <router-link to="/" class="btn-smll-default">
                     <img src="/storage/icons/home-05.svg" alt="">
                 </router-link>
@@ -25,7 +25,7 @@
                 <!-- PLAYER INFO -->
                 <div class="col-1 p-0 info-jugador">
                     <!-- COMPONENTE INFO JUGADOR -->
-                    <info-players :players="players" />
+                    <info-players :players="players" :user="user"/>
                 </div>
 
                 <div class="col-8 p-0" style="height: 622.5px; width: 830px;">
@@ -59,6 +59,7 @@
             </div>
         </div>
     </div>
+    <game-end v-else :players="players" :user="user"/>
 </template>
 
 <script setup>
@@ -67,6 +68,7 @@ import { onBeforeMount, onMounted, onUnmounted, ref, computed, watch } from 'vue
 import { useRoute, useRouter } from 'vue-router';
 import useAuth from '@/composables/auth';
 import RoundEnd from '@/views/gameRoom/components/RoundEnd.vue';
+import GameEnd from '@/views/gameRoom/components/GameEnd.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -96,6 +98,7 @@ const roundInProgress = ref(false);
 const roundEnd = ref(false);
 const guessedWord = ref(false);
 const showOverlay = ref(true);
+const lastRound = ref(false);
 
 const playingWord = ref('');
 const words = ([]);
@@ -172,9 +175,15 @@ onUnmounted(() => {
 // Observa cuándo termina la ronda
 watch(roundFinished, (newValue) => {
     if (newValue) {
-        console.log('Siguiente jugador');
-        showOverlay.value = true;
-        if (!gameFinished.value) {
+        if (currentRound.value + 1 > rounds.value && currentPlayerIndex.value == players.value.length - 1) {      
+            lastRound.value = true;
+            roundEnd.value = true; 
+            setTimeout(() => {
+                gameFinished.value = true;
+            }, 2500);
+        } else {
+            console.log('Siguiente jugador');
+            showOverlay.value = true;
             roundEnd.value = true;
             startRound.value = false;
             setTimeout(() => {
@@ -190,8 +199,7 @@ watch(roundFinished, (newValue) => {
                     setPlayingWord();
                 }
             }, 10000);
-        } else {
-            // router.push({ name: 'home' });
+
         }
     }
 });
@@ -444,7 +452,7 @@ const moveToNextPlayer = () => {
 
 // Inicia la cuenta atrás para todos los jugadores
 const beginStartTimer = () => {
-    
+
     if (currentPlayer.value.uuid == user.value.uuid) {
         setTimeout(() => {
             axios.post('/api/start-timer', {
@@ -581,10 +589,10 @@ const compareWords = (playingWord, userWord) => {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 10; 
+    z-index: 10;
 }
 
-.block{
+.block {
     position: relative;
     width: 100%;
     height: 100%;

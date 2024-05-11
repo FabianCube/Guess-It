@@ -1,12 +1,9 @@
 <template>
-    <div v-if="status === 1" class="round-end">
-        <img src="/storage/fin_de_ronda.svg" :key="timeLeft" />
-    </div>
-    <div v-else-if="status === 2" class="blur-background">
+    <div class="d-flex flex-column align-items-center justify-content-start vh-100">
+        <img id="logo" src="/storage/guess-it-logo.svg" class="logo mt-5"></img>
         <div class="round-end table-container">
             <div class="d-flex flex-column align-items-center justify-content-center">
-                <h3 class="m-0 word-played-color">Palabra Jugada</h3>
-                <h2 class="m-0 word-played-color">{{ playedWord }}</h2>
+                <h2 class="m-0 word-played-color">FINAL DE PARTIDA</h2>
             </div>
             <div class="d-flex flex-column table">
                 <div class="d-flex justify-content-between">
@@ -26,23 +23,26 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div v-else-if="status === 3" class="round-end">
-        <img src="/storage/preparate.svg" :key="timeLeft" />
+        <router-link :to="{ name: 'home' }" class="px-5 btn-default volver">
+            VOLVER
+        </router-link>
     </div>
 </template>
 
 <script setup>
-import { ref, computed, defineProps, watch } from 'vue';
+import { ref, computed, defineProps } from 'vue';
 
-const props = defineProps(['roundEnd', 'players', 'playedWord', 'lastRound' , 'user']);
+const props = defineProps(['players' , 'user']);
 
 const status = ref(0);
-const roundDurations = { end: 2000, table: 5000, prepare: 2000 };
 
 const sortedPlayers = computed(() => {
     return [...props.players].sort((a, b) => b.points - a.points);
 });
+
+const isUser = (player) => {
+    return props.user.uuid == player.uuid;
+}
 
 const getColorByIndex = (index) => {
     if (index === 0) return 'gold';
@@ -50,75 +50,8 @@ const getColorByIndex = (index) => {
     if (index === 2) return '#cd7f32';
     return 'grey';
 };
-
-const changeStatus = (newStatus, duration) => {
-    status.value = newStatus;
-    setTimeout(() => {
-        if (newStatus === 1) {
-            if (props.lastRound) {
-                status.value = 0;
-            } else {
-                changeStatus(2, roundDurations.table);
-            }
-        } else if (newStatus === 2) {
-            changeStatus(3, roundDurations.prepare);
-        } else {
-            status.value = 0;
-        }
-    }, duration);
-};
-
-const playSound = (soundPath) => {
-    const audio = new Audio(soundPath);
-    audio.volume = 0.05;
-    audio.play();
-};
-
-const isUser = (player) => {
-    return props.user.uuid == player.uuid;
-}
-
-watch(() => props.roundEnd, (newValue) => {
-    if (newValue) {
-        if (props.lastRound) {
-            playSound('/storage/sounds/final_ronda.mp3');
-            changeStatus(1, roundDurations.end);
-        } else {
-            playSound('/storage/sounds/final_ronda.mp3');
-            changeStatus(1, roundDurations.end);
-        }
-    }
-});
-
-
-
-
 </script>
 <style scoped>
-.round-end {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000;
-    font-size: 4em;
-    padding: 20px;
-    border-radius: 10px;
-}
-
-.blur-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    backdrop-filter: blur(4px);
-    z-index: 999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .table-container {
     font-family: 'Lilita One', sans-serif;
     width: 50%;
@@ -127,6 +60,7 @@ watch(() => props.roundEnd, (newValue) => {
     padding: 25px 40px 25px 40px;
     border-radius: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 100px;
 }
 
 .etiqueta {
@@ -164,6 +98,11 @@ watch(() => props.roundEnd, (newValue) => {
 
 .word-played-color {
     color: #494949;
+}
+
+.volver{
+    width: auto;
+    margin-top: 50px;
 }
 
 .is-user{
