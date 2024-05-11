@@ -20,11 +20,11 @@
                     </div>
                     <!-- Email -->
                     <div class="mb-3">
-                        <label for="name" class="form-label">{{ $t('name') }}</label>
-                        <input v-model="registerForm.name" id="name" type="text" class="form-control" autofocus>
+                        <label for="nickname" class="form-label">Nickname</label>
+                        <input v-model="registerForm.nickname" id="nickname" type="text" class="form-control" autofocus>
                         <!-- Validation Errors -->
                         <div class="text-danger mt-1">
-                            <div v-for="message in validationErrors?.name">
+                            <div v-for="message in validationErrors?.nickname">
                                 {{ message }}
                             </div>
                         </div>
@@ -72,7 +72,7 @@
                     <div class="flex items-center justify-end mt-4">
                         <button 
                             @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')"  
-                            class="btn-default btn-register" :disabled="processing">
+                            class="btn-default btn-register" :class="{ 'opacity-25': processing }" :disabled="processing">
                             REGISTRARSE
                         </button>
                     </div>

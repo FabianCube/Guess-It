@@ -23,7 +23,7 @@ class UserController extends Controller
     public function index()
     {
         $orderColumn = request('order_column', 'created_at');
-        if (!in_array($orderColumn, ['id', 'name', 'created_at'])) {
+        if (!in_array($orderColumn, ['id', 'nickname', 'created_at'])) {
             $orderColumn = 'created_at';
         }
         $orderDirection = request('order_direction', 'desc');
@@ -34,12 +34,12 @@ class UserController extends Controller
                 $query->where('id', request('search_id'));
             })
             ->when(request('search_title'), function ($query) {
-                $query->where('name', 'like', '%' . request('search_title') . '%');
+                $query->where('nickname', 'like', '%' . request('search_title') . '%');
             })
             ->when(request('search_global'), function ($query) {
                 $query->where(function ($q) {
                     $q->where('id', request('search_global'))
-                        ->orWhere('name', 'like', '%' . request('search_global') . '%');
+                        ->orWhere('nickname', 'like', '%' . request('search_global') . '%');
                 });
             })
             ->orderBy($orderColumn, $orderDirection)
@@ -58,7 +58,7 @@ class UserController extends Controller
     {
         //$role = Role::find($request->role_id);
         $user = new User();
-        $user->name = $request->name;
+        $user->nickname = $request->nickname;
         $user->email = $request->email;
         $user->level = 1;
         $user->password = Hash::make($request->password);
@@ -96,7 +96,7 @@ class UserController extends Controller
     {
         $role = Role::find($request->role_id);
 
-        $user->name = $request->name;
+        $user->nickname = $request->nickname;
         $user->email = $request->email;
         if (!empty($request->password)) {
             $user->password = Hash::make($request->password) ?? $user->password;

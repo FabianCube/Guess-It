@@ -37,7 +37,7 @@ export default function useAuth() {
 
     // TODO Modificar los parametros que recive del controlador (agregar los que faltan)
     const registerForm = reactive({
-        name: '',
+        nickname: '',
         email: '',
         level: 1,
         password: '',

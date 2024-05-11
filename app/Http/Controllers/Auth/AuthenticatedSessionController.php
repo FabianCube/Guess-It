@@ -81,7 +81,7 @@ class AuthenticatedSessionController extends Controller
         }
 
         $user = User::create([
-            'name' => $request['name'],
+            'nickname' => $request['nickname'],
             'email' => $request['email'],
             'level' => 1,
             'password' => Hash::make($request['password']),
