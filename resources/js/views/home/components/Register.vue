@@ -2,7 +2,7 @@
 <template>
     <div class="card border-0 shadow-sm popup-login">
         <div class="w-100 p-2">
-            <button @click="toggleLogin()" id="closeLogin">
+            <button @click="toggleRegister()" id="closeLogin">
                 <img src="/storage/icons/arrow-left.svg" alt="">
             </button>
         </div>
@@ -87,6 +87,7 @@ import { defineEmits, ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 
+const emits = defineEmits(['open-register']);
 const { registerForm, validationErrors, processing, submitRegister } = useAuth();
 const baseAvatar = '/storage/avatars/';
 const router = useRouter();
@@ -118,6 +119,11 @@ const changeAvatar = () => {
     }
     loadAvatar(); // Cargamos el nuevo avatar
 };
+
+function toggleRegister()
+{
+    emits('open-register');
+}
 
 </script>
 

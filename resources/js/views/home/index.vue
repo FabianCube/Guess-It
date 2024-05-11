@@ -5,7 +5,7 @@
     </div>
     <div class="register">
         <!-- COMPONENTE DE REGISTRO -->
-        <register-popup />
+        <register-popup @open-register="toggleRegister"/>
     </div>
     <div class="account">
         <!-- COMPONENTE DE PERFIL DE USUARIO -->
@@ -185,7 +185,7 @@ function toggleAccount() {
 
 // Abrir cerrar popup de registro
 function toggleRegister() {
-    toggleLogin();
+    // toggleLogin();
     let register = document.querySelector('.register');
     let isOpen = register.classList.contains('active');
     isOpen ? register.classList.remove('active') : register.classList.add('active');
