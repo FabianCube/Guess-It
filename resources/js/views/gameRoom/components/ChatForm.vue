@@ -48,31 +48,7 @@ function sendMessage()
 </script>
 
 <style scoped>
-.text-input {
-  width: 100%;
-  background-color: white;
-  position: relative;
-}
 
-#btn-input {
-  width: 100%;
-  border-radius: 22px;
-}
+@import './../style/chatForm.css';
 
-.send-btn {
-  position: absolute;
-  border: none;
-  background-color: transparent;
-  right: 0;
-  top: 3px;
-}
-
-input:focus {
-  outline: none !important;
-  outline-width: 0 !important;
-  box-shadow: none;
-  -moz-box-shadow: none;
-  -webkit-box-shadow: none;
-  border: grey 1px solid;
-}
 </style>

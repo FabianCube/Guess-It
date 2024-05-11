@@ -58,62 +58,7 @@ function getUserColor (message) {
 
 </script>
 <style scoped>
-.chat {
-  height: 90%;
-  width: 100%;
-  overflow-y: auto;
-  display: flex;
-  justify-content: end;
-  flex-flow: column;
-  list-style: none;
-  padding: 10px;
-}
 
-.bubbles {
-  border: solid 2px black;
-  font-size: 16px;
-  border-radius: 12px;
-  margin-top: 10px;
-  width: fit-content;
-  box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.25);
-}
+@import './../style/chatMessages.css';
 
-.bubble-container {
-  display: inline-flex;
-  align-items: center;
-  flex-flow: row;
-  min-height: 30px;
-  height: auto;
-  padding: 0 10px 0 10px;
-}
-
-.header {
-  font-family: "Lilita One", sans-serif;
-  margin-right: 7px;
-}
-
-.bubble-text {
-  /*overflow-wrap: normal;*/
-  word-break: break-word;
-}
-
-.correct-word {
-  border-top: 1px solid #A0A0A0 !important;
-  border-bottom: 1px solid #A0A0A0 !important;
-  font-family: "Lilita One", sans-serif;
-  border: none;
-  font-size: 18px;
-  color: #38C62C;
-}
-
-
-/* ROUND */
-
-.round-container {
-  padding: 0 10px 0 10px;
-}
-
-.round-title {
-  font-family: "Lilita One", sans-serif;
-}
 </style>

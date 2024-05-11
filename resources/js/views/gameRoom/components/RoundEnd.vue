@@ -81,74 +81,7 @@ watch(() => props.roundEnd, (newValue) => {
 
 </script>
 <style scoped>
-.round-end {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000;
-    font-size: 4em;
-    padding: 20px;
-    border-radius: 10px;
-}
 
-.blur-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    backdrop-filter: blur(4px);
-    z-index: 999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+@import './../style/roundEnd.css';
 
-.table-container {
-    font-family: 'Lilita One', sans-serif;
-    width: 50%;
-    height: auto;
-    background: white;
-    padding: 25px 40px 25px 40px;
-    border-radius: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.etiqueta {
-    border-radius: 10px;
-    padding-left: 0.5rem;
-    padding-right: 1rem;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-    border: 2px solid #B2B2B2;
-}
-
-.avatar {
-    height: 4rem;
-    width: 4rem;
-    border-radius: 50%;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-position: center;
-    background-size: cover;
-}
-
-.avatar img {
-    height: 100%;
-    width: auto;
-}
-
-.list-name{
-    font-size: 24px;
-}
-
-.list-position{
-    font-size: 32px;
-}
-
-.word-played-color{
-    color: #494949;
-}
 </style>
