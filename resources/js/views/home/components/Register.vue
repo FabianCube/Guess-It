@@ -99,6 +99,7 @@ const hovers = ref(null);
 
 const playHovers = (soundFile) => {
     hovers.value = new Audio(soundFile);
+    hovers.value.volume = 0.5;
     hovers.value.play();
 }
 

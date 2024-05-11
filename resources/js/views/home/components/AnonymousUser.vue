@@ -1,7 +1,7 @@
 <template>
     <div class="card border-0 shadow-sm popup-login">
         <div class="w-100 p-2">
-            <button @click="toggleAnonymous()" id="closeLogin">
+            <button @click="toggleAnonymous(), playHovers('/storage/sounds/click-back.mp3')" id="closeLogin">
                 <img src="/storage/icons/arrow-left.svg" alt="">
             </button>
         </div>
@@ -27,8 +27,8 @@
                     <!-- Buttons -->
                     <div class="flex items-center justify-end mt-4">
                         <button 
-                            @mouseenter="() => playSound('/storage/sounds/hover1.mp3')"  
-                            @click="createRoom(), playSound('/storage/sounds/hover2.mp3')" 
+                            @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')"  
+                            @click="createRoom(), playHovers('/storage/sounds/hover2.mp3')" 
                             class="btn-default btn-login">
                             PREPARADO!
                         </button>
@@ -49,10 +49,12 @@ import { useRouter } from 'vue-router';
 import { v4 as uuidv4 } from 'uuid';
 
 const emits = defineEmits(['close-anonymous']);
+const hovers = ref(null);
 
-const playSound = (soundFile) => {
-    const audio = new Audio(soundFile);
-    audio.play();
+const playHovers = (soundFile) => {
+    hovers.value = new Audio(soundFile);
+    hovers.value.volume = 0.5;
+    hovers.value.play();
 }
 
 function toggleAnonymous() {

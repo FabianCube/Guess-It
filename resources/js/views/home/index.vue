@@ -104,11 +104,13 @@ const isMusicMuted = ref(true);
 
 const playHovers = (soundFile) => {
     hovers.value = new Audio(soundFile);
+    hovers.value.volume = 0.5;
     hovers.value.play();
 }
 
 const playBackgroundMusic = () => {
     backgroundMusic.value = new Audio('/storage/sounds/background-music.mp3');
+    backgroundMusic.value.volume = 0.2;
     backgroundMusic.value.loop();
     backgroundMusic.value.play();
 }
