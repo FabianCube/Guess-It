@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 
 class AccountController extends Controller
 {
+    // función para obtener historial del usuario
     public function getUserHistory(Request $request)
     {
         $user = $request->user();
@@ -21,6 +22,7 @@ class AccountController extends Controller
         return response()->json($userHistory);
     }
 
+    // funcion admin para obtener todos los datos de los usuarios.
     public function getAllUsers()
     {
         $users = User::getAllUsers();
@@ -30,6 +32,7 @@ class AccountController extends Controller
         return response()->json($users);
     }
 
+    // función admin para obtener todos los games.
     public function getAllGames()
     {
         $games = History::getAllGames();
@@ -39,6 +42,7 @@ class AccountController extends Controller
         return response()->json($games);
     }
 
+    // función para eliminar a un usuario
     public function deleteUser(Request $request)
     {
         User::deleteUser($request->id);
@@ -46,6 +50,7 @@ class AccountController extends Controller
         Log::info("AccountController ===== ", ['id to delete ----------> ' => $request->id]);
     }
     
+    // función para actualizar un usuario.
     public function updateUser(Request $request, $id)
     {
         $user = User::findOrFail($id);
