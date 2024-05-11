@@ -29,16 +29,16 @@ const props = defineProps([ 'user', 'historyData' ]);
 
 const games = ref({});
 
+// obtenemos todos los games al cargar el componente.
 onMounted(() => {
     getAllGames();
 })
 
 const getAllGames = async () => {
-
+// hacemos una petición a la api de los games jugados
     await axios.get('/api/admin-history')
         .then(response => {
             games.value = response.data;
-            console.log(response.data);
         })
 }
 </script>

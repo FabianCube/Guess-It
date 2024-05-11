@@ -82,6 +82,7 @@ const avatar = ref();
 const activeTab = ref(0); // index 0-2 (history, stats, settings)
 const historyData = ref({});
 
+// al cargar la página obtendremos los datos del user y del historial.
 onMounted(() => {
     if (isLoggedIn()) {
         getUser();
@@ -89,12 +90,13 @@ onMounted(() => {
     }
 })
 
+// hacemos un watch de isLoggedIn para ver si cambia el estado a logged o viceversa.
 watch(() => isLoggedIn(), () => {
     getUser();
 });
 
 const getUser = async () => {
-
+//  hacemos una peticion a al api para obtener los datos del usuario.
     axios.get('/api/user')
         .then(response => {
             console.log(response.data.data);
@@ -104,16 +106,18 @@ const getUser = async () => {
 }
 
 const getHistory = async () => {
-
+// hacemos una petición a la api para obtener los datos de el historial.
     await axios.get(`/api/account-history/${user.value.id}`)
         .then(response => {
             historyData.value = response.data;
-            console.log("HISTORY_DATA == " + response.data[0].user_id);
         })
 }
 
+// funcion para cambiar de tab dentro del panel de account
 const changeFocusTab = (element) => {
 
+    // quitamos a todos los divs la clase de 'active' para posteriormente
+    // asignarle el 'active' unicamente al que nos interesa.
     document.querySelectorAll('.tab').forEach(el => {
         el.classList.remove('active');
     });
@@ -126,9 +130,9 @@ const changeFocusTab = (element) => {
     }
 
     activeTab.value = activeTabIndex();
-    // console.log(activeTab.value)
 }
 
+// funcion para obtener el index de la tab que está actualmente activa.
 const activeTabIndex = () => {
     let tabs = document.querySelectorAll('.tab');
     let activeIndex = -1;
@@ -143,6 +147,7 @@ const activeTabIndex = () => {
     return activeIndex;
 }
 
+// funcion para cerrar account.
 const toggleAccount = () => {
     emits('close-account');
 }

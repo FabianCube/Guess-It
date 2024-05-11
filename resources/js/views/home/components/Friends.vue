@@ -37,13 +37,13 @@ const friendEmail = ref('');
 const friendRequests = ref([]);
 const friendsList = ref([]);
 
-
+// Antes de cargar el componente, obtener los datos de amigos pertinentes
 onBeforeMount(async () => {
     await loadFriendRequests();
     await loadFriendsList();
 });
 
-
+// función para cargar las peticiones de amigos mediante axios.
 const loadFriendRequests = async () => {
     try {
         const response = await axios.get('/api/friends/requests');
@@ -53,6 +53,7 @@ const loadFriendRequests = async () => {
     }
 };
 
+// función para cargar los amigos mediante petición axios.
 const loadFriendsList = async () => {
     try {
         const response = await axios.get('/api/friends/list');
@@ -63,6 +64,7 @@ const loadFriendsList = async () => {
     }
 };
 
+// funcion para mandar invitación de amistad.
 const sendFriendRequest = async () => {
     try {
         const response = await axios.post('/api/friends/send-request', {
@@ -74,6 +76,7 @@ const sendFriendRequest = async () => {
     }
 };
 
+// funcion para aceptar la peticion de amistad.
 const acceptRequest = async (requestId) => {
     try {
         const response = await axios.post(`/api/friends/accept/${requestId}`);
@@ -85,6 +88,7 @@ const acceptRequest = async (requestId) => {
     }
 };
 
+// funcion para rechazar peticion de amistad
 const rejectRequest = async (requestId) => {
     try {
         const response = await axios.post(`/api/friends/reject/${requestId}`);

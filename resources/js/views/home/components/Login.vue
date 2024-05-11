@@ -72,13 +72,17 @@
 import { defineProps, defineEmits } from 'vue';
 import useAuth from '@/composables/auth';
 
+// emits para mandar al padre (index.vue) el emit de que se ha ejecutado una funcion.
 const emits = defineEmits(['close-popup', 'open-register']);
 const { loginForm, validationErrors, processing, submitLogin } = useAuth();
 
+// funcion para abrir y cerrar el pop up de login
 function toggleLogin() {
     emits('close-popup');
 }
 
+
+// funcion para abrir el popup de register
 function toggleRegister()
 {
     emits('open-register');

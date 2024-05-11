@@ -48,16 +48,18 @@ const totalWonGames = ref(0);
 const averagePoints = ref(0);
 const totalGamesPlayed = ref(0);
 
+// al cargar el componente calculamos las stats de el user
 onMounted(() => {
     calculateStats();
 })
 
+// calcular stats del user
 const calculateStats = () => {
-    console.log("Props in account status: " + props.historyData);
-
+    // obtenemos los datos que nos llegan por props del padre.
     let data = props.historyData;
     let totalPositions;
 
+    // calculamos los datos que nos interesan.
     for(let i = 0; i < data.length; i++)
     {
         totalPoints.value += data[i].user_points;
@@ -69,6 +71,7 @@ const calculateStats = () => {
         }
     }
 
+    // asignamos los datos a las variables que usaremos en el template.
     averagePoints.value = totalPoints.value / data.length;
     totalGamesPlayed.value = data.length;
 }
