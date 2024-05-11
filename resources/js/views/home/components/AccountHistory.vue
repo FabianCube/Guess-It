@@ -31,19 +31,7 @@ watch(() => props.historyData, () => {
 </script>
 
 <style scoped>
-table
-{
-    width: 100%;
-}
 
-.first-row
-{
-    border-bottom: solid 1px black;
-}
+@import './../style/accountHistory.css';
 
-.first-row>th
-{
-    font-size: 14px;
-
-}
 </style>

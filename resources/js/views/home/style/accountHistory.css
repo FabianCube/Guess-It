@@ -1,0 +1,14 @@
+table
+{
+    width: 100%;
+}
+
+.first-row
+{
+    border-bottom: solid 1px black;
+}
+
+.first-row>th
+{
+    font-size: 14px;
+}

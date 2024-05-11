@@ -16,5 +16,5 @@ const props = defineProps([ 'user' ]);
 </script>
 
 <style scoped>
-
+@import './../style/accountSettings.css';
 </style>
