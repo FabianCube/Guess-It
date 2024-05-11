@@ -84,6 +84,7 @@ Route::post('correct-word', [GameController::class, 'correctWord']);
 Route::post('drawer-points', [GameController::class, 'drawerPoints']);
 Route::post('start-timer', [GameController::class, 'startTimer']);
 Route::post('encrypted-word', [GameController::class, 'encryptedWord']);
+Route::post('update-game/{game_id}', [GameController::class, 'updateGame']);
 
 // Chat controller
 Route::post('messages', [ChatsController::class, 'sendMessage']);
