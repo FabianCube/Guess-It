@@ -65,7 +65,7 @@ class AuthenticatedSessionController extends Controller
             return response()->noContent();
         }
 
-        return redirect('/');
+        return redirect()->intended(RouteServiceProvider::HOME);
     }
 
     /**

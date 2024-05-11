@@ -156,10 +156,10 @@ export default function useAuth() {
 
         axios.post('/logout')
             .then(response => {
-                user.name = ''
+                user.nickname = ''
                 user.email = ''
                 store.dispatch('auth/logout')
-                router.push({ name: 'auth.login' })
+                router.push({ name: 'home' })
             })
             .catch(error => {
                 // swal({
