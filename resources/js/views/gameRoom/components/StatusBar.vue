@@ -100,7 +100,9 @@ watch(() => props.playingWord, (word) => {
 });
 
 watch(() => roundTimeLeft.value, () => {
-
+    if(roundTimeLeft.value == 9){
+        playSound('/storage/sounds/timer.wav');
+    }
     if (props.currentPlayer.uuid == props.user.uuid) {
         letterRevealer();
     }
@@ -214,6 +216,12 @@ const encryptWord = (word) => {
 function countVisibleLetters(wordArray) {
     return wordArray.filter(letterObj => letterObj.visibility === 1).length;
 }
+
+const playSound = (soundPath) => {
+    const audio = new Audio(soundPath);
+    audio.volume = 0.02;
+    audio.play();
+};
 
 </script>
 
