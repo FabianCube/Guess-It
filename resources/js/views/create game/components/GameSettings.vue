@@ -56,37 +56,7 @@ watch([numberRounds, roundTime, difficulty], () => {
 </script>
 
 <style scoped>
-.settings {
-    position: relative;
-    margin-top: 6.5rem;
-    margin-bottom: 4.5rem;
-}
 
-/* SELECTOR */
+@import './../style/gameSettings.css';
 
-.select-settings {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-image: url('/storage/icons/select-arrow.svg');
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    width: 6rem;
-    padding-left: 10px;
-    border: 3px solid #000000;
-    border-radius: 10px;
-}
-
-.select-settings-dificulty {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-image: url('/storage/icons/select-arrow.svg');
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    width: 8rem;
-    padding-left: 10px;
-    border: 3px solid #000000;
-    border-radius: 10px;
-}
 </style>
