@@ -48,16 +48,18 @@ const totalWonGames = ref(0);
 const averagePoints = ref(0);
 const totalGamesPlayed = ref(0);
 
+// al cargar el componente calculamos las stats de el user
 onMounted(() => {
     calculateStats();
 })
 
+// calcular stats del user
 const calculateStats = () => {
-    console.log("Props in account status: " + props.historyData);
-
+    // obtenemos los datos que nos llegan por props del padre.
     let data = props.historyData;
     let totalPositions;
 
+    // calculamos los datos que nos interesan.
     for(let i = 0; i < data.length; i++)
     {
         totalPoints.value += data[i].user_points;
@@ -69,6 +71,7 @@ const calculateStats = () => {
         }
     }
 
+    // asignamos los datos a las variables que usaremos en el template.
     averagePoints.value = totalPoints.value / data.length;
     totalGamesPlayed.value = data.length;
 }
@@ -76,80 +79,7 @@ const calculateStats = () => {
 </script>
 
 <style scoped>
-#stats-container
-{
-    width: 100%;
-    margin-top: 20px;
-}
-h3
-{
-    font-size: 12px;
-    color: white;
-    line-height: 35px;
-    margin: 0;
-}
 
-.stats
-{
-    height: 35px;
-    border-radius: 6px;
-    background-color: #FD6F5A;
-    margin-bottom: 5px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-flow: row;
-    padding-right: 20px;
-}
+@import './../style/accountStats.css';
 
-.head-stat
-{
-    display: flex;
-    width: 250px;
-}
-
-@media (max-width: 820px)
-{
-    .stats>h3
-    {
-        text-align: right;
-        width: 50px;
-        font-size: .7rem;
-    }
-
-    .head-stat>h3
-    {
-        font-size: .7rem;
-    }
-}
-
-.stats:nth-child(1)
-{
-    background-color: #FD6F5A;
-}
-.stats:nth-child(2)
-{
-    background-color: #FF9447;
-}
-.stats:nth-child(3)
-{
-    background-color: #2993BA;
-}
-.stats:nth-child(4)
-{
-    background-color: #A05FD3;
-}
-
-.image-stat
-{
-    display: flex;
-    width: 40px;
-    justify-content: center;
-    align-items: center;
-}
-
-ul
-{
-    list-style: none;
-}
 </style>

@@ -72,13 +72,17 @@
 import { defineProps, defineEmits } from 'vue';
 import useAuth from '@/composables/auth';
 
+// emits para mandar al padre (index.vue) el emit de que se ha ejecutado una funcion.
 const emits = defineEmits(['close-popup', 'open-register']);
 const { loginForm, validationErrors, processing, submitLogin } = useAuth();
 
+// funcion para abrir y cerrar el pop up de login
 function toggleLogin() {
     emits('close-popup');
 }
 
+
+// funcion para abrir el popup de register
 function toggleRegister()
 {
     emits('open-register');
@@ -86,80 +90,7 @@ function toggleRegister()
 
 </script>
 <style scoped>
-#closeLogin
-{
-    background-color: transparent;
-    border: none;
-}
-.popup-login
-{
-    width: 800px;
-    height: 600px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 100px;
-    border-radius: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Lilita One', sans-serif;
-}
 
-@media (max-width: 820px)
-{
-    .popup-login
-    {
-        width: 90vw;
-        border-radius: 15px;
-        padding: 0;
-        
-    }
+@import './../style/login.css';
 
-    .card-body
-    {
-        width: 80%!important;
-        padding: 30px!important;
-    }
-
-    .card-body>h1
-    {
-        font-size: 2rem;
-    }
-}
-
-.card-body
-{
-    width: 50%;
-}
-
-.btn-login
-{
-    width: 100%;
-    height: 65px;
-    border: none;
-    margin: 0 0 15px 0;
-    line-height: 65px;
-    font-size: 2rem;
-}
-
-.btn-register
-{
-    width: 100%;
-    height: 45px;
-    border: none;
-    margin: 0 0 15px 0;
-    line-height: 45px;
-    font-size: 1.6rem;
-    border-radius: 12px;
-
-    background-color: #6753DB;
-    box-shadow: 0 10px #513EBE;
-}
-
-
-.form-control
-{
-    border-radius: 12px!important;
-    border: solid 2px #757575;
-}
 </style>

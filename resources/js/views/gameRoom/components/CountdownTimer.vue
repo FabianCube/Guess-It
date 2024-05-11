@@ -58,37 +58,7 @@ function startCountdown() {
 </script>
 
 <style scoped>
-.countdown {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000;
-    font-size: 4em;
-    padding: 20px;
-    border-radius: 10px;
-}
 
-.countdown img {
-    width: auto;
-    height: 30rem;
-    animation: growAndFade 1s ease-out forwards;
-}
+@import './../style/countdownTimer.css';
 
-@keyframes growAndFade {
-    0% {
-        transform: scale(0.1);
-        opacity: 1;
-    }
-
-    70% {
-        transform: scale(1);
-        opacity: 1;
-    }
-
-    100% {
-        transform: scale(2);
-        opacity: 0;
-    }
-}
 </style>

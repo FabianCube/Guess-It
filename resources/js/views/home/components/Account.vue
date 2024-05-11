@@ -82,6 +82,7 @@ const avatar = ref();
 const activeTab = ref(0); // index 0-2 (history, stats, settings)
 const historyData = ref({});
 
+// al cargar la página obtendremos los datos del user y del historial.
 onMounted(() => {
     if (isLoggedIn()) {
         getUser();
@@ -89,12 +90,13 @@ onMounted(() => {
     }
 })
 
+// hacemos un watch de isLoggedIn para ver si cambia el estado a logged o viceversa.
 watch(() => isLoggedIn(), () => {
     getUser();
 });
 
 const getUser = async () => {
-
+//  hacemos una peticion a al api para obtener los datos del usuario.
     axios.get('/api/user')
         .then(response => {
             console.log(response.data.data);
@@ -104,16 +106,18 @@ const getUser = async () => {
 }
 
 const getHistory = async () => {
-
+// hacemos una petición a la api para obtener los datos de el historial.
     await axios.get(`/api/account-history/${user.value.id}`)
         .then(response => {
             historyData.value = response.data;
-            console.log("HISTORY_DATA == " + response.data[0].user_id);
         })
 }
 
+// funcion para cambiar de tab dentro del panel de account
 const changeFocusTab = (element) => {
 
+    // quitamos a todos los divs la clase de 'active' para posteriormente
+    // asignarle el 'active' unicamente al que nos interesa.
     document.querySelectorAll('.tab').forEach(el => {
         el.classList.remove('active');
     });
@@ -126,9 +130,9 @@ const changeFocusTab = (element) => {
     }
 
     activeTab.value = activeTabIndex();
-    // console.log(activeTab.value)
 }
 
+// funcion para obtener el index de la tab que está actualmente activa.
 const activeTabIndex = () => {
     let tabs = document.querySelectorAll('.tab');
     let activeIndex = -1;
@@ -143,227 +147,14 @@ const activeTabIndex = () => {
     return activeIndex;
 }
 
+// funcion para cerrar account.
 const toggleAccount = () => {
     emits('close-account');
 }
 </script>
 
 <style scoped>
-#closeLogin {
-    background-color: transparent;
-    border: none;
-}
 
-.popup-account {
-    width: 800px;
-    height: 600px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 100px;
-    border-radius: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Lilita One', sans-serif;
-}
+@import './../style/account.css';
 
-@media (max-width: 820px)
-{
-    .popup-account
-    {
-        width: 90vw;
-        border-radius: 16px;
-        padding: 0;
-    }
-
-    .title-tab
-    {
-        font-size: 0.7rem;
-    }
-
-    .tab:hover p 
-    {
-        font-size: 0.7rem;
-    }
-}
-
-.btn-login {
-    width: 100%;
-    height: 65px;
-    border: none;
-    margin: 0 0 15px 0;
-    line-height: 65px;
-    font-size: 2rem;
-}
-
-.form-control {
-    border-radius: 12px !important;
-    border: solid 2px #757575;
-}
-
-.info-container {
-    width: 100%;
-    height: 100%;
-    background-color: #A05FD3;
-    border-radius: 29px;
-    padding: 13px;
-}
-
-.content-tab {
-    background-color: white;
-    width: 100%;
-    height: 240px;
-    border-radius: 0 23px 23px;
-    padding: 10px 30px 5px 30px;
-    overflow-y: scroll;
-}
-
-.tabs {
-    display: flex;
-    flex-flow: row;
-    margin: 0;
-    padding: 0;
-}
-
-.tab {
-    height: 35px;
-    width: 150px;
-    background-color: #CDCDCD;
-    color: #4E4E4E;
-    margin-right: 10px;
-    border-radius: 17px 17px 0 0;
-    display: flex;
-    flex-flow: row;
-    justify-content: space-around;
-    align-items: center;
-    cursor: pointer;
-    transition: all .1s;
-}
-
-.tab>p {
-    user-select: none;
-    /* Para que no se pueda seleccionar el texto */
-    transition: all .1s;
-}
-
-.tab:hover p {
-    font-size: 16px;
-}
-
-.tab>p {
-    margin: 0;
-}
-
-.active {
-    background-color: #fff;
-    color: black;
-    width: 200px;
-}
-
-.container-info {
-    padding-bottom: 8px;
-}
-
-.user-container {
-    width: 400px;
-    height: auto;
-    background-color: #fff;
-    border: #3E3E3E 3px solid;
-    border-radius: 23px;
-    display: flex;
-    padding: 20px;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.info-user>h3 {
-    font-size: 20px;
-    color: #3E3E3E;
-    margin: 5px;
-}
-
-.avatar-image {
-    width: 100px;
-    height: 100px;
-    overflow: hidden;
-    border-radius: 50px;
-}
-
-.avatar-image>img {
-    width: 100%;
-    height: auto;
-}
-
-.btn-logout {
-    border: none;
-    border-radius: 6px;
-    width: 100px !important;
-    height: 30px !important;
-    font-size: 14px !important;
-    line-height: 30px !important;
-    margin: 0;
-
-    background-color: #df1a1a;
-    box-shadow: 0 5px #861713;
-}
-
-@keyframes rainbow {
-    0% {
-        color: red;
-    }
-
-    14% {
-        color: orange;
-    }
-
-    28% {
-        color: yellow;
-    }
-
-    42% {
-        color: green;
-    }
-
-    57% {
-        color: blue;
-    }
-
-    71% {
-        color: indigo;
-    }
-
-    85% {
-        color: violet;
-    }
-
-    100% {
-        color: red;
-    }
-}
-
-.rainbow-text {
-    animation: rainbow 6s infinite;
-}
-
-/* width */
-::-webkit-scrollbar {
-    width: 10px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-    background: #73409a;
-    border-radius: 6px;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-    background: #FCB078;
-    border-radius: 6px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-    background: #e69a64;
-}
 </style>

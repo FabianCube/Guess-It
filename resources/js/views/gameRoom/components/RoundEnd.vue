@@ -95,29 +95,8 @@ watch(() => props.roundEnd, (newValue) => {
 
 </script>
 <style scoped>
-.round-end {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000;
-    font-size: 4em;
-    padding: 20px;
-    border-radius: 10px;
-}
 
-.blur-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    backdrop-filter: blur(4px);
-    z-index: 999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+@import './../style/roundEnd.css';
 
 .table-container {
     font-family: 'Lilita One', sans-serif;

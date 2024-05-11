@@ -1,0 +1,67 @@
+.etiqueta {
+    border-radius: 10px;
+    height: 4.3rem;
+    padding: 0.5rem;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+.player-1 {
+    border: 3px solid #950398;
+}
+
+.player-2 {
+    border: 3px solid #d42424;
+}
+
+.player-3 {
+    border: 3px solid #1ed621;
+}
+
+.player-4 {
+    border: 3px solid #1f39df;
+}
+
+.player-5 {
+    border: 3px solid #fb930c;
+}
+
+.player-6 {
+    border: 3px solid #fcf010;
+}
+
+.vacia {
+    border: 1px solid #B2B2B2;
+    box-shadow: none;
+}
+
+.avatar {
+    border-radius: 50%;
+    overflow: hidden;
+    height: 3rem;
+    width: 3rem;
+    flex-shrink: 0;
+}
+
+.avatar img {
+    height: 100%;
+    width: auto;
+}
+
+.avatar-vacio {
+    border-radius: 50%;
+    height: 3rem;
+    width: 3rem;
+    border: 3px solid #A2A2A2;
+    flex-shrink: 0;
+}
+
+.nombre-jugador {
+    width: 70%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #454545;
+}
+
+.nombre-jugador-vacio {
+    color: #737373;
+}

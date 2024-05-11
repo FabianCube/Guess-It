@@ -589,10 +589,10 @@ const compareWords = (playingWord, userWord) => {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 10;
+    z-index: 10; 
 }
 
-.block {
+.block{
     position: relative;
     width: 100%;
     height: 100%;

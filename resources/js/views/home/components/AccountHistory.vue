@@ -18,42 +18,20 @@
 import axios from 'axios';
 import { ref, onMounted, defineProps, onBeforeMount, watch } from 'vue';
 
+// obtenemos los datos mediante props del padre.
 const props = defineProps([ 'user', 'historyData' ]);
 const games = ref({});
 
+// hacemos un watch de la variable de historyData, cada vez que cambie lo
+// asignaremos a games.value.
 watch(() => props.historyData, () => {
     games.value = props.historyData;
 })
 
-// onMounted(() => {
-//     console.log(props.historyData.game_id);
-// })
-
-// const getHistory = async () => {
-
-//     await axios.get(`/api/account-history/${props.user.id}`)
-//         .then(response => {
-//             props.historyData = response.data;
-//             console.log(response.data[0].id);
-//         })
-// }
-
 </script>
 
 <style scoped>
-table
-{
-    width: 100%;
-}
 
-.first-row
-{
-    border-bottom: solid 1px black;
-}
+@import './../style/accountHistory.css';
 
-.first-row>th
-{
-    font-size: 14px;
-
-}
 </style>

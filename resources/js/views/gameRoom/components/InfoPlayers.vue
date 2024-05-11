@@ -7,19 +7,19 @@
             <div class="p-0 m-0 avatar">
                 <img :src="player.avatar" alt="avatar">
             </div>
-            <p class="name-player-info">{{ player.nickname}}</p>
+            <p class="name-player-info">{{ player.nickname }}</p>
             <p class="points-player-info">{{ player.points }} Pts.</p>
         </div>
     </div>
 </template>
 
 <script setup>
-import { defineProps, watch , computed } from 'vue';
+import { defineProps, watch, computed } from 'vue';
 
 const props = defineProps(['players' , 'user']);
 
 watch(() => props.players, (playersChange) => {
-  players.value = playersChange;
+    players.value = playersChange;
 });
 
 const isUser = (player) => {
@@ -36,13 +36,7 @@ const sortedPlayers = computed(() => {
 
 <style scoped>
 
-.name-player-info
-{
-    font-family: 'Lilita One', sans-serif;
-    font-size: 12px;
-    margin: 0;
-    padding: 0;
-}
+@import './../style/infoPlayers.css';
 
 .points-player-info
 {

@@ -9,20 +9,6 @@
                 <th>AVATAR ID</th>
                 <th>MODIFY</th>
             </tr>
-            <!-- <tr v-for="user in users"> -->
-                <!-- <td>{{ user.id }}</td>
-                <td>{{ user.nickname }}</td>
-                <td>{{ user.level }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.avatar_id }}</td>
-                <td class="modify-cel">
-                    <button class="btn modify">
-                        <img src="/storage/icons/edit.svg" alt="">
-                    </button>
-                    <button class="btn delete" @click="deleteUser(user.id)">
-                        <img src="/storage/icons/trash.svg" alt="">
-                    </button>
-                </td> -->
             <tr v-for="user in users" :key="user.id">
                 <template v-if="editingUserId === user.id">
                     <td>{{ user.id }}</td>
@@ -62,15 +48,16 @@
 
 <script setup>
 import axios from 'axios';
-import { ref, onMounted, defineProps, onBeforeMount, watch } from 'vue';
+import { ref, onMounted, defineProps } from 'vue';
 import sweetAlertNotifications from '@/utils/swal_notifications';
-const { throwInfoMessage, throwSuccessMessage, throwInviteMessage } = sweetAlertNotifications();
+const { throwSuccessMessage, throwInviteMessage } = sweetAlertNotifications();
 
 const props = defineProps(['user', 'historyData']);
 const users = ref({});
 const editedUser = ref({});
 const editingUserId = ref(null);
 
+// al cargar el componente obtener todos los jugadores.
 onMounted(() => {
     getAllPlayers();
 })
@@ -83,6 +70,7 @@ const getAllPlayers = async () => {
         })
 }
 
+// preparar delete de user, si el usuario decide que si, se eliminará.
 const deleteUser = (id) => {
     throwInviteMessage(
         '¿Eliminar usuario?',
@@ -91,13 +79,16 @@ const deleteUser = (id) => {
     );
 }
 
+// eliminar usuario.
 const proceedDeleteUser = (id) => {
     axios.delete(`/api/delete-user/${id}`);
     refresh();
     throwSuccessMessage('USUARIO ELIMINADO');
 }
 
+// funcion para editar valores de un usuario.
 const startEdit = (id) => {
+    // id del usuario que queremos editar
     editingUserId.value = id;
     const userToEdit = users.value.find(user => user.id === id);
     editedUser.value = { ...userToEdit };// ... para copiar todos los valores
@@ -107,13 +98,16 @@ const cancelEdit = () => {
     editingUserId.value = null;
 }
 
+// funcion para mandar los datos editados y hacer un update del user.
 const saveChanges = async (id) => {
+    // le pasamos por input los valores actualizados a la api.
     await axios.put(`/api/update-user/${id}`, editedUser.value);
     cancelEdit();
     refresh();
     throwSuccessMessage('CAMBIOS GUARDADOS');
 }
 
+// actualizar la lista de usuarios.
 const refresh = () => {
     getAllPlayers();
 }

@@ -5,7 +5,7 @@
     </div>
     <div class="register">
         <!-- COMPONENTE DE REGISTRO -->
-        <register-popup />
+        <register-popup @open-register="toggleRegister"/>
     </div>
     <div class="account">
         <!-- COMPONENTE DE PERFIL DE USUARIO -->
@@ -185,7 +185,7 @@ function toggleAccount() {
 
 // Abrir cerrar popup de registro
 function toggleRegister() {
-    toggleLogin();
+    // toggleLogin();
     let register = document.querySelector('.register');
     let isOpen = register.classList.contains('active');
     isOpen ? register.classList.remove('active') : register.classList.add('active');
@@ -303,146 +303,7 @@ const deleteCache = async (code) => {
 </script>
 
 <style scoped>
-#logo {
-    width: 100%;;
-    height: auto;
-}
 
-.login {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    z-index: 100;
-    display: none;
-    background-color: rgba(0, 0, 0, .25);
-    backdrop-filter: blur(4px);
-}
-
-.register {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    z-index: 100;
-    display: none;
-    background-color: rgba(0, 0, 0, .25);
-    backdrop-filter: blur(4px);
-}
-
-.anonymous {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    z-index: 100;
-    display: none;
-    background-color: rgba(0, 0, 0, .25);
-    backdrop-filter: blur(4px);
-}
-
-.account {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    z-index: 100;
-    display: none;
-    background-color: rgba(0, 0, 0, .25);
-    backdrop-filter: blur(4px);
-}
-
-.enter-game {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    z-index: 100;
-    display: none;
-    background-color: rgba(0, 0, 0, .25);
-    backdrop-filter: blur(4px);
-}
-
-.active {
-    display: block !important;
-}
-
-.shake-img {
-    display: inline-block;
-    /* Necesario para que transform funcione */
-    animation: shake 5s infinite;
-}
-
-.ps-buttons {
-    padding-left: 5vw;
-}
-
-.pe-buttons {
-    padding-right: 5vw;
-}
-
-.btn-friends {
-    margin-left: auto;
-}
-
-@keyframes shake {
-
-    0%,
-    30% {
-        transform: translate(0px, 0px);
-    }
-
-    30%,
-    40% {
-        transform: scale(0.95);
-    }
-
-    40%,
-    50% {
-        transform: scale(1);
-    }
-
-    60%,
-    90% {
-        transform: translate(0px, 0px);
-    }
-
-    92% {
-        transform: translate(0px, 5px);
-    }
-
-    94% {
-        transform: translate(0px, -5px);
-    }
-
-    96% {
-        transform: translate(0px, 5px);
-    }
-
-    98% {
-        transform: translate(0px, -5px);
-    }
-
-    100% {
-        transform: translate(0px, 0px);
-    }
-}
-
-.avatar-image {
-    width: 80%;
-    height: 70%;
-    border-radius: 50px;
-    overflow: hidden;
-}
-
-.avatar-image>img {
-    width: 100%;
-    height: auto;
-}
-
-.btn-default
-{
-    width: 100%;
-}
-
-
-
-
-
+@import 'style/index.css';
 
 </style>

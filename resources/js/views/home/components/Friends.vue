@@ -37,13 +37,13 @@ const friendEmail = ref('');
 const friendRequests = ref([]);
 const friendsList = ref([]);
 
-
+// Antes de cargar el componente, obtener los datos de amigos pertinentes
 onBeforeMount(async () => {
     await loadFriendRequests();
     await loadFriendsList();
 });
 
-
+// función para cargar las peticiones de amigos mediante axios.
 const loadFriendRequests = async () => {
     try {
         const response = await axios.get('/api/friends/requests');
@@ -53,6 +53,7 @@ const loadFriendRequests = async () => {
     }
 };
 
+// función para cargar los amigos mediante petición axios.
 const loadFriendsList = async () => {
     try {
         const response = await axios.get('/api/friends/list');
@@ -63,6 +64,7 @@ const loadFriendsList = async () => {
     }
 };
 
+// funcion para mandar invitación de amistad.
 const sendFriendRequest = async () => {
     try {
         const response = await axios.post('/api/friends/send-request', {
@@ -74,6 +76,7 @@ const sendFriendRequest = async () => {
     }
 };
 
+// funcion para aceptar la peticion de amistad.
 const acceptRequest = async (requestId) => {
     try {
         const response = await axios.post(`/api/friends/accept/${requestId}`);
@@ -85,6 +88,7 @@ const acceptRequest = async (requestId) => {
     }
 };
 
+// funcion para rechazar peticion de amistad
 const rejectRequest = async (requestId) => {
     try {
         const response = await axios.post(`/api/friends/reject/${requestId}`);
@@ -98,54 +102,7 @@ const rejectRequest = async (requestId) => {
 
 
 <style scoped>
-.popup-friends {
-    font-family: "Lilita One", sans-serif;
-    width: 100%;
-    height: 50vh;
-    background-color: white;
-    border-radius: 20px;
-    transform-origin: bottom;
-    animation: growUp 0.3s ease-out forwards;
-    overflow: hidden;
-}
 
-.mail-input {
-    width: 100%;
-    border-radius: 6px;
-    border: solid 2px #757575;
-}
+@import './../style/friends.css';
 
-.request {
-    border: solid 2px #757575;
-    border-radius: 8px;
-    padding: 5px;
-    padding-bottom: 10px;
-    box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.25);
-}
-
-.friend {
-    border: 2px solid #B2B2B2;
-    border-radius: 8px;
-    height: 4.3rem;
-    padding: 0.5rem;
-    box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.25);
-}
-
-.avatar {
-    border-radius: 50%;
-    overflow: hidden;
-    height: 3rem;
-    width: 3rem;
-    flex-shrink: 0;
-}
-
-@keyframes growUp {
-    from {
-        transform: scaleY(0);
-    }
-
-    to {
-        transform: scaleY(100%);
-    }
-}
 </style>

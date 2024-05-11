@@ -2,7 +2,7 @@
 <template>
     <div class="card border-0 shadow-sm popup-login">
         <div class="w-100 p-2">
-            <button @click="toggleLogin()" id="closeLogin">
+            <button @click="toggleRegister()" id="closeLogin">
                 <img src="/storage/icons/arrow-left.svg" alt="">
             </button>
         </div>
@@ -87,6 +87,7 @@ import { defineEmits, ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 
+const emits = defineEmits(['open-register']);
 const { registerForm, validationErrors, processing, submitRegister } = useAuth();
 const baseAvatar = '/storage/avatars/';
 const router = useRouter();
@@ -119,117 +120,15 @@ const changeAvatar = () => {
     loadAvatar(); // Cargamos el nuevo avatar
 };
 
+function toggleRegister()
+{
+    emits('open-register');
+}
+
 </script>
 
 <style scoped>
-#closeLogin {
-    background-color: transparent;
-    border: none;
-}
 
-.popup-login {
-    width: 800px;
-    height: 700px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 100px;
-    border-radius: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Lilita One', sans-serif;
-}
+@import './../style/register.css';
 
-@media (max-width: 820px)
-{
-    .popup-login
-    {
-        width: 90vw;
-        border-radius: 15px;
-        padding: 0;
-        
-    }
-
-    .card-body
-    {
-        width: 80%!important;
-        padding: 30px!important;
-    }
-
-    .card-body>h1
-    {
-        font-size: 2rem;
-    }
-}
-
-.image-container {
-    position: relative;
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: blue;
-}
-
-.avatar-wrapper {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 20px auto;
-    width: fit-content;
-}
-
-.avatar-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.change-avatar {
-    position: absolute;
-    bottom: 10px;
-    right: -5px;
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-    z-index: 10;
-}
-
-.change-avatar:hover {
-    animation: rotate 1s;
-}
-
-.change-avatar:active {
-    animation: scale 0.5s;
-}
-
-@keyframes rotate {
-
-    0%,
-    50% {
-        transform: rotate(-180deg);
-    }
-
-    50%,
-    100% {
-        transform: rotate(180deg);
-    }
-}
-
-@keyframes scale {
-
-0%,
-50% {
-    transform: scale(1.2);
-}
-
-50%,
-100% {
-    transform: scale(1);
-}
-}
 </style>
