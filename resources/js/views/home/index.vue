@@ -58,7 +58,7 @@
                         @click="playHovers('/storage/sounds/hover3.mp3')" 
                         @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')" 
                         class="avatar-image">
-                            <img src="/storage/avatars/avatar1.jpg" alt="">
+                            <img :src="userAvatar" alt="">
                     </div>
                 </button>
                 <button 
@@ -100,6 +100,7 @@ const user = ref();
 const hovers = ref(null);
 const backgroundMusic = ref(null);
 const isMusicMuted = ref(true);
+const userAvatar = ref();
 
 
 const playHovers = (soundFile) => {
@@ -145,6 +146,10 @@ onMounted(async () => {
 
     if (isLoggedIn()) {
         const userId = await axios.get(`/api/user`);
+
+        userAvatar.value = "/storage/avatars/avatar" + userId.data.data.avatar_id + ".jpg";
+
+        console.log(userAvatar.value);
 
         UserPrivateChannel = window.Echo.private(`user.${userId.data.data.id}`);
 
