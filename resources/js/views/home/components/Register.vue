@@ -14,7 +14,7 @@
                             <img :src="avatarImage" alt="Avatar" class="avatar-image">
                             <input v-model="registerForm.avatar_id" type="text" id="currentAvatarId" hidden>
                         </div>
-                        <a class="change-avatar" @click="changeAvatar">
+                        <a class="change-avatar" @click="changeAvatar(), playHovers('/storage/sounds/pop-change-avatar.mp3')">
                             <img src="/storage/icons/next-avatar.svg" alt="Next-avatar">
                         </a>
                     </div>

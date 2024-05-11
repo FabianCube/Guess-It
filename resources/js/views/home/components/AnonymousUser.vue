@@ -11,7 +11,7 @@
                 <div class="image-container">
                     <img :src="avatarImage" alt="Avatar" class="avatar-image">
                 </div>
-                <button class="change-avatar" @click="changeAvatar">
+                <button class="change-avatar" @click="changeAvatar(), playHovers('/storage/sounds/pop-change-avatar.mp3')">
                     <img src="/storage/icons/next-avatar.svg" alt="Next-avatar">
                 </button>
             </div>
