@@ -265,6 +265,7 @@ const listenCorrectWord = () => {
             if (players.value[playerIndex].uuid == user.value.uuid) {
                 guessedWord.value = true;
                 isChatEnabled.value = false;
+                playSound('/storage/sounds/acertado.mp3');
             }
 
             messages.value.push({
@@ -603,6 +604,12 @@ function updatePlayerPositions(players) {
 
   return playersCopy;
 }
+
+const playSound = (soundPath) => {
+    const audio = new Audio(soundPath);
+    audio.volume = 0.05;
+    audio.play();
+};
 
 </script>
 

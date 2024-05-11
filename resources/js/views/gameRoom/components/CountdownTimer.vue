@@ -39,22 +39,17 @@ watch([timeLeft], () => {
 
 
 function startCountdown() {
+    playSound('/storage/sounds/inicio_ronda.mp3');
     const intervalId = setInterval(() => {
         if (timeLeft.value > 0) {
             timeLeft.value--;
             currentImage.value++;
-            if(timeLeft.value == 1){
-                playSound('/storage/sounds/inicio_ronda.mp3');
-            }
         } else {
             clearInterval(intervalId);
         }
     }, 1000);
 }
 
-// onUnmounted(() => {
-    //     clearInterval(intervalId);
-    // });
 </script>
 
 <style scoped>
