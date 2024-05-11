@@ -10,16 +10,17 @@
             </div>
             <div class="d-flex flex-column table">
                 <div class="d-flex justify-content-between">
-                    <p class="players-font">Jugador</p>
-                    <p class="players-font">Puntos</p>
+                    <p class="players-font">POSICIÓN</p>
+                    <p class="players-font">PUNTOS</p>
                 </div>
-                <div class="d-flex justify-content-between align-items-center my-2 list-name etiqueta" v-for="(player, index) in sortedPlayers" :key="player.uuid">
+                <div class="d-flex justify-content-between align-items-center my-2 list-name etiqueta"
+                    v-for="(player, index) in sortedPlayers" :key="player.uuid" :class="{'is-user': isUser(player)}">
                     <div class="d-flex align-items-center">
                         <p class="mb-0 list-position" :style="{ color: getColorByIndex(index) }">{{ index + 1 }}</p>
                         <div class="mx-3 avatar" :style="{ backgroundImage: 'url(' + player.avatar + ')' }">
                             <!-- <img :src="player.avatar" alt="avatar"> -->
                         </div>
-                        <p class="mb-0" :style="{color:  player.color }">{{ player.nickname }}</p>
+                        <p class="mb-0" :style="{ color: player.color }">{{ player.nickname }}</p>
                     </div>
                     <p class="mb-0">{{ player.points }}</p>
                 </div>
@@ -34,7 +35,7 @@
 <script setup>
 import { ref, computed, defineProps, watch } from 'vue';
 
-const props = defineProps(['roundEnd', 'players', 'playedWord']);
+const props = defineProps(['roundEnd', 'players', 'playedWord', 'lastRound' , 'user']);
 
 const status = ref(0);
 const roundDurations = { end: 2000, table: 5000, prepare: 2000 };
@@ -54,7 +55,11 @@ const changeStatus = (newStatus, duration) => {
     status.value = newStatus;
     setTimeout(() => {
         if (newStatus === 1) {
-            changeStatus(2, roundDurations.table);
+            if (props.lastRound) {
+                status.value = 0;
+            } else {
+                changeStatus(2, roundDurations.table);
+            }
         } else if (newStatus === 2) {
             changeStatus(3, roundDurations.prepare);
         } else {
@@ -69,10 +74,19 @@ const playSound = (soundPath) => {
     audio.play();
 };
 
+const isUser = (player) => {
+    return props.user.uuid == player.uuid;
+}
+
 watch(() => props.roundEnd, (newValue) => {
     if (newValue) {
-        playSound('/storage/sounds/final_ronda.mp3');
-        changeStatus(1, roundDurations.end);
+        if (props.lastRound) {
+            playSound('/storage/sounds/final_ronda.mp3');
+            changeStatus(1, roundDurations.end);
+        } else {
+            playSound('/storage/sounds/final_ronda.mp3');
+            changeStatus(1, roundDurations.end);
+        }
     }
 });
 

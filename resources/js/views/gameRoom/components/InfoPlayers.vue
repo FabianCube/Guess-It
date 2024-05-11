@@ -2,8 +2,8 @@
 
 <template>
     <div class="p-2 flex flex-column justify-content-start align-items-center players-container">
-        <div v-for="(player, index) in sortedPlayers" :key="index"
-            class="p-2 flex flex-column align-items-center player" :style="{ borderColor: player.color }">
+        <div v-for="(player, index) in sortedPlayers" :key="index" class="p-2 flex flex-column align-items-center player" :class="{'is-user': isUser(player.uuid)}"
+            :style="{borderColor: player.color}">
             <div class="p-0 m-0 avatar">
                 <img :src="player.avatar" alt="avatar">
             </div>
@@ -16,21 +16,22 @@
 <script setup>
 import { defineProps, watch, computed } from 'vue';
 
-const props = defineProps(['players']);
+const props = defineProps(['players' , 'user']);
 
 watch(() => props.players, (playersChange) => {
     players.value = playersChange;
 });
 
-// Crear un array ordenado usando una propiedad computada
+const isUser = (player) => {
+    return props.user.uuid == player;
+}
+
+// Reordena el array de jugadores por puntos
 const sortedPlayers = computed(() => {
-    // Copiar el array original para no modificar `props.players`
-    const playersCopy = [...props.players];
-    // Ordenar por puntos en orden descendente
-    return playersCopy.sort((a, b) => b.points - a.points);
+  const playersCopy = [...props.players];
+  return playersCopy.sort((a, b) => b.points - a.points);
 });
 
-console.log(props.players);
 </script>
 
 <style scoped>

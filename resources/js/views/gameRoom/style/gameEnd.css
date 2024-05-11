@@ -1,27 +1,3 @@
-.round-end {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000;       
-    font-size: 4em;
-    padding: 20px;
-    border-radius: 10px;
-}
-
-.blur-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    backdrop-filter: blur(4px);
-    z-index: 999;        
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .table-container {
     font-family: 'Lilita One', sans-serif;
     width: 50%;
@@ -30,6 +6,7 @@
     padding: 25px 40px 25px 40px;
     border-radius: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 100px;
 }
 
 .etiqueta {
@@ -67,6 +44,11 @@
 
 .word-played-color {
     color: #494949;
+}
+
+.volver{
+    width: auto;
+    margin-top: 50px;
 }
 
 .is-user{
