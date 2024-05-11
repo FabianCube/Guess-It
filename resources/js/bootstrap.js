@@ -20,7 +20,7 @@ window.axios.interceptors.response.use(
     error => {
         if (error.response?.status === 401 || error.response?.status === 403 || error.response?.status === 419) {
             if (location.pathname !== '/login'){
-                location.assign('/login')
+                location.assign('/')
             }
         }
 
