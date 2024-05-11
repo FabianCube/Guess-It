@@ -111,7 +111,7 @@ const playHovers = (soundFile) => {
 const playBackgroundMusic = () => {
     backgroundMusic.value = new Audio('/storage/sounds/background-music.mp3');
     backgroundMusic.value.volume = 0.2;
-    backgroundMusic.value.loop();
+    backgroundMusic.value.loop = true;
     backgroundMusic.value.play();
 }
 

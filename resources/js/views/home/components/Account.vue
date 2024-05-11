@@ -2,7 +2,7 @@
 <template>
     <div class="card border-0 shadow-sm popup-account">
         <div class="w-100">
-            <button @click="toggleAccount()" id="closeLogin">
+            <button @click="toggleAccount(), playHovers('/storage/sounds/click-back.mp3')" id="closeLogin">
                 <img src="/storage/icons/arrow-left.svg" alt="">
             </button>
         </div>
@@ -81,6 +81,14 @@ const user = ref({});
 const avatar = ref();
 const activeTab = ref(0); // index 0-2 (history, stats, settings)
 const historyData = ref({});
+const hovers = ref(null);
+
+
+const playHovers = (soundFile) => {
+    hovers.value = new Audio(soundFile);
+    hovers.value.volume = 0.5;
+    hovers.value.play();
+}
 
 // al cargar la página obtendremos los datos del user y del historial.
 onMounted(() => {
