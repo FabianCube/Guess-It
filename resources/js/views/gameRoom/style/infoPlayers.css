@@ -39,3 +39,7 @@
     height: 100%;
     width: auto;
 }
+
+.is-user{
+    box-shadow: 0 6px 6px #2993BA;
+}

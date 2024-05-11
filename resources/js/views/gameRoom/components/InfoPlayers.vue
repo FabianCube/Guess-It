@@ -38,44 +38,4 @@ const sortedPlayers = computed(() => {
 
 @import './../style/infoPlayers.css';
 
-.points-player-info
-{
-    font-family: 'Lilita One', sans-serif;
-    margin: 0;
-    padding: 0;
-}
-
-.players-container {
-    width: 100%;
-    height: 100%;
-    background-color: #FFFDFD;
-    border-radius: 22px;
-}
-
-.player
-{
-    height: 95px;
-    width: 100%;
-    border: 3px solid;
-    border-radius: 22px;
-    margin-bottom: 6px;
-    box-shadow: 0 4px 4px rgba(0,0,0,.25);
-}
-
-.is-user{
-    box-shadow: 0 6px 6px #2993BA;
-}
-
-.avatar {
-    border-radius: 50%;
-    overflow: hidden;
-    height: 3rem;
-    width: 3rem;
-    flex-shrink: 0;
-}
-
-.avatar img {
-    height: 100%;
-    width: auto;
-}
 </style>

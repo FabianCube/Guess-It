@@ -52,60 +52,7 @@ const getColorByIndex = (index) => {
 };
 </script>
 <style scoped>
-.table-container {
-    font-family: 'Lilita One', sans-serif;
-    width: 50%;
-    height: auto;
-    background: white;
-    padding: 25px 40px 25px 40px;
-    border-radius: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-top: 100px;
-}
 
-.etiqueta {
-    border-radius: 10px;
-    padding-left: 0.5rem;
-    padding-right: 1rem;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-    border: 2px solid #B2B2B2;
-}
+@import './../style/gameEnd.css';
 
-.avatar {
-    height: 4rem;
-    width: 4rem;
-    border-radius: 50%;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-position: center;
-    background-size: cover;
-}
-
-.avatar img {
-    height: 100%;
-    width: auto;
-}
-
-.list-name {
-    font-size: 24px;
-}
-
-.list-position {
-    font-size: 32px;
-}
-
-.word-played-color {
-    color: #494949;
-}
-
-.volver{
-    width: auto;
-    margin-top: 50px;
-}
-
-.is-user{
-    box-shadow: 0px 4px 4px 0px #2993BA;
-}
 </style>
