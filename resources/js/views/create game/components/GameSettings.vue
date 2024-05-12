@@ -59,4 +59,22 @@ watch([numberRounds, roundTime, difficulty], () => {
 
 @import './../style/gameSettings.css';
 
+@media(max-width: 520px)
+{
+    h2
+    {
+        font-size: 2rem;
+    }
+
+    h3
+    {
+        font-size: 1rem;
+    }
+
+    .settings
+    {
+        margin-top: 40px;
+    }
+}
+
 </style>

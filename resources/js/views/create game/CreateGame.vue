@@ -29,8 +29,8 @@
                     @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')" 
                     class="btn-smll-default"><img src="/storage/icons/volume-on.svg" alt=""></button>
             </div>
-            <div class="flex mt-5">
-                <div class="col-4 ">
+            <div class="row d-flex mt-5">
+                <div class=" order-2 order-sm-1 col-xs-12 col-sm-12 col-md-4 col-lg-4">
                     <div class="background-players">
                         <div class="h-100 d-flex flex-column justify-content-between p-5">
                             <h2 class="mb-3 players-font">JUGADORES</h2>
@@ -48,9 +48,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-8 d-flex flex-column justify-content-between ps-5">
+                <div class=" order-1 order-sm-2 col-xs-12 col-sm-12 col-md-8 col-lg-8 d-flex flex-column justify-content-between ps-sm-5">
                     <div class="background-instructions">
-                        <div class="p-3 h-100">
+                        <div class="p-3 h-100 container-settings">
                             <!-- COMPONENTE AJUSTES DE PARTIDA -->
                             <GameSettings v-if="options" @update-settings="handleSettingsUpdate" />
                             <!-- COMPONENTE CAROUSEL -->
@@ -334,5 +334,34 @@ const startGame = async () => {
 <style scoped>
 
 @import 'style/createGame.css';
+
+@media(max-width: 520px)
+{
+    .btn-play
+    {
+        margin: 10px 0 10px 0;
+    }
+
+    .background-code
+    {
+        margin: 10px 0 10px 0;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .background-code>h4
+    {
+        margin: 10px 0 10px 0;
+        font-size: 1rem!important;
+        margin: 0;
+    }
+
+    .background-instructions
+    {
+        max-height: 400px!important;
+        justify-content: center;
+        align-items: center;
+    }
+}
 
 </style>
