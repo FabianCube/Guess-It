@@ -20,9 +20,3 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 Broadcast::channel('user.{userId}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
-
-// Broadcast::channel('chat', null);
-
-// Broadcast::channel('canvas', null);
-
-// Broadcast::channel('room-channel', null);

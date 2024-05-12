@@ -76,13 +76,12 @@
 <script setup>
 import axios from 'axios';
 import { onBeforeMount, onMounted, onUnmounted, ref, computed, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import useAuth from '@/composables/auth';
 import RoundEnd from '@/views/gameRoom/components/RoundEnd.vue';
 import GameEnd from '@/views/gameRoom/components/GameEnd.vue';
 
 const route = useRoute();
-const router = useRouter();
 const { isLoggedIn } = useAuth();
 const user = ref();
 const messages = ref([]);
@@ -158,7 +157,7 @@ onBeforeMount(async () => {
 
 const playBackgroundMusic = () => {
     backgroundMusic.value = new Audio('/storage/sounds/game-music.mp3');
-    backgroundMusic.value.volume = 0.2;
+    backgroundMusic.value.volume = 0.15;
     backgroundMusic.value.loop = true;
     backgroundMusic.value.play();
 }
