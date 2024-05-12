@@ -89,6 +89,15 @@
     border-radius: 22px;
 }
 
+#clearArea
+{
+    position: absolute;
+    z-index: 100;
+    margin-left: 450px;
+    border: none;
+    background-color: transparent;
+}
+
 .controls {
     position: absolute;
     bottom: 0%;

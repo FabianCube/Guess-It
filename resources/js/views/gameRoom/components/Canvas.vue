@@ -237,9 +237,11 @@ const changeTool = (tool) => {
                 <div @click="updateColor($event.target, 'orange')" class="color"></div>
             </div>
 
+            <button @click="clearArea" id="clearArea">
+                <img src="/storage/icons/clear.svg" alt="">
+            </button>
         </div>
 
-        <button @click="clearArea" id="clearArea">Clear Area</button>
     </div>
     <div v-else class="overlay"></div>
     <!--  -->
