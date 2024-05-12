@@ -4,8 +4,11 @@
     <div class="p-2 flex flex-column justify-content-start align-items-center players-container">
         <div v-for="(player, index) in sortedPlayers" :key="index" class="p-2 flex flex-column align-items-center player" :class="{'is-user': isUser(player.uuid)}"
             :style="{borderColor: player.color}">
-            <div class="p-0 m-0 avatar">
-                <img :src="player.avatar" alt="avatar">
+            <div class="p-0 m-0 avatar-wrapper">
+                <div class="avatar">
+                    <img :src="player.avatar" alt="avatar">
+                </div>
+                <div class="position-label">{{ index + 1 }}</div>
             </div>
             <p class="name-player-info">{{ player.nickname }}</p>
             <p class="points-player-info">{{ player.points }} Pts.</p>

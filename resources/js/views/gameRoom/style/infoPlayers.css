@@ -27,7 +27,16 @@
     box-shadow: 0 4px 4px rgba(0, 0, 0, .25);
 }
 
+.avatar-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+}
+
 .avatar {
+    position: relative;
     border-radius: 50%;
     overflow: hidden;
     height: 3rem;
@@ -38,6 +47,23 @@
 .avatar img {
     height: 100%;
     width: auto;
+}
+
+.position-label {
+    position: absolute;
+    bottom: 0; /* Posición en la parte inferior del avatar */
+    right: 0; /* Alineado a la derecha dentro del avatar */
+    border: 1px solid black;
+    background-color: rgba(255, 255, 255, 1); /* Fondo semitransparente para mayor visibilidad */
+    border-radius: 50%; /* Hace que la etiqueta sea circular */
+    width: 1.2rem; /* Tamaño fijo */
+    height: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem; /* Ajusta según necesidad */
+    font-family: 'Lilita One', sans-serif; /* Estilo de fuente */
+    color: #333; /* Color del texto */
 }
 
 .is-user{
