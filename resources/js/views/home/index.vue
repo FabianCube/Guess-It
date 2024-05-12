@@ -1,7 +1,7 @@
 <template>
     <div class="login">
         <!-- COMPONENTE LOGIN DE USUARIO -->
-        <login-popup @close-popup="toggleLogin" @open-register="toggleRegister" />
+        <login-popup @close-popup="toggleLogin" @open-register="toggleRegister"/>
     </div>
     <div class="register">
         <!-- COMPONENTE DE REGISTRO -->
@@ -22,11 +22,7 @@
     <div id="background"></div>
     <div id="total-container" class="relative flex items-top justify-center min-h-screen sm:items-center py-4 sm:pt-0">
         <div class="row col-12 flex justify-between py-5 p-5 p-md-0">
-            <div
-                class="order-xs-2 order-lg-1 col-xs-12 col-sm-12 col-md-4 d-flex flex-md-column justify-content-sm-between justify-content-end align-items-start pl-sm-0 pl-8">
-                <!-- <button class="btn-smll-default mb-5" style="border: none;">
-                    <img src="/storage/icons/info-circle.svg" alt="">
-                </button> -->
+            <div class="order-xs-2 order-lg-1 col-xs-12 col-sm-12 col-md-4 d-flex flex-md-column justify-content-sm-between justify-content-end align-items-start pl-sm-0 pl-8">
                 <button @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')"
                     @click="muteAllSounds(), playHovers('/storage/sounds/hover3.mp3')" class="btn-smll-default"
                     style="border: none;">
@@ -91,7 +87,6 @@ const roomCode = ref();
 const userRegistered = ref();
 const router = useRouter();
 const friendsList = ref(false);
-const user = ref();
 const hovers = ref(null);
 const backgroundMusic = ref(null);
 const isMusicMuted = ref(false);
@@ -180,6 +175,14 @@ function toggleLogin() {
     isOpen ? login.classList.remove('active') : login.classList.add('active');
 
     logged.value = isLoggedIn();
+
+    if(logged.value){
+        axios.get('/api/user')
+        .then(response => {
+            userAvatar.value = "/storage/avatars/avatar" + response.data.data.avatar_id + ".jpg";
+        })
+    }
+
     console.log("La sesion se ha " + (logged.value ? "iniciado" : "cerrado") + " correctamente");
 }
 
@@ -256,6 +259,11 @@ const createRoom = async () => {
         console.error("Error al crear la sala:", error);
     }
 };
+
+const getAvatar = (avatar) => {
+    console.log("Avatar");
+    userAvatar.value = avatar.avatar;
+}
 
 // Inserta al jugador en la sala
 const enterRoom = () => {
