@@ -14,6 +14,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <link rel="icon" href="/storage/icons/favicon.svg" type="image/svg+xml" />
     <title>Guess-it - ¡Dibuja y adivina!</title>
 
     <!-- Fonts -->
