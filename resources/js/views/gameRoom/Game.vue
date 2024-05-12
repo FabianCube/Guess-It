@@ -128,9 +128,9 @@ const playHovers = (soundFile) => {
 /* MOUNTING */
 
 onBeforeMount(async () => {
-    // if (localStorage.getItem('Partida') != route.params.code) {
-    //     router.push({ name: 'home' });
-    // }
+    if (localStorage.getItem('Partida') != route.params.code) {
+        router.push({ name: 'home' });
+    }
 
     const decodedData = decodeURIComponent(route.query.gameData);
     gameData.value = JSON.parse(decodedData);
@@ -145,7 +145,7 @@ onBeforeMount(async () => {
 
     await getUserData();
 
-    // localStorage.removeItem('Partida');
+    localStorage.removeItem('Partida');
     
     await userAcces();
 
