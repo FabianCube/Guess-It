@@ -98,33 +98,6 @@ const hovers = ref(null);
 const backgroundMusic = ref(null);
 const isMusicMuted = ref(false);
 
-
-const playHovers = (soundFile) => {
-    hovers.value = new Audio(soundFile);
-    hovers.value.volume = 0.25;
-    hovers.value.play();
-}
-
-const playBackgroundMusic = () => {
-    backgroundMusic.value = new Audio('/storage/sounds/create-game-background.mp3');
-    backgroundMusic.value.volume = 0.1;
-    backgroundMusic.value.loop = true;
-    backgroundMusic.value.play();
-}
-
-const muteAllSounds = () => {
-    if(backgroundMusic.value.paused)
-    {
-        backgroundMusic.value.play();
-        isMusicMuted.value = false;
-    }
-    else
-    {
-        backgroundMusic.value.pause();
-        isMusicMuted.value = true;
-    }
-}
-
 // Variable con el id del creador de partida
 const owner = ref();
 
@@ -154,31 +127,7 @@ const players = ref();
 const showFriendsList = ref(false);
 const friendsList = ref([]);
 
-// Función para manejar la actualización de la configuración
-const handleSettingsUpdate = (newSettings) => {
-    gameSettings.value = newSettings;
-};
-
-// Función para manejar la actualización de la configuración
-const handlePlayers = (newPlayers) => {
-    players.value = newPlayers;
-    startButtonEnabled.value = newPlayers >= 2;
-};
-
-const handleClose = () => {
-    showFriendsList.value = false;
-};
-
-// Cargar la lista de amigos
-const loadFriends = async () => {
-    try {
-        const response = await axios.get('/api/friends/list');
-        friendsList.value = response.data;
-        console.log(friendsList.value);
-    } catch (error) {
-        console.error('Error loading friends:', error);
-    }
-};
+/* MOUNTING */
 
 onBeforeMount(async () => {
     if (localStorage.getItem('Sala') != route.params.code) {
@@ -245,6 +194,100 @@ onBeforeUnmount(() => {
     navigator.sendBeacon(`/api/leave-room/${roomCode.value}`, formData);
 });
 
+/* LISTENERS */
+
+window.addEventListener('beforeunload', function (event) {
+    const formData = new FormData();
+    formData.append("uuid", storedUserData.uuid);
+
+    navigator.sendBeacon(`/api/leave-room/${roomCode.value}`, formData);
+});
+
+// Mueve el fondo de pantalla según el movimiento del ratón
+const movingBackground = () => {
+    const bg = document.getElementById('background');
+
+    if (!bg) {
+        console.error('Elemento #background no encontrado.');
+        return;
+    }
+
+    // Mueve el fondo de pantalla según el movimiento del ratón
+    document.addEventListener("mousemove", (e) => {
+        const width = window.innerWidth / 2;
+        const height = window.innerHeight / 2;
+
+        const mouseX = e.clientX - width;
+        const mouseY = e.clientY - height;
+
+        // Con esto se ajusta la sensibilidad del movimiento del fondo de pantalla
+        const bgX = mouseX * 0.02;
+        const bgY = mouseY * 0.02;
+
+        // Aplica la transformación
+        bg.style.transform = `translate(${bgX}px, ${bgY}px) translateZ(0)`;
+    });
+}
+
+/* HANDLERS */
+
+// Función para manejar la actualización de la configuración
+const handleSettingsUpdate = (newSettings) => {
+    gameSettings.value = newSettings;
+};
+
+// Función para manejar la actualización de la configuración
+const handlePlayers = (newPlayers) => {
+    players.value = newPlayers;
+    startButtonEnabled.value = newPlayers >= 2;
+};
+
+const handleClose = () => {
+    showFriendsList.value = false;
+};
+
+/* FUNCTIONS */
+
+// Reproduce sonido en los hover
+const playHovers = (soundFile) => {
+    hovers.value = new Audio(soundFile);
+    hovers.value.volume = 0.25;
+    hovers.value.play();
+}
+
+//Reproduce la música de fondo
+const playBackgroundMusic = () => {
+    backgroundMusic.value = new Audio('/storage/sounds/create-game-background.mp3');
+    backgroundMusic.value.volume = 0.1;
+    backgroundMusic.value.loop = true;
+    backgroundMusic.value.play();
+}
+
+// Silencia todos los sonidos
+const muteAllSounds = () => {
+    if(backgroundMusic.value.paused)
+    {
+        backgroundMusic.value.play();
+        isMusicMuted.value = false;
+    }
+    else
+    {
+        backgroundMusic.value.pause();
+        isMusicMuted.value = true;
+    }
+}
+
+// Cargar la lista de amigos
+const loadFriends = async () => {
+    try {
+        const response = await axios.get('/api/friends/list');
+        friendsList.value = response.data;
+        console.log(friendsList.value);
+    } catch (error) {
+        console.error('Error loading friends:', error);
+    }
+};
+
 // Obtenemos el id del creador de partida
 const getOwner = async () => {
     try {
@@ -273,15 +316,6 @@ const copiarCodigo = () => {
         });
 };
 
-
-window.addEventListener('beforeunload', function (event) {
-    const formData = new FormData();
-    formData.append("uuid", storedUserData.uuid);
-
-    navigator.sendBeacon(`/api/leave-room/${roomCode.value}`, formData);
-});
-
-
 // Se crea la partida y se le pasa la configuración y los jugadores 
 const startGame = async () => {
     try {
@@ -295,32 +329,6 @@ const startGame = async () => {
         console.error("Error al crear la partida:", error);
     }
 };
-
-const movingBackground = () => {
-    const bg = document.getElementById('background');
-
-    if (!bg) {
-        console.error('Elemento #background no encontrado.');
-        return;
-    }
-
-    // Mueve el fondo de pantalla según el movimiento del ratón
-    document.addEventListener("mousemove", (e) => {
-        const width = window.innerWidth / 2;
-        const height = window.innerHeight / 2;
-
-        const mouseX = e.clientX - width;
-        const mouseY = e.clientY - height;
-
-        // Con esto se ajusta la sensibilidad del movimiento del fondo de pantalla
-        const bgX = mouseX * 0.02;
-        const bgY = mouseY * 0.02;
-
-        // Aplica la transformación
-        bg.style.transform = `translate(${bgX}px, ${bgY}px) translateZ(0)`;
-    });
-}
-
 </script>
 
 <style scoped>

@@ -5,7 +5,7 @@
     </div>
     <div class="register">
         <!-- COMPONENTE DE REGISTRO -->
-        <register-popup @open-register="toggleRegister"/>
+        <register-popup @open-register="toggleRegister" />
     </div>
     <div class="account">
         <!-- COMPONENTE DE PERFIL DE USUARIO -->
@@ -22,57 +22,52 @@
     <div id="background"></div>
     <div id="total-container" class="relative flex items-top justify-center min-h-screen sm:items-center py-4 sm:pt-0">
         <div class="row col-12 flex justify-between py-5 p-5 p-md-0">
-            <div class="order-xs-2 order-lg-1 col-xs-12 col-sm-12 col-md-4 d-flex flex-md-column justify-content-sm-between justify-content-end align-items-start pl-sm-0 pl-8">
+            <div
+                class="order-xs-2 order-lg-1 col-xs-12 col-sm-12 col-md-4 d-flex flex-md-column justify-content-sm-between justify-content-end align-items-start pl-sm-0 pl-8">
                 <!-- <button class="btn-smll-default mb-5" style="border: none;">
                     <img src="/storage/icons/info-circle.svg" alt="">
                 </button> -->
-                <button 
-                    @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')" 
-                    @click="muteAllSounds(), playHovers('/storage/sounds/hover3.mp3')" 
-                    class="btn-smll-default" style="border: none;">
-                        <img v-if="isMusicMuted" src="/storage/icons/volume-off.svg" alt="">
-                        <img v-else src="/storage/icons/volume-on.svg" alt="">
+                <button @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')"
+                    @click="muteAllSounds(), playHovers('/storage/sounds/hover3.mp3')" class="btn-smll-default"
+                    style="border: none;">
+                    <img v-if="isMusicMuted" src="/storage/icons/volume-off.svg" alt="">
+                    <img v-else src="/storage/icons/volume-on.svg" alt="">
                 </button>
             </div>
 
-            <div class="order-xs-1 order-lg-2 col-xs-12 col-sm-12 col-md-4 flex justify-center align-items-center flex-column md:pt-8">
+            <div
+                class="order-xs-1 order-lg-2 col-xs-12 col-sm-12 col-md-4 flex justify-center align-items-center flex-column md:pt-8">
                 <img id="logo" src="/storage/guess-it-logo.svg" class="shake-img"></img>
 
-                <button 
-                    @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')" 
-                    @click="toggleAnonymous(), playHovers('/storage/sounds/hover3.mp3')" 
-                    to="/create-game" class="btn-default">
+                <button @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')"
+                    @click="toggleAnonymous(), playHovers('/storage/sounds/hover3.mp3')" to="/create-game"
+                    class="btn-default">
                     CREAR PARTIDA
                 </button>
-                <button 
-                    @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')"  
-                    @click="toggleEnterGame(), playHovers('/storage/sounds/hover3.mp3')" 
-                    class="btn-default">
+                <button @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')"
+                    @click="toggleEnterGame(), playHovers('/storage/sounds/hover3.mp3')" class="btn-default">
                     UNIRSE A PARTIDA
                 </button>
             </div>
 
-            <div class="order-xs-3 order-lg-3 col-xs-12 col-sm-12 col-md-4 d-flex flex-md-column justify-content-between align-items-end pe-buttons">
+            <div
+                class="order-xs-3 order-lg-3 col-xs-12 col-sm-12 col-md-4 d-flex flex-md-column justify-content-between align-items-end pe-buttons">
                 <button v-if="logged" @click="toggleAccount()" class="btn-smll-default flex justify-content-center">
-                    <div 
-                        @click="playHovers('/storage/sounds/hover3.mp3')" 
-                        @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')" 
-                        class="avatar-image">
-                            <img :src="userAvatar" alt="">
+                    <div @click="playHovers('/storage/sounds/hover3.mp3')"
+                        @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')" class="avatar-image">
+                        <img :src="userAvatar" alt="">
                     </div>
                 </button>
-                <button 
-                    @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')"  
-                    v-else @click="toggleLogin(), playHovers('/storage/sounds/hover3.mp3')" 
+                <button @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')" v-else
+                    @click="toggleLogin(), playHovers('/storage/sounds/hover3.mp3')"
                     class="btn-smll-default flex justify-content-center">
                     <img src="/storage/icons/account.svg" alt="">
                 </button>
 
                 <div class="d-flex flex-column justify-content-end">
                     <friends v-if="friendsList" />
-                    <button 
-                        @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')"  
-                        @click="toggleFriendsList(), playHovers('/storage/sounds/hover3.mp3')" 
+                    <button @mouseenter="() => playHovers('/storage/sounds/hover1.mp3')"
+                        @click="toggleFriendsList(), playHovers('/storage/sounds/hover3.mp3')"
                         class="btn-smll-default btn-friends" style="border: none">
                         <img src="/storage/icons/friends.svg" alt="">
                     </button>
@@ -101,33 +96,6 @@ const hovers = ref(null);
 const backgroundMusic = ref(null);
 const isMusicMuted = ref(true);
 const userAvatar = ref();
-
-
-const playHovers = (soundFile) => {
-    hovers.value = new Audio(soundFile);
-    hovers.value.volume = 0.25;
-    hovers.value.play();
-}
-
-const playBackgroundMusic = () => {
-    backgroundMusic.value = new Audio('/storage/sounds/background-music.mp3');
-    backgroundMusic.value.volume = 0.2;
-    backgroundMusic.value.loop = true;
-    backgroundMusic.value.play();
-}
-
-const muteAllSounds = () => {
-    if(backgroundMusic.value.paused)
-    {
-        backgroundMusic.value.play();
-        isMusicMuted.value = false;
-    }
-    else
-    {
-        backgroundMusic.value.pause();
-        isMusicMuted.value = true;
-    }
-}
 
 let UserPrivateChannel;
 
@@ -192,7 +160,7 @@ document.addEventListener('loggin-done', () => {
 const listenNewCache = () => {
     window.Echo.channel('cache')
         .listen('.GetCache', (e) => {
-            createCache(e.code,e.roomData);
+            createCache(e.code, e.roomData);
         });
 }
 
@@ -225,7 +193,6 @@ function toggleAnonymous() {
         let isOpen = anonymous.classList.contains('active');
         isOpen ? anonymous.classList.remove('active') : anonymous.classList.add('active');
     }
-
 }
 
 // Abrir cerrar popup de cuenta de usuario
@@ -273,9 +240,9 @@ const enterAnonymous = (code) => {
 const createRoom = async () => {
     try {
         await axios.get('/api/user')
-        .then(response => {
-            userRegistered.value = response.data.data.id;
-        })
+            .then(response => {
+                userRegistered.value = response.data.data.id;
+            })
 
         const response = await axios.post(`/api/create-room/${userRegistered.value}`);
         roomCode.value = response.data.code;
@@ -325,7 +292,7 @@ const movingBackground = () => {
 }
 
 // Guarda en la caché las salas abiertas
-const createCache = async (code,roomData) => {
+const createCache = async (code, roomData) => {
     await axios.post('/api/create-cache', {
         code: code,
         roomData: roomData
@@ -347,12 +314,31 @@ const deleteCache = async (code) => {
     });
 }
 
+const playHovers = (soundFile) => {
+    hovers.value = new Audio(soundFile);
+    hovers.value.volume = 0.25;
+    hovers.value.play();
+}
 
+const playBackgroundMusic = () => {
+    backgroundMusic.value = new Audio('/storage/sounds/background-music.mp3');
+    backgroundMusic.value.volume = 0.2;
+    backgroundMusic.value.loop = true;
+    backgroundMusic.value.play();
+}
 
+const muteAllSounds = () => {
+    if (backgroundMusic.value.paused) {
+        backgroundMusic.value.play();
+        isMusicMuted.value = false;
+    }
+    else {
+        backgroundMusic.value.pause();
+        isMusicMuted.value = true;
+    }
+}
 </script>
 
 <style scoped>
-
 @import 'style/index.css';
-
 </style>

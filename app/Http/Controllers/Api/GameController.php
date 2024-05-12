@@ -131,6 +131,7 @@ class GameController extends Controller
         ]);
     }
 
+    // Obtiene el array de palabras a jugar ssegún la dificultad
     public function getWord(Request $request)
     {
         $difficulty = $request->difficulty;
@@ -141,22 +142,22 @@ class GameController extends Controller
         return response()->json($words);
     }
 
+    // Dispara un evento con la palabra a jugar
     public function broadcastWord(Request $request)
     {
         $word = $request->word;
         $code = $request->code;
 
         broadcast(new SendWord($code, $word))->toOthers();
-        Log::info("GameController ==> broadcastWord: ", ['word' => $word]);
 
         return response()->json([
             'word' => $word
         ]);
     }
 
+    // Dispara un evento cuándo termina una ronda
     public function broadcastRoundFinished(Request $request)
     {
-
         $code = $request->code;
         $finished = $request->finished;
 
@@ -178,14 +179,11 @@ class GameController extends Controller
         // Puntos base por ser el primero, segundo, etc.
         $basePoints = [100, 75, 50, 25, 10];
 
-        // Reduce los puntos en un 0.5% por cada segundo transcurrido
+        // Reduce los puntos en un 0.05% por cada segundo transcurrido
         $timeFactor = 0.005;
 
         // Calcula los puntos base según el orden de acierto
         $orderPoints = $basePoints[$guessOrder - 1];
-
-        // Reducción de puntos según el tiempo que ha pasado
-        // $decrement = floor($elapsedTime / 10);
 
         // Reducción total en porcentaje
         $reduction = $elapsedTime * $timeFactor;
