@@ -1,11 +1,6 @@
-# Características
+# GESS - IT
 
-### Link storage
-
-```bash
-php artisan storage:link
-```
-
+Guess-it es un juego multijugador en el que mientras uno dibuja, el resto tiene que adivinar la palabra lo más rápido posible para ganar.
 
 ## SETUP
 ### Clonar Repositorio 
@@ -111,4 +106,10 @@ window.Echo = new Echo({
  - Lo mismo que .env, la IP del HOST puede variar.
 
 
+# Características
 
+### Link storage
+
+```bash
+php artisan storage:link
+```
