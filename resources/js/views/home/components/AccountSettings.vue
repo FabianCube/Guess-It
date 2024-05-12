@@ -67,12 +67,25 @@ const changeAvatar = () => {
     loadAvatar();
 };
 
+const saveChanges = () => {
+    throwInviteMessage(
+        '¿Guardar cambios? Se reiniciará la página.',
+        () => proceedSaveChanges(),
+        () => console.log('Cancelado.')
+    );
+}
+
 // Método para guardar los cambios en el servidor
-const saveChanges = async () => {
+const proceedSaveChanges = async () => {
     editedUser.avatar_id = avatarId.value;
     let id = editedUser.id;
     await axios.put(`/api/update-user-settings/${id}`, editedUser)
     throwSuccessMessage('CAMBIOS GUARDADOS');
+    
+    setTimeout(() => {
+        location.reload();
+    }, 2000);
+
 };
 
 </script>
