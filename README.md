@@ -49,6 +49,14 @@ npm run dev
 npm run build or yarn build
 ```
 
+# Características
+
+### Link storage
+
+```bash
+php artisan storage:link
+```
+
 <br><br>
 
 # CONFIG MULTIPLAYER
@@ -105,11 +113,3 @@ window.Echo = new Echo({
 ```
  - Lo mismo que .env, la IP del HOST puede variar.
 
-
-# Características
-
-### Link storage
-
-```bash
-php artisan storage:link
-```
