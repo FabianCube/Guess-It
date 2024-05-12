@@ -1,5 +1,5 @@
 <template>
-    <div class="w-100">
+    <div class="w-100 players-container">
         <!-- Renderizar jugadores -->
         <div v-for="(jugador, index) in jugadores" :key="index" class="d-flex align-items-center mb-2 etiqueta"
             :class="`player-${index + 1}`">
@@ -110,5 +110,19 @@ const escucharNuevaCache = () => {
 <style scoped>
 
 @import './../style/playerList.css';
+
+@media(max-width: 520px)
+{
+    .etiqueta
+    {
+        width: 99%;
+    }
+
+    .players-container
+    {
+        display: grid!important;
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
 
 </style>

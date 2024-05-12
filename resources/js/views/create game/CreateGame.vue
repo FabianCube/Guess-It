@@ -362,6 +362,11 @@ const startGame = async () => {
         justify-content: center;
         align-items: center;
     }
+
+    .background-players
+    {
+        height: 400px;
+    }
 }
 
 </style>
