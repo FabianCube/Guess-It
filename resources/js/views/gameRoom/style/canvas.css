@@ -98,6 +98,19 @@
     background-color: transparent;
 }
 
+@media(max-width: 720px)
+{
+    #clearArea
+    {
+        margin-left: 390px;
+    }
+
+    .controls
+    {
+        width: 340px!important;
+    }
+}
+
 .controls {
     position: absolute;
     bottom: 0%;
