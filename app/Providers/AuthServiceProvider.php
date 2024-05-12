@@ -32,10 +32,10 @@ class AuthServiceProvider extends ServiceProvider
     protected function registerUserAccessToGates()
     {
         try {
-            foreach (Permission::pluck('name') as $permission) {
+            foreach (Permission::pluck('nickname') as $permission) {
                 Gate::define($permission, function ($user) use ($permission) {
                     return $user->roles()->whereHas('permissions', function ($q) use ($permission) {
-                        $q->where('name', $permission);
+                        $q->where('nickname', $permission);
                     })->count() > 0;
                 });
             }

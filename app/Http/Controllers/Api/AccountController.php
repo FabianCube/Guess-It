@@ -54,9 +54,27 @@ class AccountController extends Controller
     public function updateUser(Request $request, $id)
     {
         $user = User::findOrFail($id);
-        
+
+        Log::info("updateUSER ========================== ", ['updateUser ----> ' => $request->input('nickname')]);
+
         $user->nickname = $request->input('nickname');
         $user->level = $request->input('level');
+        $user->email = $request->input('email');
+        $user->avatar_id = $request->input('avatar_id');
+        
+        $user->save();
+        
+        Log::info("AccountController ===== ", ['updateUser ----------> ' => $user]);
+        return response()->json(['message' => 'update user done']);
+    }
+
+    public function updateUserSettings(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        Log::info("updateUSER =============== ", ['updateUser ----> ' => $request->input('nickname')]);
+
+        $user->nickname = $request->input('nickname');
         $user->email = $request->input('email');
         $user->avatar_id = $request->input('avatar_id');
         

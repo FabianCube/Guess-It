@@ -61,7 +61,7 @@
                 <div v-else class="content-tab">
                     <account-history v-if="activeTab == 0" :historyData="historyData" :user="user" />
                     <account-stats :historyData="historyData" v-else-if="activeTab == 1" :user="user" />
-                    <account-settings v-else-if="activeTab == 2" :user="user" />
+                    <account-settings v-else-if="activeTab == 2" :user="user"/>
                 </div>
                 
                 <!-- ======== -->

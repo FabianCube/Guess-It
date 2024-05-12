@@ -13,16 +13,13 @@ class ProfileController extends Controller
     /**
      * @throws ValidationException
      */
-    public function update(UpdateProfileRequest $request)
+    public function update(Request $request)
     {
         $profile = Auth::user();
-        $profile->name = $request->name;
+        $profile->nickname = $request->nickname;
         $profile->email = $request->email;
 
-        if ($profile->save()) {
-            return $this->successResponse($profile, 'User updated');;
-        }
-        return response()->json(['status' => 403, 'success' => false]);
+        $profile->save();
     }
 
     public function user(Request $request)

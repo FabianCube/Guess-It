@@ -94,7 +94,7 @@ const friendsList = ref(false);
 const user = ref();
 const hovers = ref(null);
 const backgroundMusic = ref(null);
-const isMusicMuted = ref(true);
+const isMusicMuted = ref(false);
 const userAvatar = ref();
 
 let UserPrivateChannel;
@@ -337,6 +337,7 @@ const muteAllSounds = () => {
         isMusicMuted.value = true;
     }
 }
+
 </script>
 
 <style scoped>
