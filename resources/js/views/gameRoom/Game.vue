@@ -76,12 +76,13 @@
 <script setup>
 import axios from 'axios';
 import { onBeforeMount, onMounted, onUnmounted, ref, computed, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute , useRouter} from 'vue-router';
 import useAuth from '@/composables/auth';
 import RoundEnd from '@/views/gameRoom/components/RoundEnd.vue';
 import GameEnd from '@/views/gameRoom/components/GameEnd.vue';
 
 const route = useRoute();
+const router = useRouter();
 const { isLoggedIn } = useAuth();
 const user = ref();
 const messages = ref([]);
@@ -128,7 +129,7 @@ const playHovers = (soundFile) => {
 
 onBeforeMount(async () => {
     // if (localStorage.getItem('Partida') != route.params.code) {
-    //     await router.push({ name: 'home' });
+    //     router.push({ name: 'home' });
     // }
 
     const decodedData = decodeURIComponent(route.query.gameData);
@@ -145,6 +146,7 @@ onBeforeMount(async () => {
     await getUserData();
 
     // localStorage.removeItem('Partida');
+    
     await userAcces();
 
     await getUserColor();
