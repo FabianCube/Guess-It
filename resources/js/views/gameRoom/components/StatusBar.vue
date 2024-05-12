@@ -93,7 +93,6 @@ watch(() => props.startRound, (newValue) => {
 });
 
 watch(() => props.playingWord, (word) => {
-    console.log("WORD IN WATCH === > " + word);
     currentWord.value = word;
 
     encryptWord(currentWord.value);
@@ -135,7 +134,6 @@ const startRoundTimer = () => {
         } else {
             clearInterval(intervalId);
             if (props.currentPlayer.uuid == props.user.uuid) {
-                console.log("[StatusBar.vue]:Emit de fin de ronda");
                 emits('endOfRound');
             }
             roundTimeLeft.value = props.timeRound;
@@ -156,7 +154,7 @@ const letterRevealer = () => {
 
     do {
         index = Math.round(Math.random() * (size - 1));
-        // console.log("Index: " + index);
+
         antiFrezexdd++;
     }
     while (usedIndex.value.includes(index) && antiFrezexdd < 20)

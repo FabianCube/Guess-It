@@ -105,7 +105,7 @@ const userAvatar = ref();
 
 const playHovers = (soundFile) => {
     hovers.value = new Audio(soundFile);
-    hovers.value.volume = 0.5;
+    hovers.value.volume = 0.25;
     hovers.value.play();
 }
 
@@ -148,8 +148,6 @@ onMounted(async () => {
         const userId = await axios.get(`/api/user`);
 
         userAvatar.value = "/storage/avatars/avatar" + userId.data.data.avatar_id + ".jpg";
-
-        console.log(userAvatar.value);
 
         UserPrivateChannel = window.Echo.private(`user.${userId.data.data.id}`);
 
@@ -276,11 +274,8 @@ const createRoom = async () => {
     try {
         await axios.get('/api/user')
         .then(response => {
-            console.log(response.data.data);
             userRegistered.value = response.data.data.id;
         })
-
-        console.log(userRegistered.value);
 
         const response = await axios.post(`/api/create-room/${userRegistered.value}`);
         roomCode.value = response.data.code;

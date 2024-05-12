@@ -8,7 +8,7 @@
     </div>
     <div v-else class="relative flex items-top justify-center min-h-screen sm:items-center sm:pt-0 lilita-one-regular">
         <invite-friends v-if="showFriendsList" :roomCode="roomCode" :friends="friendsList" @close="handleClose"
-            @invited="handleInvitation" />
+            />
         <div class="container py-4">
             <div class="d-flex justify-content-between align-items-center">
                 <router-link 
@@ -101,13 +101,13 @@ const isMusicMuted = ref(false);
 
 const playHovers = (soundFile) => {
     hovers.value = new Audio(soundFile);
-    hovers.value.volume = 0.5;
+    hovers.value.volume = 0.25;
     hovers.value.play();
 }
 
 const playBackgroundMusic = () => {
     backgroundMusic.value = new Audio('/storage/sounds/create-game-background.mp3');
-    backgroundMusic.value.volume = 0.2;
+    backgroundMusic.value.volume = 0.1;
     backgroundMusic.value.loop = true;
     backgroundMusic.value.play();
 }
@@ -157,24 +157,16 @@ const friendsList = ref([]);
 // Función para manejar la actualización de la configuración
 const handleSettingsUpdate = (newSettings) => {
     gameSettings.value = newSettings;
-    console.log(gameSettings.value);
 };
 
 // Función para manejar la actualización de la configuración
 const handlePlayers = (newPlayers) => {
     players.value = newPlayers;
-    console.log(players.value);
     startButtonEnabled.value = newPlayers >= 2;
-    console.log(startButtonEnabled.value);
 };
 
 const handleClose = () => {
     showFriendsList.value = false;
-};
-
-const handleInvitation = (friendId) => {
-    console.log(`Friend ${friendId} invited`);
-    // Aquí podrías añadir lógica adicional después de que se haya enviado una invitación
 };
 
 // Cargar la lista de amigos
@@ -186,10 +178,6 @@ const loadFriends = async () => {
     } catch (error) {
         console.error('Error loading friends:', error);
     }
-};
-
-const canStartGame = () => {
-    return players.value >= 2;
 };
 
 onBeforeMount(async () => {
@@ -214,9 +202,6 @@ onBeforeMount(async () => {
     // Esperamos 3 segundos después de ejecutar getOwner para que se muestre la animación de carga
     // await Promise.all([loadingPromise, ownerPromise, jugadoresPromise]);
     await Promise.all([loadingPromise, ownerPromise]);
-
-    console.log(userRegistered.value);
-    console.log(owner.value);
 
     // Si el usuario es el creador de partida, se le muestran las opciones de partida
     if (owner.value == storedUserData.uuid || owner.value == userRegistered.value) {
@@ -265,7 +250,6 @@ const getOwner = async () => {
     try {
         const response = await axios.get(`/api/room/owner/${roomCode.value}`);
         owner.value = response.data;
-        console.log(owner.value);
     } catch (error) {
         console.error('Error obteniendo detalles de la sala:', error);
     }
@@ -282,7 +266,6 @@ const copiarCodigo = () => {
 
     navigator.clipboard.writeText(roomCode.value)
         .then(() => {
-            console.log('Código copiado al portapapeles');
             throwSuccessMessage('Código de partida copiado');
         })
         .catch(err => {

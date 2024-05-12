@@ -58,7 +58,6 @@ const loadFriendsList = async () => {
     try {
         const response = await axios.get('/api/friends/list');
         friendsList.value = response.data;
-        console.log(friendsList.value);
     } catch (error) {
         console.error('Error loading friends list:', error);
     }

@@ -16,8 +16,6 @@ const currentTool = ref('draw');
 const props = defineProps(['user', 'newCanvas', 'isDrawingEnabled', 'roomCode' , 'roundInProgress']);
 const emits = defineEmits(['canvasupdate']);
 
-console.log(props.isDrawingEnabled);
-
 
 onMounted(() => {
     init();
@@ -31,7 +29,6 @@ onMounted(() => {
 
 // Si cambia el canvas lo reconstruimos
 watch(() => props.newCanvas, (canvas) => {
-    console.log(canvas);
     if (canvas == "clear") {
         clearArea();
     }
@@ -122,11 +119,8 @@ const sendCanvas = (params) => {
 
 // pasa a Json los movimienos para reconstruir el canvas
 const getParams = () => {
-    console.log("[Canvas.vue]:getParams: Entrado en getParams!");
-
     const params = JSON.stringify(movements.value);
 
-    // console.log(params);
     sendCanvas(params);
 };
 

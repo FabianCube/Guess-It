@@ -72,7 +72,6 @@ const cargarJugadores = async () => {
         const response = await axios.get(`/api/room/players/${codigoSala.value}`);
         jugadores.value = response.data;
         emits('update-players', jugadores.value.length);
-        console.log(jugadores.value);
     } catch (error) {
         console.error('Error al cargar los jugadores:', error);
     }

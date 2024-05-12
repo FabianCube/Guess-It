@@ -51,8 +51,8 @@ function scrollToBottom() {
   container.scrollBottom = container.scrollHeight;
 }
 
+// Obtiene el color del usuario que ha escrito el mensaje
 function getUserColor (message) {
-    console.log(message.user.color);
     return `color: ${message.user.color} !important;`;
 };
 

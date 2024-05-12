@@ -121,7 +121,7 @@ const isMusicMuted = ref(false);
 
 const playHovers = (soundFile) => {
     hovers.value = new Audio(soundFile);
-    hovers.value.volume = 0.5;
+    hovers.value.volume = 0.25;
     hovers.value.play();
 }
 
@@ -142,9 +142,6 @@ onBeforeMount(async () => {
     gameId.value = gameData.value.game_id;
 
     roomCode.value = route.params.code;
-
-    console.log('Playing in channel ==== room-' + roomCode.value);
-    console.log('Injected game data:', gameData.value);
 
     await getUserData();
 
@@ -180,9 +177,6 @@ const muteAllSounds = () => {
 }
 
 onMounted(async () => {
-    console.log("[Game.vue]:currentPlayerIndex.value -> " + currentPlayerIndex.value);
-    console.log("[Game.vue]:currentPlayer.value.uuid -> " + currentPlayer.value.uuid);
-    console.log("[Game.vue]:user.value.uuid -> " + user.value.uuid);
 
     playBackgroundMusic();
     beginStartTimer();
@@ -197,7 +191,6 @@ onMounted(async () => {
 
     movingBackground();
 
-    console.log("User: " + user.value.nickname);
 });
 
 onUnmounted(() => {
@@ -248,8 +241,6 @@ watch(roundFinished, (newValue) => {
 const listenEventMessageSent = () => {
     window.Echo.channel('room-' + roomCode.value)
         .listen('.MessageSent', (e) => {
-            console.log("[Game.vue]:listenEventMessageSent:.MessageSent -> " + e.message);
-
             messages.value.push({
                 message: e.message,
                 user: e.user
@@ -267,8 +258,6 @@ const listenEventCanvasUpdate = () => {
 const listenEventSendWord = () => {
     window.Echo.channel('room-' + roomCode.value)
         .listen('.SendWord', (e) => {
-            console.log("[Game.vue]:listenEventSendWord:.SendWord -> " + e.word);
-
             playingWord.value = e.word;
         });
 }
@@ -278,7 +267,6 @@ const listenRoundFinished = () => {
         .listen('.RoundFinished', (e) => {
             roundFinished.value = e.finished;
             roundInProgress.value = false;
-            console.log("Ronda terminada");
         });
 }
 
@@ -306,11 +294,7 @@ const listenCorrectWord = () => {
 
             guessOrder.value++;
 
-            console.log(guessOrder.value);
-            console.log(players.value.length);
-
             if (guessOrder.value == players.value.length && currentPlayer.value.uuid == user.value.uuid) {
-                console.log("[Game.vue]:Fin de ronda, todos los jugadores han adivinado la palabra");
                 handleEndOfRound();
             }
         });
@@ -338,7 +322,6 @@ const listenStartTimer = () => {
 
 // Cuándo la cuenta atrás llega a 0 deshabilitamos el componente del timer
 const handleTimerUpdate = (timeLeft) => {
-    console.log(timer.value);
 
     if (timeLeft.timeLeft == 0) {
         timer.value = false;
@@ -357,9 +340,6 @@ const handleTimeLeft = (time) => {
 // Cuándo acaba el tiempo de la ronda 
 const handleEndOfRound = async () => {
     if (roundInProgress.value) {
-
-        console.log("Gestionando fin de ronda");
-
         await axios.post('/api/drawer-points', {
             code: roomCode.value,
             userId: currentPlayer.value.uuid,
@@ -400,12 +380,8 @@ const addMessage = (newMessage) => {
         }).catch(error => {
             console.error("Error: ", error);
         });
-        console.log(roundInProgress.value);
     } else {
         messages.value.push(newMessage);
-
-        console.log("[Game.vue]:addMessage:user.nickname -> " + newMessage.user.nickname)
-        console.log("[Game.vue]:addMessage:message -> " + newMessage.message)
 
         axios.post('/api/messages', {
             user: newMessage.user,
@@ -417,8 +393,6 @@ const addMessage = (newMessage) => {
             console.error("Error: ", error);
         });
     }
-
-    console.log("[Game.vue]:addMessage:messages{} -> " + messages.value);
 }
 
 const sendCanvas = (canvas) => {
@@ -436,7 +410,6 @@ const sendCanvas = (canvas) => {
 const setPlayingWord = async () => {
 
     playingWord.value = await getPlayingWord();
-    console.log("[Game.vue]:setPlayingWord:word -> " + playingWord.value)
 
     await axios.post('/api/word', {
         code: roomCode.value,
@@ -460,7 +433,6 @@ const getUserColor = async () => {
 
 // Al acabar la ronda pasa a dibujar el siguiente jugador, si es la última ronda termina el juego
 const moveToNextPlayer = () => {
-    console.log(roundInProgress.value);
 
     if (currentRound.value + 1 > rounds.value && currentPlayerIndex.value == players.value.length - 1) {
         gameFinished.value = true;
@@ -472,9 +444,6 @@ const moveToNextPlayer = () => {
             currentPlayerIndex.value = 0;
         }
     }
-
-    console.log("[Game.vue]:currentPlayerIndex.value -> " + currentPlayerIndex.value);
-    console.log("[Game.vue]:currentPlayer.value -> " + currentPlayer.value);
 };
 
 // Inicia la cuenta atrás para todos los jugadores
@@ -506,8 +475,6 @@ const getUserData = async () => {
                 user.value.avatar = "/storage/avatars/avatar" + response.data.data.avatar_id + ".jpg";
                 user.value.uuid = user.value.id
             })
-
-        console.log(user.value);
     }
     else {
         console.log("[INFO]: Entrando como usuario anónimo.");
@@ -550,10 +517,9 @@ const getPlayingWord = async () => {
 
 const selectRandomWord = (words) => {
 
-    console.log(words);
     // length de las palabras
-    // let length = computed(() => words.length);
     let length = words.length;
+
     // indice aleatorio
     let index = Math.floor(Math.random() * length);
     let word = words[index].toUpperCase();
@@ -607,11 +573,9 @@ const compareWords = (playingWord, userWord) => {
     return normalizedStr1.localeCompare(normalizedStr2, undefined, { sensitivity: 'base' }) === 0;
 }
 
+// Guarda los datos de la partida en la base de datos
 const updateGame = async () => {
-    console.log(updatePlayerPositions(players.value));
-    console.log(gameId.value);
     try {
-
         const response = await axios.post(`/api/update-game/${gameId.value}`, { players: updatePlayerPositions(players.value) });
         console.log('Respuesta del servidor:', response.data);
     } catch (error) {

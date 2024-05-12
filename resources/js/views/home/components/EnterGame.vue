@@ -46,7 +46,7 @@ const hovers = ref(null);
 
 const playHovers = (soundFile) => {
     hovers.value = new Audio(soundFile);
-    hovers.value.volume = 0.5;
+    hovers.value.volume = 0.25;
     hovers.value.play();
 }
 
@@ -66,7 +66,6 @@ const findRoom = async () => {
     try {
         const response = await axios.get(`/api/find-room/${roomCode.value}`);
         roomExists.value = response.data;
-        console.log(roomExists.value.mensaje);
 
         if (roomExists.value.mensaje) {
             console.log("Sala existe");

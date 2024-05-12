@@ -31,11 +31,11 @@ const props = defineProps({
     roomCode: String
 });
 
-const emits = defineEmits(['close', 'invited']);
+const emits = defineEmits(['close']);
 
 const playHovers = (soundFile) => {
     hovers.value = new Audio(soundFile);
-    hovers.value.volume = 0.5;
+    hovers.value.volume = 0.25;
     hovers.value.play();
 }
 
@@ -43,6 +43,7 @@ const closeModal = () => {
     emits('close');
 };
 
+// Envia una invitación a partida a otro usuario
 const inviteFriend = async (friendId) => {
     try {
         const response = await axios.post((`/api/invite-user`), {

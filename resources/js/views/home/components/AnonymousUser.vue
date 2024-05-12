@@ -53,7 +53,7 @@ const hovers = ref(null);
 
 const playHovers = (soundFile) => {
     hovers.value = new Audio(soundFile);
-    hovers.value.volume = 0.5;
+    hovers.value.volume = 0.25;
     hovers.value.play();
 }
 
@@ -103,7 +103,6 @@ const playerUuid = ref();
 
 // Se crea la sala, se añade al jugador anónimo y se redirige a la sala
 const createRoom = async () => {
-    console.log(passedRoomCode.roomCode);
     if (passedRoomCode.roomCode) {
         console.log("Uniendo al jugador a la sala existente con código:", passedRoomCode.roomCode);
         try {
@@ -148,8 +147,6 @@ const submitAnonymousLogin = () => {
 
     // Guarda los datos en Session Storage
     sessionStorage.setItem('userData', JSON.stringify(userData));
-
-    console.log('Sesión anónima creada correctamente en Session Storage.');
 };
 
 

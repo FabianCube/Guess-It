@@ -26,7 +26,6 @@ const props = defineProps([ 'user' , 'isChatEnabled']);
 const emits = defineEmits([ 'messagesent' ]);
 const newMessage = ref('');
 
-console.log(props.isChatEnabled);
 
 function sendMessage()
 {
@@ -37,9 +36,6 @@ function sendMessage()
     user: props.user,
     message: newMessage.value
   });
-
-  console.log("[ChatForm.vue]:sendMessage:user.nickname -> " + props.user.nickname);
-  console.log("[ChatForm.vue]:sendMessage:message: " + newMessage.value);
 
   //Clear the input
   newMessage.value = '';
